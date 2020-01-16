@@ -1,15 +1,133 @@
-import kivy
-kivy.require('1.0.6') # replace with your current kivy version !
+'''
+Canvas stress
+=============
 
-from kivy.app import App
+This example tests the performance of our Graphics engine by drawing large
+numbers of small squares. You should see a black canvas with buttons and a
+label at the bottom. Pressing the buttons adds small colored squares to the
+canvas.
+
+'''
+from kivy.lang import Builder
+from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.widget import Widget
 from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App
+from kivy.graphics import Color, Rectangle
+from random import random as r
+from functools import partial
+
+kivy_string = """
+ScreenManagement
+    BaseScreen:
+        name: 'base'
+        
+    FlavorScreen:
+        name: 'flavor'
+        
+        
+<BaseScreen>:
+    FloatLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: "images.jpg"
+                
+        Button:
+            text: 'Base 1'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .2, 'y': .6}
+        Button:
+            text: 'Base 2'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .2, 'y': .4}
+        Button:
+            text: 'Base 3'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .2, 'y': .2}
+
+        Button:
+            text: 'Move to next'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .7, 'y': .2}
+            on_release: 
+                root.manager.current = 'flavor'
+            
+<FlavorScreen>:
+    FloatLayout:
+        canvas.before:
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: "images.jpg"
+                
+        Button:
+            text: 'Next'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .7, 'y': .2}
+            on_release: 
+                root.manager.current = 'base'
+"""
 
 
-class MyApp(App):
+class ScreenManagement(ScreenManager):
+    pass
+
+
+class BaseScreen(Screen):
+    pass
+
+
+class FlavorScreen(Screen):
+    pass
+
+
+class CustomLayout(FloatLayout):
+    def __init__(self, **kwargs):
+        # make sure we aren't overriding any important functionality
+        super(CustomLayout, self).__init__(**kwargs)
+
+        with self.canvas.before:
+            Color(0, 1, 0, 1)  # green; colors range from 0-1 instead of 0-255
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+
+        self.bind(size=self._update_rect, pos=self._update_rect)
+
+    def _update_rect(self, instance, value):
+        self.rect.pos = instance.pos
+        self.rect.size = instance.size
+
+
+class StressCanvasApp(App):
+
+    def add_rects(self, label, wid, count, *largs):
+        label.text = str(int(label.text) + count)
+        with wid.canvas:
+            for x in range(count):
+                Color(r(), 1, 1, mode='hsv')
+                Rectangle(pos=(r() * wid.width + wid.x,
+                               r() * wid.height + wid.y), size=(20, 20))
+
+    def double_rects(self, label, wid, *largs):
+        count = int(label.text)
+        self.add_rects(label, wid, count, *largs)
+
+    def reset_rects(self, label, wid, *largs):
+        label.text = '0'
+        wid.canvas.clear()
 
     def build(self):
-        return Label(text='Hello world')
+        return Builder.load_string(kivy_string)
 
 
 if __name__ == '__main__':
-    MyApp().run()
+    StressCanvasApp().run()
