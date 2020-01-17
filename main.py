@@ -1,27 +1,13 @@
-from View.Admin import screens
+from Model import screenManager
 import kivy
-kivy.require('1.11.1')  # replace with your current kivy version !
+kivy.require('1.11.1')
 
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.lang import Builder
-from kivy.core.window import Window
-
-# make the app fullscreen
-Window.fullscreen = 'auto'
-
-# use the kv definitions found in the adminScreens.kv file
-Builder.load_file('View/Admin/adminScreens.kv')
-
-# initialize Screen manager
-screenManager = ScreenManager()
-screenManager.add_widget(screens.AdminMainScreen(name='Admin Page'))
 
 class MainApp(App):
 
     def build(self):
-        return screenManager
-
+        return screenManager.ScreenManager.sm
 
 if __name__ == '__main__':
     MainApp().run()
