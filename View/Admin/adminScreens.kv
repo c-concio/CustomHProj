@@ -1,0 +1,37 @@
+#:kivy 1.11.1
+
+<AdminMainScreen>:
+    canvas:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None, None
+        pos_hint:{'center_x': 0.5, 'center_y': 0.5}
+        spacing: 25
+        size: 350, 300
+
+        Button:
+            text: 'Edit Inventory'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
+
+        Button:
+            text: 'Internet Setting'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
+
+        Button:
+            text: 'Power Off'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
