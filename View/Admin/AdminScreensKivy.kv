@@ -1,6 +1,9 @@
 #:kivy 1.11.1
 
 <AdminMainScreen>:
+    # objectProperty names
+    editInventoryButton: edit_inventory
+
     canvas:
         Color:
             rgba: 0.2, 0.2, 0.2, 1
@@ -16,6 +19,7 @@
         size: 350, 300
 
         Button:
+            id: edit_inventory
             text: 'Edit Inventory'
             pos_hint:{'left': 1}
             background_normal: ''
