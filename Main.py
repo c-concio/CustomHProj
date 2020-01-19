@@ -1,5 +1,4 @@
-from Model import ScreenManager
-from Model import AdminScreens
+from Model import AdminModel
 from Controller import AdminMainScreenController
 import kivy
 
@@ -11,9 +10,12 @@ from kivy.app import App
 class MainApp(App):
 
     def build(self):
-        screenManager = ScreenManager.screenManager
-        ScreenManager.adminMainScreen.initialize_buttons()
-        ScreenManager.inventoryScreen.add_template()
+        screenManager = AdminModel.screenManager
+        AdminModel.adminMainScreen.initialize_buttons()
+        AdminModel.inventoryScreen.add_template()
+        AdminModel.inventoryScreen.add_template()
+        AdminModel.inventoryScreen.add_template()
+        AdminModel.inventoryScreen.add_template()
         return screenManager
 
 if __name__ == '__main__':
