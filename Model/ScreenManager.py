@@ -2,7 +2,7 @@ from Model import AdminScreens
 from Controller import AdminMainScreenController
 
 import kivy
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, NoTransition, CardTransition
 from kivy.lang import Builder
 from kivy.core.window import Window
 
@@ -23,3 +23,4 @@ internetSettingsScreen = AdminScreens.InternetSettingsScreen(name='Internet Sett
 screenManager.add_widget(adminMainScreen)
 screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
+screenManager.transition = CardTransition()
