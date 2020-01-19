@@ -13,8 +13,8 @@ class MainApp(App):
     def build(self):
         screenManager = ScreenManager.screenManager
         ScreenManager.adminMainScreen.initialize_buttons()
+        ScreenManager.inventoryScreen.add_template()
         return screenManager
-
 
 if __name__ == '__main__':
     MainApp().run()

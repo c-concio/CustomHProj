@@ -2,7 +2,9 @@
 
 <AdminMainScreen>:
     # objectProperty names
-    editInventoryButton: edit_inventory
+    inventoryButton: inventory
+    internetButton: internet
+    powerButton: power
 
     canvas:
         Color:
@@ -19,7 +21,7 @@
         size: 350, 300
 
         Button:
-            id: edit_inventory
+            id: inventory
             text: 'Edit Inventory'
             pos_hint:{'left': 1}
             background_normal: ''
@@ -27,6 +29,7 @@
             background_down: 'Color\DarkerOrange.png'
 
         Button:
+            id: internet
             text: 'Internet Setting'
             pos_hint:{'left': 1}
             background_normal: ''
@@ -34,8 +37,91 @@
             background_down: 'Color\DarkerOrange.png'
 
         Button:
+            id: power
             text: 'Power Off'
             pos_hint:{'left': 1}
             background_normal: ''
             background_color: [1, 0.595, 0, 1]
             background_down: 'Color\DarkerOrange.png'
+
+<InventoryItemTemplate>:
+    cylinderName: cylinder
+    ingredientName: ingredient
+    percentageAmount: percentage
+    progressBar: progress
+
+    Label:
+        id: cylinder
+        text: 'Cylinder Name'
+        pos_hint: {'x': 0.05, 'y': 3/4}
+        size_hint: (1, 1/4)
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+
+    Label:
+        id: ingredient
+        text: 'Ingredient'
+        pos_hint: {'x': 0.05, 'y': 2/4}
+        size_hint: (1, 1/4)
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+
+    Label:
+        id: percentage
+        text: "Percentage"
+        pos_hint: {'x': 0.05, 'y': 1/4}
+        size_hint: (1, 1/4)
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+
+    ProgressBar:
+        id: progress
+        pos_hint: {'center_x': 0.5, 'y': 0}
+        size_hint: (0.9, 1/4)
+        value: 50
+
+<InventoryScreen>
+    grid: gridLayout
+
+    canvas:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 38
+
+            canvas:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Button:
+                text: 'Back'
+                size_hint_x: None
+                width: 80
+                size_hint_y: None
+                height: 36
+
+
+
+        GridLayout:
+            padding: [5, 15, 5, 15]
+            id: gridLayout
+            cols: 3
+            row_force_default: True
+            row_default_height: 100
+            size_hint_max_x: 100
+            valign: 'middle'
+            pos_hint: {'center_x': 0.5}

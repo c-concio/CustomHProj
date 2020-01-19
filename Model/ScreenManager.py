@@ -8,7 +8,7 @@ from kivy.core.window import Window
 
 
 # make the app fullscreen
-Window.fullscreen = 'auto'
+# Window.fullscreen = 'auto'
 
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/Admin/AdminScreensKivy.kv')
