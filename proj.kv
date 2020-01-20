@@ -1,0 +1,240 @@
+<HomeScreen>:
+    name: "Home"
+
+    FloatLayout:
+
+        canvas:
+            Rectangle:
+                source: "bg3.jpg"
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text:"Get Your Customized \nHot Sauce"
+            halign: 'center'
+            font_name: "OstrichSans"
+            bold: True
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint: {"x":0.35,"top":0.80}
+            size_hint: 0.35, 0.15
+
+        Label:
+            text:"Or Scan Your \nQR Code Here"
+            halign: 'center'
+            font_name: "OstrichSans"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.07, "bottom":0.3}
+            size_hint: 0.35, 0.15
+
+
+        RoundedButton:
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_name: "OstrichSans"
+            bold: True
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Start"
+            color: 0, 0, 0, 1
+            on_release:
+                root.manager.transition.direction = "left"
+                root.startBtn()
+
+
+<RoundedButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [30,]
+
+<RoundedToggleButton@Button>:
+    RoundedRectangle:
+        radius: [30,]
+
+<SizeScreen>:
+    name: "size"
+
+    FloatLayout:
+
+        canvas:
+            Rectangle:
+                source: "bg3.jpg"
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text:"Choose Cup Size"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+        RelativeLayout:
+            ToggleButton:
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.61}
+                text: 'SMALL'
+                bold: True
+                font_name: "Pacifico"
+                group: 'geometry'
+
+        RelativeLayout:
+            ToggleButton:
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.4}
+                text: 'MEDIUM'
+                bold: True
+                font_name: "Pacifico"
+                group: 'geometry'
+
+        RelativeLayout:
+            ToggleButton:
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.19}
+                text: 'LARGE'
+                font_name: "Pacifico"
+                bold: True
+                group: 'geometry'
+
+        RoundedButton:
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Next"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.startBtn()
+
+
+
+
+<BaseScreen>:
+    name: "base"
+
+    FloatLayout:
+
+        canvas:
+            Rectangle:
+                source: "bg3.jpg"
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text:"Choose Base"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+        RoundedButton:
+            pos_hint:{"x":0.1,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 14**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Sauce Of The \nMonth"
+            halign: 'center'
+            on_release:
+                root.manager.transition.direction = "up"
+                root.SauceMonthBtn()
+
+
+        RoundedButton:
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Next"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.startBtn()
+
+
+<SauceOfMonth>:
+    name: "sauceMonth"
+
+    FloatLayout:
+
+        canvas:
+            Rectangle:
+                source: "bg3.jpg"
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text:"Sauce of the Month"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+<FlavourScreen>:
+    name: "flavour"
+
+    FloatLayout:
+
+        canvas:
+            Rectangle:
+                source: "bg3.jpg"
+                size: self.size
+                pos: self.pos
+
+        Label:
+            text:"Choose Flavour"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+
+        RoundedButton:
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Next"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.startBtn()
+
+
+<CustomDropDown>:
+    Button:
+        text: 'Base1'
+        size_hint_y: None
+        height: 44
+        on_release: root.select('item1')
+    Label:
+        text: 'Unselectable item'
+        size_hint_y: None
+        height: 44
+    Button:
+        text: 'Base2'
+        size_hint_y: None
+        height: 44
+        on_release: root.select('item2')
+
+<P>:
+    Label:
+        text: "You pressed the button"
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+
+    Button:
+        text: "You pressed the button"
+        size_hint: 0.8, 0.2
+        pos_hint: {"x":0.1, "y":0.1}
