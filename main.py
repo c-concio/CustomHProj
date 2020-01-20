@@ -52,12 +52,27 @@ ScreenManagement
             size_hint_x : .1
             size_hint_y : .1
             pos_hint: {'x': .2, 'y': .2}
-
         Button:
-            text: 'Move to next'
+            text: 'Base 4'
             size_hint_x : .1
             size_hint_y : .1
-            pos_hint: {'x': .7, 'y': .2}
+            pos_hint: {'x': .4, 'y': .6}
+        Button:
+            text: 'Base 5'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .4, 'y': .4}
+        Button:
+            text: 'Base 6'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .4, 'y': .2}
+
+        Button:
+            text: 'To Flavor'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .8, 'y': .1}
             on_release: 
                 root.manager.current = 'flavor'
             
@@ -68,12 +83,43 @@ ScreenManagement
                 pos: self.pos
                 size: self.size
                 source: "images.jpg"
-                
+        
         Button:
-            text: 'Next'
+            text: 'Flavor 1'
             size_hint_x : .1
             size_hint_y : .1
-            pos_hint: {'x': .7, 'y': .2}
+            pos_hint: {'x': .2, 'y': .6}
+        Button:
+            text: 'Flavor 2'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .2, 'y': .4}
+        Button:
+            text: 'Flavor 3'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .2, 'y': .2}
+        Button:
+            text: 'Flavor 4'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .4, 'y': .6}
+        Button:
+            text: 'Flavor 5'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .4, 'y': .4}
+        Button:
+            text: 'Flavor 6'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .4, 'y': .2}        
+                
+        Button:
+            text: 'To Base'
+            size_hint_x : .1
+            size_hint_y : .1
+            pos_hint: {'x': .8, 'y': .1}
             on_release: 
                 root.manager.current = 'base'
 """
