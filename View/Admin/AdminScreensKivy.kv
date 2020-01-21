@@ -51,12 +51,14 @@
     ingredientName: ingredient
     percentageAmount: percentage
     progressBar: progress
+    resetButton: reset
+
 
     Label:
         id: cylinder
         text: 'Cylinder Name'
-        pos_hint: {'x': 0.05, 'y': 3/4}
-        size_hint: (1, 1/4)
+        pos_hint: {'x': 0.05, 'y': 4/5}
+        size_hint: (1, 1/5)
         text_size: self.size
         halign: 'left'
         valign: 'middle'
@@ -64,8 +66,8 @@
     Label:
         id: ingredient
         text: 'Ingredient'
-        pos_hint: {'x': 0.05, 'y': 2/4}
-        size_hint: (1, 1/4)
+        pos_hint: {'x': 0.05, 'y': 3/5}
+        size_hint: (1, 1/5)
         text_size: self.size
         halign: 'left'
         valign: 'middle'
@@ -73,17 +75,23 @@
     Label:
         id: percentage
         text: "Percentage"
-        pos_hint: {'x': 0.05, 'y': 1/4}
-        size_hint: (1, 1/4)
+        pos_hint: {'x': 0.05, 'y': 2/5}
+        size_hint: (1, 1/5)
         text_size: self.size
         halign: 'left'
         valign: 'middle'
 
     ProgressBar:
         id: progress
-        pos_hint: {'center_x': 0.5, 'y': 0}
-        size_hint: (0.9, 1/4)
+        pos_hint: {'center_x': 0.5, 'y': 1/5}
+        size_hint: (0.9, 1/5)
         value: 50
+
+    Button:
+        id: reset
+        text: 'Reset'
+        pos_hint: {'x': 0.05, 'y': 0}
+        size_hint: (0.9, 1/5)
 
 <InventoryScreen>
     backButton: back
@@ -129,3 +137,4 @@
             size_hint_max_x: 100
             valign: 'middle'
             pos_hint: {'center_x': 0.5}
+            spacing: [0, 20]
