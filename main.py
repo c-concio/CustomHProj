@@ -28,12 +28,12 @@ def create_connection(db_file):
     conn = None
     try:
         conn = sqlite3.connect(db_file)
-        return conn
     except Error as e:
         print(e)
 
     return conn
 
+# create table function
 def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
@@ -41,13 +41,21 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
+# insert function for Cylinder table
+def insert_cylinder(conn, cylinder):
+    sql = ''' INSERT INTO cylinder(ingredient, amount)
+              VALUES(?,?) '''
+    cur = conn.cursor()
+    cur.execute(sql, cylinder)
+    return cur.lastrowid
+
 def main():
     database = r"C:\sqlite\db\pysqlite.db"
 
     sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
                                             id integer PRIMARY KEY,
                                             ingredient text,
-                                            amount text
+                                            amount integer
                                     ); """
 
     # create database connection
@@ -56,9 +64,14 @@ def main():
     # create tables
     if conn is not None:
         create_table(conn, sql_create_cylinder_table)
+
     else:
         print("Error! Cannot create the connection")
 
+    with conn:
+        # create new row
+        cylinderRow = ('Ketchup', 500);
+        insert_cylinder(conn, cylinderRow)
 
 
 
