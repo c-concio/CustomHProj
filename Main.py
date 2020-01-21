@@ -11,11 +11,10 @@ class MainApp(App):
 
     def build(self):
         screenManager = AdminModel.screenManager
-        AdminModel.adminMainScreen.initialize_buttons()
-        AdminModel.inventoryScreen.add_template()
-        AdminModel.inventoryScreen.add_template()
-        AdminModel.inventoryScreen.add_template()
-        AdminModel.inventoryScreen.add_template()
+        AdminMainScreenController.add_inventory_template(AdminModel.inventoryScreen)
+        AdminMainScreenController.add_inventory_template(AdminModel.inventoryScreen)
+        AdminMainScreenController.add_inventory_template(AdminModel.inventoryScreen)
+        AdminMainScreenController.add_inventory_template(AdminModel.inventoryScreen)
         return screenManager
 
 if __name__ == '__main__':

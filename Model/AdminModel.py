@@ -21,21 +21,11 @@ class AdminMainScreen(Screen):
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
 
-    # Button switches to the
-    def initialize_buttons(self):
-        self.inventoryButton.bind(on_press=lambda x: AdminMainScreenController.switch_screen('Inventory Screen'))
-        self.internetButton.bind(on_press=lambda x: AdminMainScreenController.switch_screen('Internet Settings Screen'))
-        self.powerButton.bind(on_press=AdminMainScreenController.quit_application)
-        inventoryScreen.backButton.bind(on_press=lambda x: AdminMainScreenController.return_screen('Admin Main Screen'))
-
 
 class InventoryScreen(Screen):
     # TODO: Make inventory items then grid them up
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
-
-    def add_template(self):
-        self.grid.add_widget(InventoryItemTemplate())
 
 
 class InternetSettingsScreen(Screen):
@@ -62,6 +52,7 @@ screenManager = ScreenManager()
 adminMainScreen = AdminMainScreen(name='Admin Main Screen')
 inventoryScreen = InventoryScreen(name='Inventory Screen')
 internetSettingsScreen = InternetSettingsScreen(name='Internet Settings Screen')
+AdminMainScreenController.initialize_buttons()
 screenManager.add_widget(adminMainScreen)
 screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
