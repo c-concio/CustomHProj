@@ -25,54 +25,115 @@ from sqlite3 import Error
 
 def create_connection(db_file):
     # create connection
-    conn = None
+    connect = None
     try:
-        conn = sqlite3.connect(db_file)
+        connect = sqlite3.connect(db_file)
     except Error as e:
         print(e)
 
-    return conn
+    return connect
 
 # create table function
-def create_table(conn, create_table_sql):
+def create_table(connect, create_table_sql):
     try:
-        c = conn.cursor()
+        c = connect.cursor()
         c.execute(create_table_sql)
     except Error as e:
         print(e)
 
 # insert function for Cylinder table
-def insert_cylinder(conn, cylinder):
+def insert_cylinder(connect, ingredient, amount):
     sql = ''' INSERT INTO cylinder(ingredient, amount)
               VALUES(?,?) '''
-    cur = conn.cursor()
+    cylinder = (ingredient, amount)
+    cur = connect.cursor()
     cur.execute(sql, cylinder)
     return cur.lastrowid
 
+def insert_cylinder_many(cylinderList):
+    try:
+        connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
+        cursor = connect.cursor()
+
+        insert_many_query = """INSERT INTO cylinder(ingredient, amount)
+                                VALUES(?,?)"""
+        cursor.executemany(insert_many_query, cylinderList)
+        connect.commit()
+        print("Inserted ", cursor.rowcount, " of rows")
+        cursor.close()
+
+    except Error as e:
+        print("Failed to insert multiple rows", e)
+
+    finally:
+        if(connect):
+            connect.close()
+            print("Closed connection")
+
+def select_first_row_from_condition(ingredient):
+    try:
+        connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
+        cursor = connect.cursor()
+
+        cursor.execute("SELECT * FROM (SELECT *, "
+                       "row_number() over (PARTITION BY ingredient ORDER BY amount DESC) as rownum "
+                       "FROM cylinder"
+                       ") cylinder "
+                       "WHERE ingredient = ? AND amount > 10 AND rownum = 1;", (ingredient, ))
+
+
+        rows = cursor.fetchall()
+
+        for row in rows:
+            print(row)
+
+        connect.commit()
+        print("Fetched first row")
+        cursor.close()
+
+    except Error as e:
+        print("Failed to select first row", e)
+
+    finally:
+        if(connect):
+            connect.close()
+            print("Closed connection")
+
+
 def main():
-    database = r"C:\sqlite\db\pysqlite.db"
+    select_first_row_from_condition('Ketchup')
 
-    sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
-                                            id integer PRIMARY KEY,
-                                            ingredient text,
-                                            amount integer
-                                    ); """
+    # listToInsert = [("Mayonaise", 10),
+    #                 ("Mustard", 20),
+    #                 ("Spice", 30)]
+    # insert_cylinder_many(listToInsert)
 
-    # create database connection
-    conn = create_connection(database)
-
-    # create tables
-    if conn is not None:
-        create_table(conn, sql_create_cylinder_table)
-
-    else:
-        print("Error! Cannot create the connection")
-
-    with conn:
-        # create new row
-        cylinderRow = ('Ketchup', 500);
-        insert_cylinder(conn, cylinderRow)
-
+    # database = r"C:\sqlite\db\pysqlite.db"
+    #
+    # sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
+    #                                         id integer PRIMARY KEY,
+    #                                         ingredient text,
+    #                                         amount integer
+    #                                 ); """
+    #
+    # # create database connection
+    # connect = create_connection(database)
+    #
+    # # create tables
+    # if connect is not None:
+    #     create_table(connect, sql_create_cylinder_table)
+    #
+    # else:
+    #     print("Error! Cannot create the connection")
+    #
+    # with connect:
+    #     # create new row
+    #     # cylinderRow = ('Ketchup', 500);
+    #     insert_cylinder(connect, 'Ketchup', 500)
+    #
+    # if(connect):
+    #     connect.close()
+    #     print("Closing SQLite connection")
 
 
 kivy_string = """
