@@ -45,7 +45,7 @@ class InternetSettingsScreen(Screen):
 
 class InventoryItemTemplate(BoxLayout):
     cylinderButton = ObjectProperty(None)
-    ingredientButton = ObjectProperty(None)
+    ingredientSpinner = ObjectProperty(None)
     percentButton = ObjectProperty(None)
     progressBar = ObjectProperty(None)
     resetButton = ObjectProperty(None)

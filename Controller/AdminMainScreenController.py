@@ -58,22 +58,20 @@ def add_inventory_template(cylinder_item):
     # assign cylinder name to label
     inventory_item_template.cylinderButton.text = 'Cylinder ' + str(cylinder_item.cylinderID)
 
+    # assign chosen ingredient
+    inventory_item_template.ingredientSpinner.text = cylinder_item.ingredient
+
     # setup the values for the ingredientSpinner and bind the function update_ingredient to it
     set_ingredient_list(inventory_item_template.ingredientSpinner)
     inventory_item_template.ingredientSpinner.bind(text=update_ingredient)
 
     # setup the percent label
-    inventory_item_template.percentLabel.text = '50'
-    update_cylinder_amount(inventory_item_template, 20)
+    inventory_item_template.percentLabel.text = str(cylinder_item.amount)
+    inventory_item_template.progressBar.value = cylinder_item.amount
 
     # TODO: Update percent amount
 
     AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
-
-
-def update_cylinder_amount(inventory_item_template, sub_amount):
-    inventory_item_template.percentLabel.text = str(float(inventory_item_template.percentLabel.text) - sub_amount)
-    inventory_item_template.progressBar.value -= sub_amount
 
 
 # update the ingredient choice in the database
