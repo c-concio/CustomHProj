@@ -34,22 +34,63 @@ def create_connection(db_file):
     return connect
 
 # create table function
-def create_table(connect, create_table_sql):
+def create_table():
     try:
-        c = connect.cursor()
-        c.execute(create_table_sql)
+        database = r"C:\sqlite\db\pysqlite.db"
+
+        sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
+                                                id integer PRIMARY KEY,
+                                                ingredient text,
+                                                amount integer
+                                        ); """
+
+        sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
+                                                        base text,
+                                                        base_cylinder_id integer,
+                                                        base_mL integer,
+                                                        flavor text,
+                                                        flavor_cylinder_id integer,
+                                                        flavor_mL integer
+                                                ); """
+
+        # create database connection
+        connect = create_connection(database)
+
+        # create tables
+        if connect is not None:
+            cursor = connect.cursor()
+            cursor.execute(sql_create_cylinder_table)
+            cursor.execute(sql_create_temporary_table)
+
+        else:
+            print("Error! Cannot create the connection")
+
+        if (connect):
+            connect.close()
+            print("Closing SQLite connection")
+
     except Error as e:
         print(e)
 
-# insert function for Cylinder table
-def insert_cylinder(connect, ingredient, amount):
-    sql = ''' INSERT INTO cylinder(ingredient, amount)
-              VALUES(?,?) '''
-    cylinder = (ingredient, amount)
-    cur = connect.cursor()
-    cur.execute(sql, cylinder)
-    return cur.lastrowid
 
+
+# insert function for Cylinder table
+def insert_cylinder(ingredient, amount):
+    try:
+        connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
+        cursor = connect.cursor()
+        sql = ''' INSERT INTO cylinder(ingredient, amount)
+                  VALUES(?,?) '''
+        cylinder = (ingredient, amount)
+        cursor.execute(sql, cylinder)
+        connect.commit()
+        print("Inserted single row to cylinder table")
+        cursor.close()
+    except Error as e:
+        print("Failed to insert into cylinder table. ", e)
+    return cursor.lastrowid
+
+# insert many function for Cylinder table
 def insert_cylinder_many(cylinderList):
     try:
         connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
@@ -63,33 +104,67 @@ def insert_cylinder_many(cylinderList):
         cursor.close()
 
     except Error as e:
-        print("Failed to insert multiple rows", e)
+        print("Failed to insert multiple rows in cylinder table. ", e)
 
     finally:
         if(connect):
             connect.close()
             print("Closed connection")
 
+
+# insert function for Temporary table
+def insert_temporary(base, base_mL, flavor, flavor_mL):
+    try:
+        connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
+        cursor = connect.cursor()
+
+        base_cylinder_id = 0
+        flavor_cylinder_id = 0
+        try:
+            # select the cylinder id with base name
+            base_cylinder_id = select_first_row_from_condition(base)
+            print("Base id", base_cylinder_id)
+
+        except:
+            print("No corresponding cylinder with this base name")
+
+        try:
+            # select cylinder id with flavor name
+            flavor_cylinder_id = select_first_row_from_condition(flavor)
+            print("Flavor id", flavor_cylinder_id)
+        except:
+            print("No corresponding cylinder with this base name")
+
+        sql = """INSERT INTO temporary(base, base_cylinder_id, base_mL, flavor, flavor_cylinder_id, flavor_mL) VALUES(?,?,?,?,?,?);"""
+        order = (base, base_cylinder_id, base_mL, flavor, flavor_cylinder_id, flavor_mL)
+        cursor.execute(sql, order)
+        connect.commit()
+
+        print("Inserted single row to temporary table")
+        cursor.close()
+    except Error as e:
+        print("Failed to insert into temporary table. ", e)
+    return cursor.lastrowid
+
 def select_first_row_from_condition(ingredient):
     try:
         connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
         cursor = connect.cursor()
 
-        cursor.execute("SELECT * FROM (SELECT *, "
+        cursor.execute("SELECT ID FROM(SELECT * FROM (SELECT *, "
                        "row_number() over (PARTITION BY ingredient ORDER BY amount DESC) as rownum "
                        "FROM cylinder"
                        ") cylinder "
-                       "WHERE ingredient = ? AND amount > 10 AND rownum = 1;", (ingredient, ))
+                       "WHERE ingredient = ? AND amount > 10 AND rownum = 1);", (ingredient, ))
 
+        rows = cursor.fetchone()
+        print("Fetched first row")
 
-        rows = cursor.fetchall()
+        cursor.close()
 
         for row in rows:
-            print(row)
-
-        connect.commit()
-        print("Fetched first row")
-        cursor.close()
+            # print(row)
+            return row
 
     except Error as e:
         print("Failed to select first row", e)
@@ -97,43 +172,52 @@ def select_first_row_from_condition(ingredient):
     finally:
         if(connect):
             connect.close()
-            print("Closed connection")
+
+def select_star_table(table):
+    try:
+        connect = sqlite3.connect(r"C:\sqlite\db\pysqlite.db")
+        cursor = connect.cursor()
+
+        sql = "SELECT * FROM " + table + ";"
+
+        cursor.execute(sql)
+
+
+        rows = cursor.fetchall()
+        print("Table contents:")
+
+        cursor.close()
+
+        for row in rows:
+            print(row)
+
+
+    except Error as e:
+        print("Failed to show table", e)
+
+    finally:
+        if(connect):
+            connect.close()
 
 
 def main():
-    select_first_row_from_condition('Ketchup')
+    create_table()
+    # print(select_first_row_from_condition('Ketchup'))
 
-    # listToInsert = [("Mayonaise", 10),
+    # listToInsert = [("Ketchup", 500),
+    #                 ("Mayonnaise", 10),
     #                 ("Mustard", 20),
     #                 ("Spice", 30)]
     # insert_cylinder_many(listToInsert)
 
-    # database = r"C:\sqlite\db\pysqlite.db"
-    #
-    # sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
-    #                                         id integer PRIMARY KEY,
-    #                                         ingredient text,
-    #                                         amount integer
-    #                                 ); """
-    #
-    # # create database connection
-    # connect = create_connection(database)
-    #
-    # # create tables
-    # if connect is not None:
-    #     create_table(connect, sql_create_cylinder_table)
-    #
-    # else:
-    #     print("Error! Cannot create the connection")
-    #
-    # with connect:
-    #     # create new row
-    #     # cylinderRow = ('Ketchup', 500);
-    #     insert_cylinder(connect, 'Ketchup', 500)
-    #
-    # if(connect):
-    #     connect.close()
-    #     print("Closing SQLite connection")
+    # insert_temporary("Ketchup", 20, "Spice", 5)
+
+    # # create new row
+    # insert_cylinder('Ketchup', 500)
+    
+    select_star_table("temporary")
+
+
 
 
 kivy_string = """
