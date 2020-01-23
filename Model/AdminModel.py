@@ -1,3 +1,10 @@
+from tkinter import Button
+
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.dropdown import DropDown
+from kivy.uix.spinner import Spinner
+from kivy.uix.textinput import TextInput
+
 from Controller import AdminMainScreenController
 import kivy
 
@@ -8,7 +15,6 @@ from kivy.uix.floatlayout import FloatLayout
 
 from kivy.lang import Builder
 from kivy.core.window import Window
-
 
 
 # //////////////////////////////////////////////////
@@ -27,13 +33,27 @@ class InventoryScreen(Screen):
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
 
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+        self.grid.bind(minimum_height=self.grid.setter('height'))
+
 
 class InternetSettingsScreen(Screen):
     pass
 
 
-class InventoryItemTemplate(FloatLayout):
-    pass
+class InventoryItemTemplate(BoxLayout):
+    cylinderButton = ObjectProperty(None)
+    ingredientButton = ObjectProperty(None)
+    percentButton = ObjectProperty(None)
+    progressBar = ObjectProperty(None)
+    resetButton = ObjectProperty(None)
+
+    def __init__(self, id):
+        super().__init__()
+        self.inventoryId = id
+
 
 # //////////////////////////////////////////////////
 #                  Screen Manager
@@ -58,3 +78,11 @@ screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
 screenManager.transition = CardTransition()
 
+# item inventory IDs
+inventoryNumber = 0
+
+# test textInput
+textInput = TextInput(multiline=False)
+dropDown = DropDown()
+pressedButton = Button()
+spinner = Spinner()

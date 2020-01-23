@@ -13,8 +13,6 @@
             pos: self.pos
             size: self.size
 
-
-
     BoxLayout:
         orientation: 'vertical'
         size_hint: None, None
@@ -46,52 +44,47 @@
             background_color: [1, 0.595, 0, 1]
             background_down: 'Color\DarkerOrange.png'
 
+
+
 <InventoryItemTemplate>:
-    cylinderName: cylinder
-    ingredientName: ingredient
-    percentageAmount: percentage
+    cylinderButton: cylinder
+    ingredientSpinner: ingredient
+    percentButton: percentage
     progressBar: progress
     resetButton: reset
+    orientation: 'vertical'
 
-
-    Label:
+    Button:
         id: cylinder
         text: 'Cylinder Name'
-        pos_hint: {'x': 0.05, 'y': 4/5}
-        size_hint: (1, 1/5)
         text_size: self.size
         halign: 'left'
         valign: 'middle'
+        background_color: [0, 0, 0, 0]
 
-    Label:
+    Spinner:
         id: ingredient
-        text: 'Ingredient'
-        pos_hint: {'x': 0.05, 'y': 3/5}
-        size_hint: (1, 1/5)
+        text: 'Default Ingredient'
         text_size: self.size
         halign: 'left'
         valign: 'middle'
+        background_color: [0, 0, 0, 0]
 
-    Label:
+    Button:
         id: percentage
         text: "Percentage"
-        pos_hint: {'x': 0.05, 'y': 2/5}
-        size_hint: (1, 1/5)
         text_size: self.size
         halign: 'left'
         valign: 'middle'
+        background_color: [0, 0, 0, 0]
 
     ProgressBar:
         id: progress
-        pos_hint: {'center_x': 0.5, 'y': 1/5}
-        size_hint: (0.9, 1/5)
         value: 50
 
     Button:
         id: reset
         text: 'Reset'
-        pos_hint: {'x': 0.05, 'y': 0}
-        size_hint: (0.9, 1/5)
 
 <InventoryScreen>
     backButton: back
@@ -126,15 +119,19 @@
                 size_hint_y: None
                 height: 36
 
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size: self.size
 
-
-        GridLayout:
-            padding: [5, 15, 5, 15]
-            id: gridLayout
-            cols: 3
-            row_force_default: True
-            row_default_height: 100
-            size_hint_max_x: 100
-            valign: 'middle'
-            pos_hint: {'center_x': 0.5}
-            spacing: [0, 20]
+            GridLayout:
+                size_hint_y: None
+                size_hint_x: 1
+                padding: [15]
+                id: gridLayout
+                cols: 3
+                row_force_default: True
+                row_default_height: 150
+                valign: 'middle'
+                #pos_hint: {'center_x': 0.5}
+                spacing: [15, 15]
