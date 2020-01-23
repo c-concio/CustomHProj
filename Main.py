@@ -1,5 +1,5 @@
 from Model import AdminModel
-from Controller import AdminMainScreenController
+from Controller import AdminMainScreenController, DatabaseController
 import kivy
 
 kivy.require('1.11.1')
@@ -11,11 +11,10 @@ class MainApp(App):
 
     def build(self):
         screenManager = AdminModel.screenManager
-
-        for x in range(0, 50):
-            AdminMainScreenController.add_inventory_template(AdminModel.inventoryScreen)
-
+        AdminMainScreenController.setup_inventory_screen()
         return screenManager
+
 
 if __name__ == '__main__':
     MainApp().run()
+    DatabaseController.database_close()

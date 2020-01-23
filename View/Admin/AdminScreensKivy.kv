@@ -44,7 +44,68 @@
             background_color: [1, 0.595, 0, 1]
             background_down: 'Color\DarkerOrange.png'
 
+<InventoryScreen>
+    backButton: back
+    grid: gridLayout
 
+    canvas:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 38
+            orientation: 'horizontal'
+
+            canvas:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Button:
+                id: back
+                text: 'Back'
+                size_hint_x: None
+                width: 80
+                size_hint_y: None
+                height: 36
+
+            BoxLayout:
+                orientation: 'vertical'
+
+                Button:
+                    id: addInventory
+                    text: 'Add Inventory'
+                    size_hint_x: None
+                    width: 120
+                    size_hint_y: None
+                    height: 36
+                    pos_hint: {'right': 1}
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size: self.size
+
+            GridLayout:
+                size_hint_y: None
+                size_hint_x: 1
+                padding: [15]
+                id: gridLayout
+                cols: 3
+                row_force_default: True
+                row_default_height: 150
+                valign: 'middle'
+                #pos_hint: {'center_x': 0.5}
+                spacing: [15, 15]
 
 <InventoryItemTemplate>:
     cylinderButton: cylinder
@@ -82,56 +143,7 @@
         id: progress
         value: 50
 
+
     Button:
         id: reset
         text: 'Reset'
-
-<InventoryScreen>
-    backButton: back
-    grid: gridLayout
-
-    canvas:
-        Color:
-            rgba: 0.2, 0.2, 0.2, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        BoxLayout:
-            size_hint_y: None
-            height: 38
-
-            canvas:
-                Color:
-                    rgba: 0.1, 0.1, 0.1, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-
-            Button:
-                id: back
-                text: 'Back'
-                size_hint_x: None
-                width: 80
-                size_hint_y: None
-                height: 36
-
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
-            size: self.size
-
-            GridLayout:
-                size_hint_y: None
-                size_hint_x: 1
-                padding: [15]
-                id: gridLayout
-                cols: 3
-                row_force_default: True
-                row_default_height: 150
-                valign: 'middle'
-                #pos_hint: {'center_x': 0.5}
-                spacing: [15, 15]

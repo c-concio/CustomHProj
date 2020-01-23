@@ -1,11 +1,18 @@
+import sqlite3
+
 import kivy
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.textinput import TextInput
 
-from Model import AdminModel
+from Controller import DatabaseController
+from Model import AdminModel, Cylinder
 from kivy.uix.screenmanager import Screen
 
+
+# -------------------------------------------------------------------
+#                       Screen Functions
+# -------------------------------------------------------------------
 
 # function takes in a screen and switches the screenManager to the passed screen
 def switch_screen(screen_name):
@@ -32,10 +39,24 @@ def initialize_buttons():
     AdminModel.inventoryScreen.backButton.bind(on_press=lambda x: return_screen('Admin Main Screen'))
 
 
+# -------------------------------------------------------------------
+#                       Inventory Screen Functions
+# -------------------------------------------------------------------
+
+# setup the inventory screen by getting cylinders from the database and adding an inventory item template for each
+def setup_inventory_screen():
+    # update all the cylinders from the database
+    DatabaseController.update_cylinders()
+    for cylinder_item in Cylinder.cylinderArray:
+        add_inventory_template(cylinder_item)
+
+
 # Add an inventory item into the screen
-def add_inventory_template(inventoryScreen):
-    inventory_item_template = AdminModel.InventoryItemTemplate(AdminModel.inventoryNumber)
-    AdminModel.inventoryNumber += 1
+def add_inventory_template(cylinder_item):
+    inventory_item_template = AdminModel.InventoryItemTemplate()
+
+    # assign cylinder name to label
+    inventory_item_template.cylinderButton.text = 'Cylinder ' + str(cylinder_item.cylinderID)
 
     # setup the values for the ingredientSpinner and bind the function update_ingredient to it
     set_ingredient_list(inventory_item_template.ingredientSpinner)
@@ -47,7 +68,7 @@ def add_inventory_template(inventoryScreen):
 
     # TODO: Update percent amount
 
-    inventoryScreen.grid.add_widget(inventory_item_template)
+    AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
 
 
 def update_cylinder_amount(inventory_item_template, sub_amount):
@@ -63,34 +84,3 @@ def update_ingredient(spinner, text):
 # get the ingredient choices from the database and set it on the spinner values
 def set_ingredient_list(spinner):
     spinner.values = ('Ingredient 1', 'Ingredient 2', 'Ingredient 3')
-
-
-def add_text_input(pressed_button):
-    try:
-        remove_text_input()
-    except:
-        pass
-
-    AdminModel.pressedButton = pressed_button
-    text_input = AdminModel.textInput
-
-    # clear any prexious text in textInput and put it over the pressed button
-    text_input.text = ''
-    pressed_button.add_widget(text_input)
-
-    text_input.size = text_input.parent.size
-    text_input.pos = text_input.parent.pos
-    text_input.bind(on_text_validate=on_enter)
-
-
-def set_button_text(text):
-    AdminModel.pressedButton.text = text
-
-
-def on_enter(instance):
-    AdminModel.pressedButton.text = instance.text
-    remove_text_input()
-
-
-def remove_text_input():
-    AdminModel.pressedButton.remove_widget(AdminModel.textInput)

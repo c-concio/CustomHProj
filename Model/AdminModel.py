@@ -50,10 +50,6 @@ class InventoryItemTemplate(BoxLayout):
     progressBar = ObjectProperty(None)
     resetButton = ObjectProperty(None)
 
-    def __init__(self, id):
-        super().__init__()
-        self.inventoryId = id
-
 
 # //////////////////////////////////////////////////
 #                  Screen Manager
@@ -78,11 +74,7 @@ screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
 screenManager.transition = CardTransition()
 
-# item inventory IDs
-inventoryNumber = 0
+# inventory array
+inventoryArray = []
 
-# test textInput
-textInput = TextInput(multiline=False)
-dropDown = DropDown()
-pressedButton = Button()
-spinner = Spinner()
+
