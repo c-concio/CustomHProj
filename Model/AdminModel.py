@@ -76,5 +76,5 @@ screenManager.transition = CardTransition()
 
 # inventory array
 inventoryArray = []
-
+ingredientArray = []
 
