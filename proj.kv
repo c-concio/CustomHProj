@@ -50,9 +50,26 @@
             size: self.size
             radius: [30,]
 
-<RoundedToggleButton@Button>:
-    RoundedRectangle:
-        radius: [30,]
+<RoundedButton2@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [50,50]
+
+
+<CircleButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [70,70]
 
 <SizeScreen>:
     name: "size"
@@ -212,29 +229,119 @@
                 root.startBtn()
 
 
-<CustomDropDown>:
-    Button:
-        text: 'Base1'
-        size_hint_y: None
-        height: 44
-        on_release: root.select('item1')
-    Label:
-        text: 'Unselectable item'
-        size_hint_y: None
-        height: 44
-    Button:
-        text: 'Base2'
-        size_hint_y: None
-        height: 44
-        on_release: root.select('item2')
 
-<P>:
-    Label:
-        text: "You pressed the button"
-        size_hint: 0.6, 0.2
-        pos_hint: {"x":0.2, "top":1}
+<AmountScreen>:
+    name: "amount"
 
-    Button:
-        text: "You pressed the button"
-        size_hint: 0.8, 0.2
-        pos_hint: {"x":0.1, "y":0.1}
+    FloatLayout:
+
+        Label:
+            text:"Drag to Adjust Amount"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+
+        RoundedButton:
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Done"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.startBtn()
+
+        Slider:
+            id: adj1
+            min: 0.
+            max: 360.
+            value: 180.
+            step: 10
+            size_hint_x: 0.3
+            pos_hint: {'x': 0.05, 'y': 0.05}
+
+
+
+        FloatLayout:
+            canvas:
+                Color:
+                    rgb: 1, 1, 1
+                Ellipse:
+                    size: self.width - 2000 , self.height - 800
+                    source: 'c1.png'
+                    angle_start: adj1.value
+                    pos: 1300,400
+
+                Ellipse:
+                    size: self.width - 2000, self.height - 800
+                    source: 'c2.png'
+                    angle_end: adj1.value
+                    pos: 1300,400
+
+            RoundedButton2:
+                text: 'Reset'
+                on_press: adj1.value = 180
+                pos_hint:{"x":0.15,"y":0.05}
+                size_hint: 0.1, 0.1
+                font_name: "OstrichSans"
+                font_size: (root.width**2 + root.height**2) / 16**4
+                bold: True
+                color: 0, 0, 0, 1
+
+            RoundedButton:
+                pos_hint:{"x":0.65,"y":0.05}
+                size_hint: 0.3, 0.2
+                font_size: (root.width**2 + root.height**2) / 13**4
+                font_name: "OstrichSans"
+                bold: True
+                color: 0, 0, 0, 1
+                text: "Done"
+                on_release:
+                    root.manager.transition.direction = "left"
+                    root.startBtn()
+
+            Label:
+                text:"Base"
+                font_name: "Pacifico"
+                font_size: (root.width**2 + root.height**2) / 17**4
+                pos_hint: {"x":0.035,"top":0.8}
+                size_hint: 0.35, 0.35
+
+
+            Label:
+                text:"Flavour"
+                font_name: "Pacifico"
+                font_size: (root.width**2 + root.height**2) / 17**4
+                pos_hint: {"x":0.035,"top":0.65}
+                size_hint: 0.35, 0.35
+
+            Label:
+                id: amountF
+                text: "0"
+
+            CircleButton:
+                id: addF
+                text: "+"
+                font_size: (root.width**2 + root.height**2) / 14**4
+                pos_hint: {"x":0.1,"y":0.35}
+                size_hint: 0.06, 0.09
+
+
+
+            CircleButton:
+                id: removeF
+                text: "-"
+                font_size: (root.width**2 + root.height**2) / 14**4
+                pos_hint: {"x":0.25,"y":0.35}
+                size_hint: 0.06, 0.09
+
+
+
+
+
+
+

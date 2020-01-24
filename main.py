@@ -38,12 +38,16 @@ class BaseScreen(Screen):
 
 
 class FlavourScreen(Screen):
-    pass
+    def startBtn(self):
+        sm.current = "amount"
 
 
 class SauceOfMonth(Screen):
     pass
 
+
+class AmountScreen(Screen):
+    pass
 
 class WindowManager(ScreenManager):
     pass
@@ -53,7 +57,8 @@ kv = Builder.load_file("proj.kv")
 
 sm = WindowManager()
 
-screens = [HomeScreen(name="Home"), SizeScreen(name="size"), BaseScreen(name="base"),SauceOfMonth(name="sauceMonth"), FlavourScreen(name="flavour") ]
+screens = [HomeScreen(name="Home"), SizeScreen(name="size"), BaseScreen(name="base"), SauceOfMonth(name="sauceMonth"),
+           FlavourScreen(name="flavour"), AmountScreen(name="amount")]
 for screen in screens:
     sm.add_widget(screen)
 
