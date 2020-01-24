@@ -50,6 +50,10 @@ class InventoryItemTemplate(BoxLayout):
     progressBar = ObjectProperty(None)
     resetButton = ObjectProperty(None)
 
+    def __init__(self, cylinderID):
+        super().__init__()
+        self.cylinderID = cylinderID
+
 
 # //////////////////////////////////////////////////
 #                  Screen Manager

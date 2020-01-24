@@ -53,7 +53,7 @@ def setup_inventory_screen():
 
 # Add an inventory item into the screen
 def add_inventory_template(cylinder_item):
-    inventory_item_template = AdminModel.InventoryItemTemplate()
+    inventory_item_template = AdminModel.InventoryItemTemplate(cylinder_item.cylinderID)
 
     # assign cylinder name to label
     inventory_item_template.cylinderButton.text = 'Cylinder ' + str(cylinder_item.cylinderID)
@@ -83,4 +83,7 @@ def set_ingredient_list(spinner):
 
 # update the ingredient choice for a cylinder
 def update_ingredient_choice(spinner, text):
-    pass
+    # get the spinner's parent's cylinder ID and update ingredient choice
+    qConn = DatabaseClass.queryCursor
+    qConn.execute("UPDATE Cylinder SET ingredient = ? WHERE cylinderID = ?", (text, spinner.parent.cylinderID))
+    DatabaseClass.conn.commit()
