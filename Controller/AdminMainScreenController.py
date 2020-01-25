@@ -7,12 +7,21 @@ from kivy.uix.textinput import TextInput
 
 from Controller import DatabaseController
 from Model import AdminModel, DatabaseClass
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, CardTransition
 
 
 # -------------------------------------------------------------------
 #                       Screen Functions
 # -------------------------------------------------------------------
+
+# function initializes the screens and sets up the different screens in the program
+def initialize_screen_manager():
+    initialize_buttons()
+    AdminModel.screenManager.add_widget(AdminModel.backgroundTestScreen)
+    AdminModel.screenManager.add_widget(AdminModel.adminMainScreen)
+    AdminModel.screenManager.add_widget(AdminModel.inventoryScreen)
+    AdminModel.screenManager.add_widget(AdminModel.internetSettingsScreen)
+    AdminModel.screenManager.transition = CardTransition()
 
 # function takes in a screen and switches the screenManager to the passed screen
 def switch_screen(screen_name):

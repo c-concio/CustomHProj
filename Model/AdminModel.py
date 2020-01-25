@@ -54,6 +54,9 @@ class InventoryItemTemplate(BoxLayout):
         super().__init__()
         self.cylinderID = cylinderID
 
+class BackgroundTestScreen(Screen):
+    pass
+
 
 # //////////////////////////////////////////////////
 #                  Screen Manager
@@ -72,11 +75,7 @@ screenManager = ScreenManager()
 adminMainScreen = AdminMainScreen(name='Admin Main Screen')
 inventoryScreen = InventoryScreen(name='Inventory Screen')
 internetSettingsScreen = InternetSettingsScreen(name='Internet Settings Screen')
-AdminMainScreenController.initialize_buttons()
-screenManager.add_widget(adminMainScreen)
-screenManager.add_widget(inventoryScreen)
-screenManager.add_widget(internetSettingsScreen)
-screenManager.transition = CardTransition()
+backgroundTestScreen = BackgroundTestScreen(name='Background Test Screen')
 
 # inventory array
 inventoryArray = []

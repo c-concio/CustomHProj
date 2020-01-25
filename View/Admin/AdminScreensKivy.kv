@@ -147,3 +147,27 @@
     Button:
         id: reset
         text: 'Reset'
+
+<BackgroundTestScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "Images/chiliBowl.png"
+
+
+

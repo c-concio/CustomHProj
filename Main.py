@@ -10,9 +10,10 @@ from kivy.app import App
 class MainApp(App):
 
     def build(self):
-        screenManager = AdminModel.screenManager
+        screen_manager = AdminModel.screenManager
+        AdminMainScreenController.initialize_screen_manager()
         AdminMainScreenController.setup_inventory_screen()
-        return screenManager
+        return screen_manager
 
 
 if __name__ == '__main__':
