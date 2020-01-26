@@ -4,7 +4,7 @@ cylinderArray = []
 ingredientArray = []
 
 # connect to the database called example.db
-conn = sqlite3.connect('Model/Cylinder.db')
+conn = sqlite3.connect('database/pysqlite.db')
 cylinderCursor = conn.cursor()
 ingredientCursor = conn.cursor()
 queryCursor = conn.cursor()

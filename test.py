@@ -55,6 +55,12 @@ def create_table():
                                                         flavor_mL integer
                                                 ); """
 
+        sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredient (
+                                                        "ID"	INTEGER,
+                                                        "IngredientType"	TEXT NOT NULL DEFAULT 'None',
+                                                        PRIMARY KEY("ID")
+                                                        ); """
+
         # create database connection
         connect = create_connection(database)
 
@@ -63,6 +69,7 @@ def create_table():
             cursor = connect.cursor()
             cursor.execute(sql_create_cylinder_table)
             cursor.execute(sql_create_temporary_table)
+            cursor.execute(sql_create_ingredient_table)
 
         else:
             print("Error! Cannot create the connection")

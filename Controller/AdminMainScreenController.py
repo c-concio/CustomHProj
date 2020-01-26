@@ -85,5 +85,5 @@ def set_ingredient_list(spinner):
 def update_ingredient_choice(spinner, text):
     # get the spinner's parent's cylinder ID and update ingredient choice
     qConn = DatabaseClass.queryCursor
-    qConn.execute("UPDATE Cylinder SET ingredient = ? WHERE cylinderID = ?", (text, spinner.parent.cylinderID))
+    qConn.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
