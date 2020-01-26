@@ -47,6 +47,7 @@
 <InventoryScreen>
     backButton: back
     grid: gridLayout
+    editIngredientButton: editIngredient
 
     canvas:
         Color:
@@ -82,8 +83,8 @@
                 orientation: 'vertical'
 
                 Button:
-                    id: addInventory
-                    text: 'Add Inventory'
+                    id: editIngredient
+                    text: 'Edit Ingredients'
                     size_hint_x: None
                     width: 120
                     size_hint_y: None
@@ -104,7 +105,6 @@
                 row_force_default: True
                 row_default_height: 150
                 valign: 'middle'
-                #pos_hint: {'center_x': 0.5}
                 spacing: [15, 15]
 
 <InventoryItemTemplate>:
@@ -147,3 +147,23 @@
     Button:
         id: reset
         text: 'Reset'
+
+<InventoryPopupButtonLayout>:
+    ingredientButton: ingredient
+    deleteButton: delete
+
+    BoxLayout:
+        size_hint_y: None
+        spacing: 5
+        Button:
+            id: ingredient
+            size_hint_y: None
+            height: 40
+
+            text: 'Ingredient'
+        Button:
+            id: delete
+            size_hint_y: None
+            size_hint_x: None
+            size: (40, 40)
+            text: 'X'

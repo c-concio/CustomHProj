@@ -1,8 +1,12 @@
 import sqlite3
 
 import kivy
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
 from Controller import DatabaseController
@@ -37,6 +41,8 @@ def initialize_buttons():
     AdminModel.adminMainScreen.internetButton.bind(on_press=lambda x: switch_screen('Internet Settings Screen'))
     AdminModel.adminMainScreen.powerButton.bind(on_press=quit_application)
     AdminModel.inventoryScreen.backButton.bind(on_press=lambda x: return_screen('Admin Main Screen'))
+    # initialize the inventory button to open up the list of inventories and allow users to change or add inventory items
+    AdminModel.inventoryScreen.editIngredientButton.bind(on_press=lambda x: open_popup())
 
 
 # -------------------------------------------------------------------
@@ -87,3 +93,22 @@ def update_ingredient_choice(spinner, text):
     qConn = DatabaseClass.queryCursor
     qConn.execute("UPDATE Cylinder SET ingredient = ? WHERE cylinderID = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
+
+
+# open popup window and show ingredient items
+def open_popup():
+    popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
+    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
+    DatabaseController.update_ingredients()
+    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray)*50)
+    DatabaseController.update_ingredients()
+    for i in DatabaseClass.ingredientArray:
+        template = AdminModel.InventoryPopupButtonLayout()
+        template.ingredientButton.text = i.ingredientType
+        template.ingredientButton.bind(on_press=lambda x: DatabaseController.edit_ingredient())
+        template.deleteButton.bind(on_press=lambda x: DatabaseController.delete_ingredient())
+        gridLayout.add_widget(template)
+    ingredient_list_scroll_view.add_widget(gridLayout)
+    popup.content = ingredient_list_scroll_view
+    popup.open()
+    print(len(DatabaseClass.ingredientArray))

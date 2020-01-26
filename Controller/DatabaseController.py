@@ -33,3 +33,15 @@ def update_ingredients():
 
 def database_close():
     DatabaseClass.conn.close()
+
+
+def delete_ingredient():
+    pass
+
+
+def edit_ingredient():
+    pass
+
+
+def add_ingredient():
+    pass

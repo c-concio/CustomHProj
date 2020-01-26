@@ -2,6 +2,7 @@ from tkinter import Button
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
 
@@ -32,6 +33,7 @@ class InventoryScreen(Screen):
     # TODO: Make inventory items then grid them up
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
+    editIngredientButton = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()
@@ -53,6 +55,11 @@ class InventoryItemTemplate(BoxLayout):
     def __init__(self, cylinderID):
         super().__init__()
         self.cylinderID = cylinderID
+
+
+class InventoryPopupButtonLayout(BoxLayout):
+    ingredientButton = ObjectProperty(None)
+    deleteButton = ObjectProperty(None)
 
 
 # //////////////////////////////////////////////////
@@ -77,8 +84,4 @@ screenManager.add_widget(adminMainScreen)
 screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
 screenManager.transition = CardTransition()
-
-# inventory array
-inventoryArray = []
-ingredientArray = []
 
