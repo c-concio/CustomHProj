@@ -1,11 +1,12 @@
-<HomeScreen>:
-    name: "Home"
+<UserMainScreen>:
+    # objectProperty names
+    startButton: start
 
     FloatLayout:
 
         canvas:
             Rectangle:
-                source: "bg3.jpg"
+                source: "View/bg3.jpg"
                 size: self.size
                 pos: self.pos
 
@@ -28,6 +29,7 @@
 
 
         RoundedButton:
+            id: start
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
             font_name: "OstrichSans"
@@ -35,50 +37,21 @@
             font_size: (root.width**2 + root.height**2) / 13**4
             text: "Start"
             color: 0, 0, 0, 1
-            on_release:
-                root.manager.transition.direction = "left"
-                root.startBtn()
 
 
-<RoundedButton@Button>:
-    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
-    canvas.before:
-        Color:
-            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
-        RoundedRectangle:
-            pos: self.pos
-            size: self.size
-            radius: [30,]
 
-<RoundedButton2@Button>:
-    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
-    canvas.before:
-        Color:
-            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
-        RoundedRectangle:
-            pos: self.pos
-            size: self.size
-            radius: [50,50]
-
-
-<CircleButton@Button>:
-    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
-    canvas.before:
-        Color:
-            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
-        RoundedRectangle:
-            pos: self.pos
-            size: self.size
-            radius: [70,70]
 
 <SizeScreen>:
-    name: "size"
+    toggleButtonSmall: small
+    toggleButtonMedium: medium
+    toggleButtonLarge: large
+    nextButton1: next1
 
     FloatLayout:
 
         canvas:
             Rectangle:
-                source: "bg3.jpg"
+                source: "View/bg3.jpg"
                 size: self.size
                 pos: self.pos
 
@@ -91,35 +64,38 @@
 
         RelativeLayout:
             ToggleButton:
+                id: small
                 size_hint: None, None
                 size: 0.15 * root.width, 0.15 * root.height
                 pos_hint:{"x":0.15,"y":0.61}
                 text: 'SMALL'
                 bold: True
                 font_name: "Pacifico"
-                group: 'geometry'
 
         RelativeLayout:
             ToggleButton:
+                id: medium
                 size_hint: None, None
                 size: 0.15 * root.width, 0.15 * root.height
                 pos_hint:{"x":0.15,"y":0.4}
                 text: 'MEDIUM'
                 bold: True
                 font_name: "Pacifico"
-                group: 'geometry'
+
 
         RelativeLayout:
             ToggleButton:
+                id: large
                 size_hint: None, None
                 size: 0.15 * root.width, 0.15 * root.height
                 pos_hint:{"x":0.15,"y":0.19}
                 text: 'LARGE'
                 font_name: "Pacifico"
                 bold: True
-                group: 'geometry'
+
 
         RoundedButton:
+            id: next1
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
             font_size: (root.width**2 + root.height**2) / 13**4
@@ -127,21 +103,20 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Next"
-            on_release:
-                root.manager.transition.direction = "left"
-                root.startBtn()
 
 
 
 
 <BaseScreen>:
-    name: "base"
+    sauceOfMonthButton: SauceOfMonth
+    nextButton2: next2
+
 
     FloatLayout:
 
         canvas:
             Rectangle:
-                source: "bg3.jpg"
+                source: "View/bg3.jpg"
                 size: self.size
                 pos: self.pos
 
@@ -153,6 +128,7 @@
             size_hint: 0.35, 0.15
 
         RoundedButton:
+            id: SauceOfMonth
             pos_hint:{"x":0.1,"y":0.05}
             size_hint: 0.3, 0.2
             font_size: (root.width**2 + root.height**2) / 14**4
@@ -161,12 +137,11 @@
             color: 0, 0, 0, 1
             text: "Sauce Of The \nMonth"
             halign: 'center'
-            on_release:
-                root.manager.transition.direction = "up"
-                root.SauceMonthBtn()
+
 
 
         RoundedButton:
+            id: next2
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
             font_size: (root.width**2 + root.height**2) / 13**4
@@ -174,19 +149,16 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Next"
-            on_release:
-                root.manager.transition.direction = "left"
-                root.startBtn()
+
 
 
 <SauceOfMonth>:
-    name: "sauceMonth"
 
     FloatLayout:
 
         canvas:
             Rectangle:
-                source: "bg3.jpg"
+                source: "View/bg3.jpg"
                 size: self.size
                 pos: self.pos
 
@@ -197,19 +169,20 @@
             pos_hint: {"x":0.35,"top":0.9}
             size_hint: 0.35, 0.15
 
-<FlavourScreen>:
-    name: "flavour"
+
+<FlavorScreen>:
+    nextButton3: next3
 
     FloatLayout:
 
         canvas:
             Rectangle:
-                source: "bg3.jpg"
+                source: "View/bg3.jpg"
                 size: self.size
                 pos: self.pos
 
         Label:
-            text:"Choose Flavour"
+            text:"Choose Flavor"
             font_name: "Pacifico"
             font_size: (root.width**2 + root.height**2) / 15**4
             pos_hint: {"x":0.35,"top":0.9}
@@ -217,6 +190,7 @@
 
 
         RoundedButton:
+            id: next3
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
             font_size: (root.width**2 + root.height**2) / 13**4
@@ -224,16 +198,23 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Next"
-            on_release:
-                root.manager.transition.direction = "left"
-                root.startBtn()
+
 
 
 
 <AmountScreen>:
-    name: "amount"
+    doneButton: done
+    resetButton: reset
+    addButton: add
+    removeButton: remove
+    baseAdjustSlider: slider
 
     FloatLayout:
+        canvas:
+            Rectangle:
+                source: "View/bg3.jpg"
+                size: self.size
+                pos: self.pos
 
         Label:
             text:"Drag to Adjust Amount"
@@ -242,8 +223,8 @@
             pos_hint: {"x":0.35,"top":0.9}
             size_hint: 0.35, 0.15
 
-
         RoundedButton:
+            id: done
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
             font_size: (root.width**2 + root.height**2) / 13**4
@@ -251,97 +232,146 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Done"
-            on_release:
-                root.manager.transition.direction = "left"
-                root.startBtn()
 
         Slider:
-            id: adj1
+            id: slider
             min: 0.
             max: 360.
             value: 180.
-            step: 10
+            step: 30
             size_hint_x: 0.3
-            pos_hint: {'x': 0.05, 'y': 0.05}
+            pos_hint: {'x': 0.05, 'top': 1.1}
+
+        Label:
+            text:"Base 1"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 17**4
+            pos_hint: {'x':-0.11,'y':0.5}
+            size_hint: 0.35, 0.35
+
+        Label:
+            text:"Base 2"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 17**4
+            pos_hint: {'x':0.15,'y':0.5}
+            size_hint: 0.35, 0.35
+
+        RoundedButton2:
+            id: reset
+            text: 'Reset'
+            on_press: reset.value = 180
+            pos_hint:{'x':0.4,'y':0.57}
+            size_hint: 0.07, 0.07
+            on_press: slider.value = 180
+            font_name: "OstrichSans"
+            font_size: (root.width**2 + root.height**2) / 18**4
+            bold: True
+            color: 0, 0, 0, 1
 
 
+        Label:
+            text:"Flavor 1"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 17**4
+            pos_hint: {'x':0.03,'y':0.35}
+            size_hint: 0.35, 0.35
 
-        FloatLayout:
+
+        CircleButton:
+            id: add
+            text: '+'
+            font_size: (root.width**2 + root.height**2) / 14**4
+            size_hint: 0.06, 0.09
+            pos_hint: {"x":0.09,"y":0.4}
+
+
+        CircleButton:
+            id: remove
+            text: "-"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            size_hint: 0.06, 0.09
+            pos_hint: {"x":0.25,"y":0.4}
+
+
+        Label:
+            text: "0"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {'x':-0.3,'y':-0.05}
+
+
+        Label:
+            text:"Flavor 2"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 17**4
+            pos_hint: {'x':0.03,'y':0.2}
+            size_hint: 0.35, 0.35
+
+
+        CircleButton:
+            id: add
+            text: '+'
+            font_size: (root.width**2 + root.height**2) / 14**4
+            size_hint: 0.06, 0.09
+            pos_hint: {"x":0.09,"y":0.25}
+
+
+        CircleButton:
+            id: remove
+            text: "-"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            size_hint: 0.06, 0.09
+            pos_hint: {"x":0.25,"y":0.25}
+
+        Label:
+            text: "0"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {'x':-0.3,'y':-0.2}
+
+
+        BoxLayout:
             canvas:
                 Color:
                     rgb: 1, 1, 1
                 Ellipse:
-                    size: self.width - 2000 , self.height - 800
-                    source: 'c1.png'
-                    angle_start: adj1.value
-                    pos: 1300,400
+                    pos: self.pos
+                    size: 300,301
+                    source: 'View/c2.png'
+                    angle_start: slider.value
 
                 Ellipse:
-                    size: self.width - 2000, self.height - 800
-                    source: 'c2.png'
-                    angle_end: adj1.value
-                    pos: 1300,400
-
-            RoundedButton2:
-                text: 'Reset'
-                on_press: adj1.value = 180
-                pos_hint:{"x":0.15,"y":0.05}
-                size_hint: 0.1, 0.1
-                font_name: "OstrichSans"
-                font_size: (root.width**2 + root.height**2) / 16**4
-                bold: True
-                color: 0, 0, 0, 1
-
-            RoundedButton:
-                pos_hint:{"x":0.65,"y":0.05}
-                size_hint: 0.3, 0.2
-                font_size: (root.width**2 + root.height**2) / 13**4
-                font_name: "OstrichSans"
-                bold: True
-                color: 0, 0, 0, 1
-                text: "Done"
-                on_release:
-                    root.manager.transition.direction = "left"
-                    root.startBtn()
-
-            Label:
-                text:"Base"
-                font_name: "Pacifico"
-                font_size: (root.width**2 + root.height**2) / 17**4
-                pos_hint: {"x":0.035,"top":0.8}
-                size_hint: 0.35, 0.35
+                    pos: self.pos
+                    size: 300,301
+                    source: 'View/c1.png'
+                    angle_end: slider.value
 
 
-            Label:
-                text:"Flavour"
-                font_name: "Pacifico"
-                font_size: (root.width**2 + root.height**2) / 17**4
-                pos_hint: {"x":0.035,"top":0.65}
-                size_hint: 0.35, 0.35
+<RoundedButton2@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [50,50]
 
-            Label:
-                id: amountF
-                text: "0"
-
-            CircleButton:
-                id: addF
-                text: "+"
-                font_size: (root.width**2 + root.height**2) / 14**4
-                pos_hint: {"x":0.1,"y":0.35}
-                size_hint: 0.06, 0.09
-
-
-
-            CircleButton:
-                id: removeF
-                text: "-"
-                font_size: (root.width**2 + root.height**2) / 14**4
-                pos_hint: {"x":0.25,"y":0.35}
-                size_hint: 0.06, 0.09
+<CircleButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [70,70]
 
 
-
-
-
-
-
+<RoundedButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [30,]
