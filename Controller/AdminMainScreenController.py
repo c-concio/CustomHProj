@@ -6,7 +6,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.textinput import TextInput
 
 from Controller import DatabaseController
-from Model import AdminModel, DatabaseClass
+from Model import AdminModel, DatabaseClass, MainModel
 from kivy.uix.screenmanager import Screen
 
 
@@ -16,18 +16,18 @@ from kivy.uix.screenmanager import Screen
 
 # function takes in a screen and switches the screenManager to the passed screen
 def switch_screen(screen_name):
-    AdminModel.screenManager.transition.direction = 'left'
-    AdminModel.screenManager.current = screen_name
+    MainModel.mainScreenManager.transition.direction = 'left'
+    MainModel.mainScreenManager.current = screen_name
     return
 
 
 def return_screen(screen_name):
-    AdminModel.screenManager.transition.direction = 'right'
-    AdminModel.screenManager.current = screen_name
+    MainModel.mainScreenManager.transition.direction = 'right'
+    MainModel.mainScreenManager.current = screen_name
 
 
 # function that powers off application
-def quit_application():
+def quit_application(self):
     raise SystemExit
 
 

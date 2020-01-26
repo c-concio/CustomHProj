@@ -1,4 +1,4 @@
-from Model import AdminModel
+from Model import AdminModel, MainModel
 from Controller import AdminMainScreenController, DatabaseController
 import kivy
 
@@ -10,7 +10,8 @@ from kivy.app import App
 class MainApp(App):
 
     def build(self):
-        screenManager = AdminModel.screenManager
+        # screenManager = AdminModel.screenManager
+        screenManager = MainModel.mainScreenManager
         AdminMainScreenController.setup_inventory_screen()
         return screenManager
 

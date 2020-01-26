@@ -212,13 +212,28 @@ def main():
     #                 ("Mustard", 20),
     #                 ("Spice", 30)]
     # insert_cylinder_many(listToInsert)
-
+    #
     # insert_temporary("Ketchup", 20, "Spice", 5)
 
     # # create new row
-    insert_cylinder('Ketchup', 500)
+    # insert_cylinder('Ketchup', 500)
 
     # select_star_table("temporary")
+
+    connect = sqlite3.connect(r"database\pysqlite.db")
+    cursor = connect.cursor()
+
+    sql = "SELECT * FROM cylinder;"
+
+    cursor.execute(sql)
+
+    bases = cursor.fetchall()
+    print("Table contents:")
+
+    for i, base in enumerate(bases):
+        print("Base " + str(i) + ": " + base[1])
+
+    cursor.close()
 
 
 kivy_string = """
@@ -378,3 +393,4 @@ class StressCanvasApp(App):
 
 if __name__ == '__main__':
     main()
+    # StressCanvasApp().run()
