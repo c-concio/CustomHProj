@@ -34,7 +34,7 @@ mainScreenManager = ScreenManager()
 # initialize Main Screen
 mainScreen = MainScreen(name='Main Screen')
 
-# adminScreen = AdminModel.AdminMainScreen(name="Admin Screen")
+# adminScreen = AdminModel.AdminMainScreen(name="Admin Main Screen")
 
 # initialize Base screen
 baseScreen = BaseModel.BaseScreen(name='Base Screen')

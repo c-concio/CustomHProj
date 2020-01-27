@@ -46,7 +46,16 @@ class BaseScreen(Screen):
 
         # Dynamic buttons
         for i, base in enumerate(bases):
-            button = Button(text=str(base[1]), size_hint=(.1, .1), pos_hint={'x': i / 5, 'y': .6})
+            x_pos_hint = .2
+            y_pos_hint = .8
+            j = 0
+            if(i >= 3):
+                x_pos_hint = .4
+                y_pos_hint = .8
+                j = 0
+            button = Button(text=str(base[1]), size_hint=(.1, .1), pos_hint={'x': x_pos_hint, 'y': y_pos_hint - j/5})
+            print(j/5)
+            j += 1
             self.add_widget(button)
             print("Base " + str(i) + ": " + base[1])
 
@@ -71,6 +80,6 @@ baseScreen = BaseScreen(name='Base Screen')
 
 # BaseScreenController.initialize_buttons()
 
-baseScreenManager.add_widget(baseScreen)
+# MainModel.mainScreenManager.add_widget(baseScreen)
 # baseScreenManager.add_widget(mainScreen)
-baseScreenManager.transition = CardTransition()
+# baseScreenManager.transition = CardTransition()
