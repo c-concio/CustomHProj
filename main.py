@@ -3,10 +3,7 @@ from CustomHProj.Model import UserModel
 from CustomHProj.Controller import UserController
 import kivy
 
-
 kivy.require('1.11.1')  # replace with your current kivy version !
-
-
 
 
 class MainApp(App):
