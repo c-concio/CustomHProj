@@ -7,7 +7,7 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-    DatabaseClass.cylinderCursor.execute("SELECT cylinderID, ingredient, amount FROM Cylinder")
+    DatabaseClass.cylinderCursor.execute("SELECT id, ingredient, amount FROM cylinder")
     result = DatabaseClass.cylinderCursor.fetchall()
 
     for i in result:
@@ -24,7 +24,7 @@ def update_ingredients():
     # clear the ingredient array
     DatabaseClass.ingredientArray.clear()
 
-    DatabaseClass.ingredientCursor.execute("SELECT * FROM Ingredients")
+    DatabaseClass.ingredientCursor.execute("SELECT * FROM ingredient")
     result = DatabaseClass.ingredientCursor.fetchall()
 
     for i in result:
