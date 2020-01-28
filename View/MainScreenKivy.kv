@@ -1,0 +1,38 @@
+#:kivy 1.11.1
+
+<MainScreen>:
+    # objectProperty names
+    adminButton: admin
+    baseButton: base
+
+    canvas:
+        Color:
+            rgba: 0.2, 0.2, 0.2, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None, None
+        pos_hint:{'center_x': 0.5, 'center_y': 0.5}
+        spacing: 25
+        size: 350, 300
+
+        Button:
+            id: admin
+            text: 'Admin'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
+
+        Button:
+            id: base
+            text: 'User Base'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
+
+

@@ -9,8 +9,8 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-    DatabaseClass.cursor.execute("SELECT cylinderID, ingredient, amount FROM Cylinder")
-    result = DatabaseClass.cursor.fetchall()
+    DatabaseClass.cylinderCursor.execute("SELECT id, ingredient, amount FROM cylinder")
+    result = DatabaseClass.cylinderCursor.fetchall()
 
     for i in result:
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))
@@ -26,8 +26,8 @@ def update_ingredients():
     # clear the ingredient array
     DatabaseClass.ingredientArray.clear()
 
-    DatabaseClass.cursor.execute("SELECT * FROM Ingredients")
-    result = DatabaseClass.cursor.fetchall()
+    DatabaseClass.ingredientCursor.execute("SELECT * FROM ingredient")
+    result = DatabaseClass.ingredientCursor.fetchall()
 
     for i in result:
         DatabaseClass.ingredientArray.append(DatabaseClass.Ingredient(i[0], i[1]))
