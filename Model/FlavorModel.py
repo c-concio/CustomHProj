@@ -24,6 +24,8 @@ class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
+    flavorList = []
+
     # backButton = ObjectProperty(None)
 
     # Get ingredient names from database
@@ -54,9 +56,18 @@ class FlavorScreen(Screen):
 
             button.bind(on_press=self.saveButtonName)
 
-    def saveButtonName(self, args):
-        # Save the base name in a list to use for the final order
+    def saveButtonName(self, instance):
+        # Save the flavor name in a list to use for the final order
         print("Button clicked")
+        if instance.state == 'down':
+            self.flavorList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.flavorList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove base, it did not exist")
 
 
 # //////////////////////////////////////////////////

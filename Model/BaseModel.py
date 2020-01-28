@@ -1,6 +1,7 @@
 import sqlite3
 
 from kivy.core.window import Window
+from kivy.uix.behaviors import ToggleButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
@@ -24,10 +25,12 @@ Builder.load_file('View/User/BaseScreenKivy.kv')
 #                  Screen Classes
 # //////////////////////////////////////////////////
 
+
 class BaseScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
+    baseList = []
 
     # backButton = ObjectProperty(None)
 
@@ -66,9 +69,19 @@ class BaseScreen(Screen):
 
             button.bind(on_press=self.saveButtonName)
 
-    def saveButtonName(self, args):
+
+    def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
         print("Button clicked")
+        if instance.state == 'down':
+            self.baseList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.baseList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove base, it did not exist")
 
 
 # //////////////////////////////////////////////////
