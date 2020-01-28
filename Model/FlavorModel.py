@@ -1,14 +1,10 @@
 import sqlite3
 
+import kivy
 from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
 
-from Controller import AdminMainScreenController, MainScreenController, BaseScreenController
-import kivy
-
-from Model import MainModel, FlavorModel
+from Model import MainModel
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition
@@ -17,35 +13,27 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 # Kivy file for Base Screen
-Builder.load_file('View/User/BaseScreenKivy.kv')
+Builder.load_file('View/User/FlavorScreenKivy.kv')
 
 
 # //////////////////////////////////////////////////
 #                  Screen Classes
 # //////////////////////////////////////////////////
 
-class BaseScreen(Screen):
+class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
-
     # backButton = ObjectProperty(None)
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
-        super(BaseScreen, self).__init__(**kwargs)
+        super(FlavorScreen, self).__init__(**kwargs)
         connect = sqlite3.connect(r"database\pysqlite.db")
         cursor = connect.cursor()
 
-        sqlCount = "SELECT COUNT(id) FROM cylinder;"
-        cursor.execute(sqlCount)
-
-        count = cursor.fetchone()
-
-        # print(count)
-
-        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
+        sqlBase = "SELECT * FROM cylinder WHERE type='Flavor';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -75,17 +63,7 @@ class BaseScreen(Screen):
 #                  Screen Manager
 # //////////////////////////////////////////////////
 
-# initialize Base Screen manager
-# baseScreenManager = ScreenManager()
 
-# initialize Base Screen
-baseScreen = BaseScreen(name='Base Screen')
-
-
-# mainScreen = MainModel.MainScreen(name='Main Screen')
-# BaseScreenController.initialize_buttons()
+flavorScreen = FlavorScreen(name='Flavor Screen')
 
 # MainModel.mainScreenManager.add_widget(flavorScreen)
-# MainModel.mainScreenManager.add_widget(baseScreen)
-# baseScreenManager.add_widget(mainScreen)
-# baseScreenManager.transition = CardTransition()

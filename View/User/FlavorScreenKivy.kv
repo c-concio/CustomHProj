@@ -1,5 +1,6 @@
-<BaseScreen>:
-    grid: base_grid
+<FlavorScreen>:
+    grid: flavor_grid
+
 
     canvas.before:
         Color:
@@ -26,18 +27,16 @@
         anchor_x: 'center'
 
         GridLayout:
-            id: base_grid
+            id: flavor_grid
             size_hint_x: 0.6
             size_hint_y: 0.2
             cols: 2
 
+    FloatLayout:
 
-<BaseItemTemplate>
-    baseToggleButton: base
-
-    ToggleButton:
-        id: base
-        text: 'Base Name'
-        text_size: self.size
-
-<BackgroundTestScreen>:
+        Button:
+            id: next
+            name: next
+            text: 'Next'
+            size_hint: .1,.1
+            pos_hint: {"x":.8, "y":.1}

@@ -1,5 +1,5 @@
 from Controller import DatabaseController
-from Model import AdminModel, DatabaseClass, MainModel
+from Model import MainModel, BaseModel
 
 
 # -------------------------------------------------------------------
@@ -20,5 +20,6 @@ def return_screen(screen_name):
 def initialize_buttons():
     MainModel.mainScreen.adminButton.bind(on_press=lambda x: switch_screen('Admin Main Screen'))
     MainModel.mainScreen.baseButton.bind(on_press=lambda x: switch_screen('Base Screen'))
+    MainModel.baseScreen.nextButton.bind(on_press=lambda x: switch_screen('Flavor Screen'))
 
     # BaseModel.baseScreen.backButton.bind(on_press=lambda x: return_screen('Main Screen'))
