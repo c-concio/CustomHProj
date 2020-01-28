@@ -1,3 +1,4 @@
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 
 from Controller import AdminMainScreenController, MainScreenController

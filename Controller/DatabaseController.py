@@ -7,7 +7,7 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-    DatabaseClass.cylinderCursor.execute("SELECT id, ingredient, amount FROM cylinder")
+    DatabaseClass.cylinderCursor.execute("SELECT id, ingredient, steps FROM cylinder")
     result = DatabaseClass.cylinderCursor.fetchall()
 
     for i in result:
