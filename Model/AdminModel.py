@@ -2,6 +2,7 @@ from tkinter import Button
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
+from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.spinner import Spinner
 from kivy.uix.textinput import TextInput
@@ -84,4 +85,7 @@ screenManager.add_widget(adminMainScreen)
 screenManager.add_widget(inventoryScreen)
 screenManager.add_widget(internetSettingsScreen)
 screenManager.transition = CardTransition()
+
+# popup variable for inventory screen
+popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
 

@@ -90,7 +90,7 @@ def set_ingredient_list(spinner):
 # update the ingredient choice for a cylinder
 def update_ingredient_choice(spinner, text):
     # get the spinner's parent's cylinder ID and update ingredient choice
-    qConn = DatabaseClass.queryCursor
+    qConn = DatabaseClass.cursor
     qConn.execute("UPDATE Cylinder SET ingredient = ? WHERE cylinderID = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
 
@@ -100,15 +100,37 @@ def open_popup():
     popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
     ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
     DatabaseController.update_ingredients()
-    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray)*50)
+    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50)
     DatabaseController.update_ingredients()
     for i in DatabaseClass.ingredientArray:
         template = AdminModel.InventoryPopupButtonLayout()
         template.ingredientButton.text = i.ingredientType
-        template.ingredientButton.bind(on_press=lambda x: DatabaseController.edit_ingredient())
-        template.deleteButton.bind(on_press=lambda x: DatabaseController.delete_ingredient())
+        bind_ingredient_button(template.ingredientButton)
+        bind_delete_button(template.deleteButton, i.ingredientType)
         gridLayout.add_widget(template)
     ingredient_list_scroll_view.add_widget(gridLayout)
-    popup.content = ingredient_list_scroll_view
-    popup.open()
-    print(len(DatabaseClass.ingredientArray))
+    AdminModel.popup.content = ingredient_list_scroll_view
+    AdminModel.popup.open()
+
+
+def refresh_popup():
+    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
+    DatabaseController.update_ingredients()
+    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50)
+    DatabaseController.update_ingredients()
+    for i in DatabaseClass.ingredientArray:
+        template = AdminModel.InventoryPopupButtonLayout()
+        template.ingredientButton.text = i.ingredientType
+        bind_ingredient_button(template.ingredientButton)
+        bind_delete_button(template.deleteButton, i.ingredientType)
+        gridLayout.add_widget(template)
+    ingredient_list_scroll_view.add_widget(gridLayout)
+    AdminModel.popup.content = ingredient_list_scroll_view
+
+
+def bind_delete_button(button, ingredient):
+    button.bind(on_press=lambda x: DatabaseController.delete_ingredient(ingredient))
+
+
+def bind_ingredient_button(button):
+    button.bind(on_press=lambda x: DatabaseController.edit_ingredient())

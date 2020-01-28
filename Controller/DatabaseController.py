@@ -1,5 +1,7 @@
 import sqlite3
-from Model import DatabaseClass, DatabaseClass
+
+from Controller import AdminMainScreenController
+from Model import DatabaseClass, DatabaseClass, AdminModel
 
 
 # function that inserts new ingredients
@@ -7,8 +9,8 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-    DatabaseClass.cylinderCursor.execute("SELECT cylinderID, ingredient, amount FROM Cylinder")
-    result = DatabaseClass.cylinderCursor.fetchall()
+    DatabaseClass.cursor.execute("SELECT cylinderID, ingredient, amount FROM Cylinder")
+    result = DatabaseClass.cursor.fetchall()
 
     for i in result:
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))
@@ -24,8 +26,8 @@ def update_ingredients():
     # clear the ingredient array
     DatabaseClass.ingredientArray.clear()
 
-    DatabaseClass.ingredientCursor.execute("SELECT * FROM Ingredients")
-    result = DatabaseClass.ingredientCursor.fetchall()
+    DatabaseClass.cursor.execute("SELECT * FROM Ingredients")
+    result = DatabaseClass.cursor.fetchall()
 
     for i in result:
         DatabaseClass.ingredientArray.append(DatabaseClass.Ingredient(i[0], i[1]))
@@ -34,9 +36,16 @@ def update_ingredients():
 def database_close():
     DatabaseClass.conn.close()
 
+# delete the ingredient selected
+def delete_ingredient(ingredient):
+    DatabaseClass.cursor.execute('DELETE FROM Ingredients WHERE IngredientType =?', [ingredient])
+    DatabaseClass.cursor.execute("UPDATE Cylinder SET ingredient = 'None' WHERE ingredient =?", [ingredient])
+    DatabaseClass.conn.commit()
+    # refresh page and popup
+    AdminModel.inventoryScreen.grid.clear_widgets()
+    AdminMainScreenController.setup_inventory_screen()
+    AdminMainScreenController.refresh_popup()
 
-def delete_ingredient():
-    pass
 
 
 def edit_ingredient():

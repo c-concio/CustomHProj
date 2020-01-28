@@ -5,9 +5,8 @@ ingredientArray = []
 
 # connect to the database called example.db
 conn = sqlite3.connect('Model/Cylinder.db')
-cylinderCursor = conn.cursor()
-ingredientCursor = conn.cursor()
-queryCursor = conn.cursor()
+cursor = conn.cursor()
+
 
 class Cylinder:
     def __init__(self, cylinderID, ingredient, amount):
