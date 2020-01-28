@@ -46,11 +46,16 @@ def delete_ingredient(ingredient):
     AdminMainScreenController.setup_inventory_screen()
     AdminMainScreenController.refresh_popup()
 
-
-
+#
 def edit_ingredient():
     pass
 
 
-def add_ingredient():
-    pass
+def add_ingredient(new_ingredient):
+    DatabaseClass.cursor.execute("INSERT INTO Ingredients(IngredientType) VALUES (?)", (new_ingredient,))
+    DatabaseClass.conn.commit()
+    AdminMainScreenController.refresh_popup()
+    # refresh page and popup
+    AdminModel.inventoryScreen.grid.clear_widgets()
+    AdminMainScreenController.setup_inventory_screen()
+    AdminMainScreenController.refresh_popup()

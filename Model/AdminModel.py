@@ -89,3 +89,4 @@ screenManager.transition = CardTransition()
 # popup variable for inventory screen
 popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
 
+text_input = TextInput()
