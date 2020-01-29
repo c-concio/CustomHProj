@@ -75,7 +75,26 @@ def add_inventory_template(cylinder_item):
     inventory_item_template.percentLabel.text = str(cylinder_item.amount)
     inventory_item_template.progressBar.value = cylinder_item.amount
 
+    # bind the reset button to change the label text and rebind on press
+    inventory_item_template.resetButton.bind(
+        on_press=reset_cylinder)
+
     AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
+
+
+def reset_cylinder(button):
+    # change text to "set up"
+    button.text = 'Set up'
+    # rebind button to reset the motor and change button to reset button
+    button.bind(on_press=set_up_cylinder)
+    button.unbind(on_press=reset_cylinder)
+
+
+def set_up_cylinder(button):
+    # change button to reset and rebind back to set up when pressed
+    button.text = 'Reset'
+    button.bind(on_press=reset_cylinder)
+    button.unbind(on_press=set_up_cylinder)
 
 
 # get the ingredient choices from the database and set it on the spinner values
@@ -155,6 +174,7 @@ def bind_delete_button(button, ingredient):
 
 def bind_ingredient_button(button):
     button.bind(on_press=lambda x: DatabaseController.edit_ingredient())
+
 
 def sort_cylinder_inventory():
     AdminModel.inventoryScreen.grid.clear_widgets()
