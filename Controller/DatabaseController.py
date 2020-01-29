@@ -1,5 +1,7 @@
 import sqlite3
-from Model import DatabaseClass, DatabaseClass
+
+from Controller import AdminMainScreenController
+from Model import DatabaseClass, DatabaseClass, AdminModel
 
 
 # function that inserts new ingredients
@@ -7,8 +9,8 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-    DatabaseClass.cylinderCursor.execute("SELECT id, ingredient, amount FROM cylinder")
-    result = DatabaseClass.cylinderCursor.fetchall()
+    DatabaseClass.cursor.execute("SELECT id, ingredient, amount FROM cylinder")
+    result = DatabaseClass.cursor.fetchall()
 
     for i in result:
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))
@@ -24,8 +26,8 @@ def update_ingredients():
     # clear the ingredient array
     DatabaseClass.ingredientArray.clear()
 
-    DatabaseClass.ingredientCursor.execute("SELECT * FROM ingredient")
-    result = DatabaseClass.ingredientCursor.fetchall()
+    DatabaseClass.cursor.execute("SELECT * FROM ingredient")
+    result = DatabaseClass.cursor.fetchall()
 
     for i in result:
         DatabaseClass.ingredientArray.append(DatabaseClass.Ingredient(i[0], i[1]))
@@ -33,3 +35,37 @@ def update_ingredients():
 
 def database_close():
     DatabaseClass.conn.close()
+
+# delete the ingredient selected
+def delete_ingredient(ingredient):
+    DatabaseClass.cursor.execute('DELETE FROM ingredient WHERE IngredientType =?', [ingredient])
+    DatabaseClass.cursor.execute("UPDATE cylinder SET ingredient = 'None' WHERE ingredient =?", [ingredient])
+    DatabaseClass.conn.commit()
+    # refresh page and popup
+    AdminModel.inventoryScreen.grid.clear_widgets()
+    AdminMainScreenController.setup_inventory_screen()
+    AdminMainScreenController.refresh_popup()
+
+#
+def edit_ingredient():
+    pass
+
+
+def add_ingredient(new_ingredient):
+    DatabaseClass.cursor.execute("INSERT INTO ingredient(IngredientType) VALUES (?)", (new_ingredient,))
+    DatabaseClass.conn.commit()
+    AdminMainScreenController.refresh_popup()
+    # refresh page and popup
+    AdminModel.inventoryScreen.grid.clear_widgets()
+    AdminMainScreenController.setup_inventory_screen()
+    AdminMainScreenController.refresh_popup()
+
+def ascend_cylinders():
+    DatabaseClass.cursor.execute("SELECT * FROM cylinder ORDER BY amount ASC")
+
+    DatabaseClass.cylinderArray.clear()
+
+    result = DatabaseClass.cursor.fetchall()
+
+    for i in result:
+        DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))

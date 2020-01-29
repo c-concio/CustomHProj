@@ -3,7 +3,6 @@
 <AdminMainScreen>:
     # objectProperty names
     inventoryButton: inventory
-    internetButton: internet
     powerButton: power
 
     canvas:
@@ -29,14 +28,6 @@
             background_down: 'Color\DarkerOrange.png'
 
         Button:
-            id: internet
-            text: 'Internet Setting'
-            pos_hint:{'left': 1}
-            background_normal: ''
-            background_color: [1, 0.595, 0, 1]
-            background_down: 'Color\DarkerOrange.png'
-
-        Button:
             id: power
             text: 'Power Off'
             pos_hint:{'left': 1}
@@ -47,6 +38,8 @@
 <InventoryScreen>
     backButton: back
     grid: gridLayout
+    editIngredientButton: editIngredient
+    sortToggleButton: sort
 
     canvas:
         Color:
@@ -81,14 +74,28 @@
             BoxLayout:
                 orientation: 'vertical'
 
-                Button:
-                    id: addInventory
-                    text: 'Add Inventory'
+                BoxLayout:
+                    orientation: 'horizontal'
                     size_hint_x: None
-                    width: 120
-                    size_hint_y: None
-                    height: 36
+                    width: self.minimum_width
                     pos_hint: {'right': 1}
+
+                    ToggleButton:
+                        id: sort
+                        text: 'Sort'
+                        size_hint_x: None
+                        width: 45
+                        size_hint_y: None
+                        height: 36
+
+                    Button:
+                        id: editIngredient
+                        text: 'Edit Ingredients'
+                        size_hint_x: None
+                        width: 120
+                        size_hint_y: None
+                        height: 36
+
 
         ScrollView:
             do_scroll_x: False
@@ -104,7 +111,6 @@
                 row_force_default: True
                 row_default_height: 150
                 valign: 'middle'
-                #pos_hint: {'center_x': 0.5}
                 spacing: [15, 15]
 
 <InventoryItemTemplate>:
@@ -147,3 +153,23 @@
     Button:
         id: reset
         text: 'Reset'
+
+<InventoryPopupButtonLayout>:
+    ingredientButton: ingredient
+    deleteButton: delete
+
+    BoxLayout:
+        size_hint_y: None
+        spacing: 5
+        Button:
+            id: ingredient
+            size_hint_y: None
+            height: 40
+
+            text: 'Ingredient'
+        Button:
+            id: delete
+            size_hint_y: None
+            size_hint_x: None
+            size: (40, 40)
+            text: 'X'
