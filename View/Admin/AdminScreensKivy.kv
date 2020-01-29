@@ -13,8 +13,6 @@
             pos: self.pos
             size: self.size
 
-
-
     BoxLayout:
         orientation: 'vertical'
         size_hint: None, None
@@ -46,45 +44,6 @@
             background_color: [1, 0.595, 0, 1]
             background_down: 'Color\DarkerOrange.png'
 
-<InventoryItemTemplate>:
-    cylinderName: cylinder
-    ingredientName: ingredient
-    percentageAmount: percentage
-    progressBar: progress
-
-    Label:
-        id: cylinder
-        text: 'Cylinder Name'
-        pos_hint: {'x': 0.05, 'y': 3/4}
-        size_hint: (1, 1/4)
-        text_size: self.size
-        halign: 'left'
-        valign: 'middle'
-
-    Label:
-        id: ingredient
-        text: 'Ingredient'
-        pos_hint: {'x': 0.05, 'y': 2/4}
-        size_hint: (1, 1/4)
-        text_size: self.size
-        halign: 'left'
-        valign: 'middle'
-
-    Label:
-        id: percentage
-        text: "Percentage"
-        pos_hint: {'x': 0.05, 'y': 1/4}
-        size_hint: (1, 1/4)
-        text_size: self.size
-        halign: 'left'
-        valign: 'middle'
-
-    ProgressBar:
-        id: progress
-        pos_hint: {'center_x': 0.5, 'y': 0}
-        size_hint: (0.9, 1/4)
-        value: 50
-
 <InventoryScreen>
     backButton: back
     grid: gridLayout
@@ -102,6 +61,7 @@
         BoxLayout:
             size_hint_y: None
             height: 38
+            orientation: 'horizontal'
 
             canvas:
                 Color:
@@ -118,14 +78,72 @@
                 size_hint_y: None
                 height: 36
 
+            BoxLayout:
+                orientation: 'vertical'
+
+                Button:
+                    id: addInventory
+                    text: 'Add Inventory'
+                    size_hint_x: None
+                    width: 120
+                    size_hint_y: None
+                    height: 36
+                    pos_hint: {'right': 1}
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size: self.size
+
+            GridLayout:
+                size_hint_y: None
+                size_hint_x: 1
+                padding: [15]
+                id: gridLayout
+                cols: 3
+                row_force_default: True
+                row_default_height: 150
+                valign: 'middle'
+                #pos_hint: {'center_x': 0.5}
+                spacing: [15, 15]
+
+<InventoryItemTemplate>:
+    cylinderButton: cylinder
+    ingredientSpinner: ingredient
+    percentLabel: percentage
+    progressBar: progress
+    resetButton: reset
+    orientation: 'vertical'
+
+    Button:
+        id: cylinder
+        text: 'Cylinder Name'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        background_color: [0, 0, 0, 0]
+
+    Spinner:
+        id: ingredient
+        text: 'Default Ingredient'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        background_color: [0, 0, 0, 0]
+
+    Label:
+        id: percentage
+        text: "Percentage"
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        background_color: [0, 0, 0, 0]
+
+    ProgressBar:
+        id: progress
+        value: 50
 
 
-        GridLayout:
-            padding: [5, 15, 5, 15]
-            id: gridLayout
-            cols: 3
-            row_force_default: True
-            row_default_height: 100
-            size_hint_max_x: 100
-            valign: 'middle'
-            pos_hint: {'center_x': 0.5}
+    Button:
+        id: reset
+        text: 'Reset'

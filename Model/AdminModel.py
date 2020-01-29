@@ -1,5 +1,14 @@
+from tkinter import Button
+
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.dropdown import DropDown
+from kivy.uix.spinner import Spinner
+from kivy.uix.textinput import TextInput
+
 from Controller import AdminMainScreenController
 import kivy
+
+from Model import MainModel
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition
@@ -9,6 +18,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.lang import Builder
 from kivy.core.window import Window
 
+# use the kv definitions found in the AdminScreensKivy.kv file
+Builder.load_file('View/Admin/AdminScreensKivy.kv')
 
 
 # //////////////////////////////////////////////////
@@ -21,29 +32,33 @@ class AdminMainScreen(Screen):
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
 
-    # Button switches to the
-    def initialize_buttons(self):
-        self.inventoryButton.bind(on_press=lambda x: AdminMainScreenController.switch_screen('Inventory Screen'))
-        self.internetButton.bind(on_press=lambda x: AdminMainScreenController.switch_screen('Internet Settings Screen'))
-        self.powerButton.bind(on_press=AdminMainScreenController.quit_application)
-        inventoryScreen.backButton.bind(on_press=lambda x: AdminMainScreenController.return_screen('Admin Main Screen'))
-
 
 class InventoryScreen(Screen):
     # TODO: Make inventory items then grid them up
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
 
-    def add_template(self):
-        self.grid.add_widget(InventoryItemTemplate())
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
+        self.grid.bind(minimum_height=self.grid.setter('height'))
 
 
 class InternetSettingsScreen(Screen):
     pass
 
 
-class InventoryItemTemplate(FloatLayout):
-    pass
+class InventoryItemTemplate(BoxLayout):
+    cylinderButton = ObjectProperty(None)
+    ingredientSpinner = ObjectProperty(None)
+    percentButton = ObjectProperty(None)
+    progressBar = ObjectProperty(None)
+    resetButton = ObjectProperty(None)
+
+    def __init__(self, cylinderID):
+        super().__init__()
+        self.cylinderID = cylinderID
+
 
 # //////////////////////////////////////////////////
 #                  Screen Manager
@@ -52,18 +67,21 @@ class InventoryItemTemplate(FloatLayout):
 # make the app fullscreen
 # Window.fullscreen = 'auto'
 
-# use the kv definitions found in the AdminScreensKivy.kv file
-Builder.load_file('View/Admin/AdminScreensKivy.kv')
 
 # initialize Screen manager
-screenManager = ScreenManager()
+# screenManager = ScreenManager()
 
 # initialize admin screens
 adminMainScreen = AdminMainScreen(name='Admin Main Screen')
 inventoryScreen = InventoryScreen(name='Inventory Screen')
 internetSettingsScreen = InternetSettingsScreen(name='Internet Settings Screen')
-screenManager.add_widget(adminMainScreen)
-screenManager.add_widget(inventoryScreen)
-screenManager.add_widget(internetSettingsScreen)
-screenManager.transition = CardTransition()
 
+AdminMainScreenController.initialize_buttons()
+
+MainModel.mainScreenManager.add_widget(adminMainScreen)
+MainModel.mainScreenManager.add_widget(inventoryScreen)
+MainModel.mainScreenManager.add_widget(internetSettingsScreen)
+
+# inventory array
+inventoryArray = []
+ingredientArray = []
