@@ -42,7 +42,7 @@ def initialize_buttons():
     AdminModel.inventoryScreen.backButton.bind(on_press=lambda x: return_screen('Admin Main Screen'))
     # initialize the inventory button to open up the list of inventories and allow users to change or add inventory items
     AdminModel.inventoryScreen.editIngredientButton.bind(on_press=lambda x: open_popup())
-
+    AdminModel.inventoryScreen.sortToggleButton.bind(on_press=sort_cylinder_inventory)
 
 # -------------------------------------------------------------------
 #                       Inventory Screen Functions
@@ -176,7 +176,18 @@ def bind_ingredient_button(button):
     button.bind(on_press=lambda x: DatabaseController.edit_ingredient())
 
 
-def sort_cylinder_inventory():
+def sort_cylinder_inventory(self):
     AdminModel.inventoryScreen.grid.clear_widgets()
     # update the cylinderArray
+
+    DatabaseController.ascend_cylinders()
+    for cylinder_item in DatabaseClass.cylinderArray:
+        add_inventory_template(cylinder_item)
+    self.unbind(on_press=sort_cylinder_inventory)
+    self.bind(on_press=un_sort_cylinder_inventory)
+
+def un_sort_cylinder_inventory(self):
+    AdminModel.inventoryScreen.grid.clear_widgets()
     setup_inventory_screen()
+    self.unbind(on_press=un_sort_cylinder_inventory)
+    self.bind(on_press=sort_cylinder_inventory)

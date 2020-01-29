@@ -41,6 +41,7 @@ class InventoryScreen(Screen):
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
     editIngredientButton = ObjectProperty(None)
+    sortToggleButton = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()

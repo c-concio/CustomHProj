@@ -39,6 +39,7 @@
     backButton: back
     grid: gridLayout
     editIngredientButton: editIngredient
+    sortToggleButton: sort
 
     canvas:
         Color:
@@ -73,14 +74,28 @@
             BoxLayout:
                 orientation: 'vertical'
 
-                Button:
-                    id: editIngredient
-                    text: 'Edit Ingredients'
+                BoxLayout:
+                    orientation: 'horizontal'
                     size_hint_x: None
-                    width: 120
-                    size_hint_y: None
-                    height: 36
+                    width: self.minimum_width
                     pos_hint: {'right': 1}
+
+                    ToggleButton:
+                        id: sort
+                        text: 'Sort'
+                        size_hint_x: None
+                        width: 45
+                        size_hint_y: None
+                        height: 36
+
+                    Button:
+                        id: editIngredient
+                        text: 'Edit Ingredients'
+                        size_hint_x: None
+                        width: 120
+                        size_hint_y: None
+                        height: 36
+
 
         ScrollView:
             do_scroll_x: False

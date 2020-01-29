@@ -59,3 +59,13 @@ def add_ingredient(new_ingredient):
     AdminModel.inventoryScreen.grid.clear_widgets()
     AdminMainScreenController.setup_inventory_screen()
     AdminMainScreenController.refresh_popup()
+
+def ascend_cylinders():
+    DatabaseClass.cursor.execute("SELECT * FROM cylinder ORDER BY amount ASC")
+
+    DatabaseClass.cylinderArray.clear()
+
+    result = DatabaseClass.cursor.fetchall()
+
+    for i in result:
+        DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))
