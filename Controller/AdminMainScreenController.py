@@ -89,8 +89,7 @@ def set_ingredient_list(spinner):
 # update the ingredient choice for a cylinder
 def update_ingredient_choice(spinner, text):
     # get the spinner's parent's cylinder ID and update ingredient choice
-    qConn = DatabaseClass.cursor
-    qConn.execute("UPDATE Cylinder SET ingredient = ? WHERE cylinderID = ?", (text, spinner.parent.cylinderID))
+    DatabaseClass.cursor.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
 
 
@@ -101,6 +100,7 @@ def open_popup():
     DatabaseController.update_ingredients()
     gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
     DatabaseController.update_ingredients()
+
     for i in DatabaseClass.ingredientArray:
         template = AdminModel.InventoryPopupButtonLayout()
         template.ingredientButton.text = i.ingredientType
@@ -118,12 +118,14 @@ def open_popup():
     AdminModel.popup.open()
 
 
-def add_text_field(replaceButton, gridLayout):
-    AdminModel.text_input = TextInput(pos=replaceButton.pos, size=replaceButton.size)
+def add_text_field(addInventoryButton, gridLayout):
+    AdminModel.text_input = TextInput(pos=addInventoryButton.pos, size=addInventoryButton.size)
     AdminModel.text_input.multiline = False
     AdminModel.text_input.bind(on_text_validate=lambda x: DatabaseController.add_ingredient(AdminModel.text_input.text))
     gridLayout.height = len(DatabaseClass.ingredientArray) * 50 + 90
     gridLayout.add_widget(AdminModel.text_input)
+    # disable the button
+    addInventoryButton.disabled = True
 
 
 def refresh_popup():
@@ -153,3 +155,8 @@ def bind_delete_button(button, ingredient):
 
 def bind_ingredient_button(button):
     button.bind(on_press=lambda x: DatabaseController.edit_ingredient())
+
+def sort_cylinder_inventory():
+    AdminModel.inventoryScreen.grid.clear_widgets()
+    # update the cylinderArray
+    setup_inventory_screen()

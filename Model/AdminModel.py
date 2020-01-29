@@ -95,6 +95,3 @@ MainModel.mainScreenManager.add_widget(internetSettingsScreen)
 popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
 
 text_input = TextInput()
-# inventory array
-inventoryArray = []
-ingredientArray = []
