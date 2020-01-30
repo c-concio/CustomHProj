@@ -32,7 +32,8 @@ class UserMainScreen(Screen):
 
 
 class SizeScreen(Screen):
-    nextButton1 = ObjectProperty(None)
+    pass
+    # nextButton1 = ObjectProperty(None)
 
 
 class BaseScreen(Screen):
@@ -58,11 +59,15 @@ class AmountScreen(Screen):
         super(AmountScreen, self).__init__(**kwargs)
         self.count = 0
         self.label_text = str(self.count)
-        self.addButton.bind(on_press=lambda x: UserController.increment(self))
+        self.addButton.bind(on_press=lambda x:UserController.increment(self))
         self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
 
 class SplitScreen(Screen):
-    pass
+    step1 = ObjectProperty(None)
+    carouselScreen = ObjectProperty(None)
+    baseScreen = ObjectProperty(None)
+    flavorScreen = ObjectProperty(None)
+    nextButton1 = ObjectProperty(None)
 
 # -------------------------------------------------------------------
 #                       Screen Manager

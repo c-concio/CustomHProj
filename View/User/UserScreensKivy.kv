@@ -1,9 +1,13 @@
 <SplitScreen>:
     name: 'Split Screen'
+    nextButton1: next1
+    step1: step1
+    carouselScreen: carouselS
+    baseScreen: baseS
+    flavorScreen: flavorS
+
     BoxLayout:
         orientation: 'vertical'
-        rows: 2
-
         BoxLayout:
             size_hint_y: None
             height: 100
@@ -23,6 +27,7 @@
                 width: 100
                 size_hint_y: None
                 height: 50
+
 
 
             Button:
@@ -49,17 +54,40 @@
                 size_hint_y: None
                 height: 50
 
+            Button:
+                id: cButton
+                text: 'Carousel'
+                size_hint_x: None
+                width: 100
+                size_hint_y: None
+                height: 50
+                on_press: carousel.load_next()
 
-        ScreenManager:
-            id: sm
-
+        Carousel:
+            id: carouselS
             SizeScreen:
+                id: sizeS
+                RoundedButton:
+                    id: next1
+                    pos_hint:{"x":0.65,"y":0.05}
+                    size_hint: 0.3, 0.2
+                    font_size: (root.width**2 + root.height**2) / 13**4
+                    font_name: "OstrichSans"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    text: "Next"
+
 
             BaseScreen:
+                id: baseS
 
 
 
+            FlavorScreen:
+                id: flavorS
 
+            #AmountScreen:
+            #    id: amountS
 
 
 
@@ -121,7 +149,6 @@
     toggleButtonSmall: small
     toggleButtonMedium: medium
     toggleButtonLarge: large
-    nextButton1: next1
 
     FloatLayout:
 
@@ -177,15 +204,7 @@
                 bold: True
 
 
-        RoundedButton:
-            id: next1
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Next"
+
 
 
 
