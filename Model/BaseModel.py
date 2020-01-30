@@ -28,7 +28,7 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
-        connect = sqlite3.connect(r"database\pysqlite.db")
+        connect = sqlite3.connect(r"database/pysqlite.db")
         cursor = connect.cursor()
 
         sqlCount = "SELECT COUNT(id) FROM cylinder;"
