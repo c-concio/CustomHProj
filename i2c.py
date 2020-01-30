@@ -29,7 +29,9 @@ HOWEVER, WILL HAVE TO TEST THE PERFORMANCE. For now, test it to see if it works.
 def run():
     getUserData()
 
-
+"""
+Get Data from user and dispense the selections
+"""
 def getUserData():
     connect = sqlite3.connect(r"database\pysqlite.db")
     cursor = connect.cursor()
@@ -42,7 +44,7 @@ def getUserData():
     sqlCylinder = "SELECT id, steps from cylinder"
     cursor.execute(sqlCylinder)
     updateStepsList = cursor.fetchall()
-    print(updateStepsList)
+    #print(updateStepsList)
 
     for combination in userInputs:
         print(combination)
@@ -51,9 +53,10 @@ def getUserData():
         Go in the local database in temporary and extract all the stuff.
         Once extracted, correspond the ID to the driver address.
         """
+        # If ID corresponds to the one in array.
         if(combination[0] == 1):
             for count1 in range(combination[1]):
-                print(combination[1])
+                #print(combination[1])
                 """
                 WE DON'T KNOW IF EACH TICK WOULD BE EVERYTIME WE ENTER THE FOR LOOP
                 OR THE FOR LOOP DOES NOT MATTER.
@@ -64,35 +67,84 @@ def getUserData():
                 Updating database after dispensing the content.
                 """
 
+            """
+            ADD IN GPIO TO LIGHT THE LED HERE CODE HERE.
+            Blink 5 Times to signify dispense
+            """
+
             newValue = 0
             for entry in updateStepsList:
-                print(entry)
+                #print(entry)
                 if (entry[0] == combination[0]):
                     print(entry[0])
-                    oldValue = entry[0]
+                    print(entry[1])
+                    oldValue = entry[1]
                     newValue = oldValue - combination[1]
+                    break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
             data = (newValue, combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
-            #cursor.close()
+
+            """
+            ADD GPIO BLINK LIGHT HERE -> 3x to update database.
+            """
+
+        if(combination[0] == 4):
+            for count1 in range(combination[1]):
+                # print(combination[1])
+                """
+                WE DON'T KNOW IF EACH TICK WOULD BE EVERYTIME WE ENTER THE FOR LOOP
+                OR THE FOR LOOP DOES NOT MATTER.
+                """
+                # bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
+
+                """
+                Updating database after dispensing the content.
+                """
+
+            """
+            ADD IN GPIO TO LIGHT THE LED HERE CODE HERE.
+            BLink 5x times to dispense.
+            """
+
+            newValue = 0
+            for entry in updateStepsList:
+                # print(entry)
+                if (entry[0] == combination[0]):
+                    print(entry[0])
+                    print(entry[1])
+                    oldValue = entry[1]
+                    newValue = oldValue - combination[1]
+                    break
+
+            sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
+            data = (newValue, combination[0])
+            cursor.execute(sqlCylinderNew, data)
+            connect.commit()
+
+            """
+            GPIO blink 3x to show update database
+            """
+
+    """
+    At the end, delete all entries in the TEMPORARY. 
+    Something along the line of sql = 'DELETE FROM tasks'.
+    Then Cursor.Close() 
+    
+    ADD GPIO Turning LED up to end the whole dispensing process.
+    """
 
 
-        if(combination[0] == "2"):
-            for count in range(combination[1]):
-                for count2 in range(combination[1]):
-                    """
-                    WE DON'T KNOW IF EACH TICK WOULD BE EVERYTIME WE ENTER THE FOR LOOP
-                    OR THE FOR LOOP DOES NOT MATTER.
-                    """
-                    # bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
-
-                    """
-                    Updating database after dispensing the content.
-                    """
+"""
+Reset the Cylinders whenever the bag is changed OR when it reaches 0.
+"""
 
 
-
+"""
+Control the relay?
+Turning GPIO ON/OFF on the attached relay. Again, hardcode the which GPIO with which Relay.
+"""
 
 run()
