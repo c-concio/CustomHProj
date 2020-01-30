@@ -24,6 +24,9 @@ LabelBase.register(name="OstrichSans", fn_regular="ostrich-regular.ttf")
 # -------------------------------------------------------------------
 
 
+
+
+
 class UserMainScreen(Screen):
     startButton = ObjectProperty(None)
 
@@ -49,22 +52,18 @@ class AmountScreen(Screen):
     addButton = ObjectProperty(None)
     removeButton = ObjectProperty(None)
 
-
     label_text = StringProperty()
 
     def __init__(self, **kwargs):
         super(AmountScreen, self).__init__(**kwargs)
         self.count = 0
         self.label_text = str(self.count)
-        self.addButton.bind(on_press =lambda x: UserController.increment(self))
-        self.removeButton.bind(on_press = lambda x: UserController.decrement(self))
-
+        self.addButton.bind(on_press=lambda x: UserController.increment(self))
+        self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
 
 class SplitScreen(Screen):
     pass
 
-class Screen1(Screen):
-    pass
 # -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
@@ -81,7 +80,7 @@ baseScreen = BaseScreen(name="Base Screen")
 flavorScreen = FlavorScreen(name="Flavor Screen")
 sauceOfMonth = SauceOfMonth(name="Sauce Of The Month Screen")
 amountScreen = AmountScreen(name="Amount Adjustment Screen")
-splitScreen = SplitScreen(name= "Split Screen")
+splitScreen = SplitScreen(name="Split Screen")
 
 UserController.initialize_buttons()
 screenManager.add_widget(userMainScreen)

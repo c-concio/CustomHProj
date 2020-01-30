@@ -15,7 +15,7 @@ class MainApp(App):
         # screenManager = AdminModel.screenManager
         screenManager = MainModel.mainScreenManager
         AdminMainScreenController.setup_inventory_screen()
-        # screenManager = UserModel.screenManager
+        screenManager = UserModel.screenManager
         return screenManager
 
 

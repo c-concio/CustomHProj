@@ -34,11 +34,14 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
+    
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Cup Size Screen'))
+    UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
     UserModel.sizeScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     UserModel.baseScreen.nextButton2.bind(on_press=lambda x: switch_screen('Flavor Screen'))
     UserModel.flavorScreen.nextButton3.bind(on_press=lambda x: switch_screen('Amount Adjustment Screen'))
     UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
+    # UserModel.splitScreen.startButton.bind(on_press=lambda x: switch_screen('Cup Size Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
 
 
