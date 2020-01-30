@@ -283,7 +283,6 @@
             font_size: (root.width**2 + root.height**2) / 14**4
             size_hint: 0.06, 0.09
             pos_hint: {"x":0.09,"y":0.4}
-            on_press: root.increment()
 
 
 
@@ -293,7 +292,7 @@
             font_size: (root.width**2 + root.height**2) / 14**4
             size_hint: 0.06, 0.09
             pos_hint: {"x":0.25,"y":0.4}
-            on_release: root.decrement()
+
 
         Label:
             text: root.label_text

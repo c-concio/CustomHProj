@@ -1,5 +1,7 @@
 from Model import AdminModel
 from Controller import AdminMainScreenController, DatabaseController
+from Model import UserModel
+from Controller import UserController
 import kivy
 
 kivy.require('1.11.1')
@@ -12,6 +14,7 @@ class MainApp(App):
     def build(self):
         screenManager = AdminModel.screenManager
         AdminMainScreenController.setup_inventory_screen()
+        screenManager = UserModel.screenManager
         return screenManager
 
 

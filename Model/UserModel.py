@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
-from CustomHProj.Controller import UserController
+from Controller import UserController
 
 kivy.require('1.9.0')
 
@@ -56,8 +56,8 @@ class AmountScreen(Screen):
         super(AmountScreen, self).__init__(**kwargs)
         self.count = 0
         self.label_text = str(self.count)
-        # self.addButton.bind(on_press= UserController.increment())
-        # self.removeButton.bind(on_press=UserController.decrement())
+        self.addButton.bind(on_press =lambda x: UserController.increment(self))
+        self.removeButton.bind(on_press = lambda x: UserController.decrement(self))
 
 
 class SplitScreen(Screen):

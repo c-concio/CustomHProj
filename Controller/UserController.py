@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
-from CustomHProj.Model import UserModel
+from Model import UserModel
 
 kivy.require('1.9.0')
 
@@ -32,7 +32,6 @@ def switch_screen(screen_name):
 #     UserModel.screenManager.current = screen_name
 
 
-
 # Button switches to
 def initialize_buttons():
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Cup Size Screen'))
@@ -41,8 +40,6 @@ def initialize_buttons():
     UserModel.flavorScreen.nextButton3.bind(on_press=lambda x: switch_screen('Amount Adjustment Screen'))
     UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
-
-
 
 
 # -------------------------------------------------------------------
@@ -64,17 +61,13 @@ def initialize_buttons():
 # -------------------------------------------------------------------
 
 
-
-
-def increment(self, *args):
+def increment(self):
     self.count += 1
     self.label_text = str(self.count)
     self.label_text
 
 
-def decrement(self, *args):
+def decrement(self):
     self.count -= 1
     self.label_text = str(self.count)
     self.label_text
-
-
