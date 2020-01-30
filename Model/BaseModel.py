@@ -72,7 +72,6 @@ class BaseScreen(Screen):
 
     def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
-        print("Button clicked")
         if instance.state == 'down':
             self.baseList.append(instance.text)
             print("Added " + instance.text)

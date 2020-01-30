@@ -4,7 +4,7 @@ import kivy
 from kivy.core.window import Window
 from kivy.uix.togglebutton import ToggleButton
 
-from Model import MainModel
+from Model import MainModel, DatabaseClass
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition
@@ -32,11 +32,11 @@ class FlavorScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(FlavorScreen, self).__init__(**kwargs)
-        connect = sqlite3.connect(r"database\pysqlite.db")
+        connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlBase = "SELECT * FROM cylinder WHERE type='Flavor';"
-        cursor.execute(sqlBase)
+        sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
+        cursor.execute(sqlFlavor)
         bases = cursor.fetchall()
 
         cursor.close()
@@ -58,7 +58,6 @@ class FlavorScreen(Screen):
 
     def saveButtonName(self, instance):
         # Save the flavor name in a list to use for the final order
-        print("Button clicked")
         if instance.state == 'down':
             self.flavorList.append(instance.text)
             print("Added " + instance.text)
