@@ -6,7 +6,6 @@ ingredientArray = []
 # connect to the database called example.db
 
 conn = sqlite3.connect('database/pysqlite.db')
-cursor = conn.cursor()
 
 
 class Cylinder:

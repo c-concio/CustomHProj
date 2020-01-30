@@ -108,7 +108,8 @@ def set_ingredient_list(spinner):
 # update the ingredient choice for a cylinder
 def update_ingredient_choice(spinner, text):
     # get the spinner's parent's cylinder ID and update ingredient choice
-    DatabaseClass.cursor.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
+    cursor = DatabaseClass.conn.cursor()
+    cursor.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
 
 
