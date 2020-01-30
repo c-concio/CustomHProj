@@ -40,19 +40,17 @@ def create_table():
     try:
         database = r"database\pysqlite.db"
 
-        sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
-                                                id integer PRIMARY KEY,
-                                                ingredient text,
-                                                amount integer
-                                        ); """
+        sql_create_cylinder_table = """ CREATE TABLE "cylinder" (
+                                        id integer PRIMARY KEY,
+                                        ingredient text NOT NULL DEFAULT 'NONE',
+                                        type text NOT NULL,
+                                        steps integer NOT NULL DEFAULT 0
+                                    );"""
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
-                                                        base text,
-                                                        base_cylinder_id integer,
-                                                        base_mL integer,
-                                                        flavor text,
-                                                        flavor_cylinder_id integer,
-                                                        flavor_mL integer
+                                                        ingredient text,
+                                                        cylinder_id integer,
+                                                        ml integer
                                                 ); """
 
         sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredient (
@@ -83,13 +81,13 @@ def create_table():
 
 
 # insert function for Cylinder table
-def insert_cylinder(ingredient, amount):
+def insert_cylinder(ingredient, steps):
     try:
         connect = sqlite3.connect(r"database\pysqlite.db")
         cursor = connect.cursor()
-        sql = ''' INSERT INTO cylinder(ingredient, amount)
+        sql = ''' INSERT INTO cylinder(ingredient, steps)
                   VALUES(?,?) '''
-        cylinder = (ingredient, amount)
+        cylinder = (ingredient, steps)
         cursor.execute(sql, cylinder)
         connect.commit()
         print("Inserted single row to cylinder table")
@@ -105,8 +103,8 @@ def insert_cylinder_many(cylinderList):
         connect = sqlite3.connect(r"database\pysqlite.db")
         cursor = connect.cursor()
 
-        insert_many_query = """INSERT INTO cylinder(ingredient, amount)
-                                VALUES(?,?)"""
+        insert_many_query = """INSERT INTO cylinder(ingredient, type, steps)
+                                VALUES(?,?,?)"""
         cursor.executemany(insert_many_query, cylinderList)
         connect.commit()
         print("Inserted ", cursor.rowcount, " of rows")
@@ -122,30 +120,22 @@ def insert_cylinder_many(cylinderList):
 
 
 # insert function for Temporary table
-def insert_temporary(base, base_mL, flavor, flavor_mL):
+def insert_temporary(ingredient, ml):
     try:
         connect = sqlite3.connect(r"database\pysqlite.db")
         cursor = connect.cursor()
 
-        base_cylinder_id = 0
-        flavor_cylinder_id = 0
+        cylinder_id = 0
         try:
             # select the cylinder id with base name
-            base_cylinder_id = select_first_row_from_condition(base)
-            print("Base id", base_cylinder_id)
+            cylinder_id = select_first_row_from_condition(ingredient)
+            print("Base id", cylinder_id)
 
         except:
             print("No corresponding cylinder with this base name")
 
-        try:
-            # select cylinder id with flavor name
-            flavor_cylinder_id = select_first_row_from_condition(flavor)
-            print("Flavor id", flavor_cylinder_id)
-        except:
-            print("No corresponding cylinder with this base name")
-
-        sql = """INSERT INTO temporary(base, base_cylinder_id, base_mL, flavor, flavor_cylinder_id, flavor_mL) VALUES(?,?,?,?,?,?);"""
-        order = (base, base_cylinder_id, base_mL, flavor, flavor_cylinder_id, flavor_mL)
+        sql = """INSERT INTO temporary(ingredient, cylinder_id, ml) VALUES(?,?,?);"""
+        order = (ingredient, cylinder_id, ml)
         cursor.execute(sql, order)
         connect.commit()
 
@@ -162,10 +152,10 @@ def select_first_row_from_condition(ingredient):
         cursor = connect.cursor()
 
         cursor.execute("SELECT ID FROM(SELECT * FROM (SELECT *, "
-                       "row_number() over (PARTITION BY ingredient ORDER BY amount DESC) as rownum "
+                       "row_number() over (PARTITION BY ingredient ORDER BY steps DESC) as rownum "
                        "FROM cylinder"
                        ") cylinder "
-                       "WHERE ingredient = ? AND amount > 10 AND rownum = 1);", (ingredient,))
+                       "WHERE ingredient = ? AND steps > 10 AND rownum = 1);", (ingredient,))
 
         rows = cursor.fetchone()
         print("Fetched first row")
@@ -214,18 +204,19 @@ def main():
     create_table()
     # print(select_first_row_from_condition('Ketchup'))
 
-    # listToInsert = [("Ketchup", 500),
-    #                 ("Mayonnaise", 10),
-    #                 ("Mustard", 20),
-    #                 ("Spice", 30)]
+    # listToInsert = [("Ketchup", "Base", 500),
+    #                 ("Mayonnaise", "Base", 10),
+    #                 ("Mustard", "Base", 20),
+    #                 ("Spice", "Flavor", 30)]
     # insert_cylinder_many(listToInsert)
     #
-    # insert_temporary("Ketchup", 20, "Spice", 5)
+    insert_temporary("Ketchup", 20)
+    insert_temporary("Spice", 10)
 
     # # create new row
     # insert_cylinder('Ketchup', 500)
 
-    # select_star_table("temporary")
+    select_star_table("temporary")
 
     connect = sqlite3.connect(r"database\pysqlite.db")
     cursor = connect.cursor()
