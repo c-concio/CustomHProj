@@ -5,7 +5,7 @@ from kivy.uix.button import Button
 from Controller import AdminMainScreenController, MainScreenController, BaseScreenController
 import kivy
 
-from Model import MainModel
+from Model import MainModel, DatabaseClass
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition
@@ -28,7 +28,7 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
-        connect = sqlite3.connect(r"database\pysqlite.db")
+        connect = DatabaseClass.conn
         cursor = connect.cursor()
 
         sqlCount = "SELECT COUNT(id) FROM cylinder;"
