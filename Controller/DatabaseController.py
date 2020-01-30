@@ -9,11 +9,9 @@ def update_cylinders():
     # clear the cylinder array
     DatabaseClass.cylinderArray.clear()
 
-
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute("SELECT id, ingredient, steps FROM cylinder")
+    cursor.execute("SELECT id, ingredient, amount FROM cylinder")
     result = cursor.fetchall()
-
 
     for i in result:
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))

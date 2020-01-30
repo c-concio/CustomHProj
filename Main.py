@@ -1,5 +1,3 @@
-from kivy.core.window import Window
-
 from Model import AdminModel, MainModel
 from Controller import AdminMainScreenController, DatabaseController
 import kivy
