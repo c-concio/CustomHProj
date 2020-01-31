@@ -19,7 +19,7 @@ Builder.load_file('View/User/FlavorScreenKivy.kv')
 # //////////////////////////////////////////////////
 #                  Screen Classes
 # //////////////////////////////////////////////////
-
+  
 class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
