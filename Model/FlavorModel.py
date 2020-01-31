@@ -73,7 +73,6 @@ class FlavorScreen(Screen):
 #                  Screen Manager
 # //////////////////////////////////////////////////
 
-
 flavorScreen = FlavorScreen(name='Flavor Screen')
 
 # MainModel.mainScreenManager.add_widget(flavorScreen)

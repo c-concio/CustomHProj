@@ -1,7 +1,6 @@
 from Controller import DatabaseController
 from Model import AdminModel, DatabaseClass, BaseModel, MainModel
 
-
 # -------------------------------------------------------------------
 #                       Screen Functions
 # -------------------------------------------------------------------
