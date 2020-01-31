@@ -1,5 +1,5 @@
 from Controller import DatabaseController
-from Model import MainModel, BaseModel, FlavorModel, DatabaseClass
+from Model import AdminModel, BaseModel, DatabaseClass, MainModel, FlavorModel
 
 
 # -------------------------------------------------------------------
