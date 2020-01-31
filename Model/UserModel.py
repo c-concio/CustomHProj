@@ -12,6 +12,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
 from Controller import UserController
+from Model import BaseModel
 
 kivy.require('1.9.0')
 
@@ -24,9 +25,6 @@ LabelBase.register(name="OstrichSans", fn_regular="ostrich-regular.ttf")
 # -------------------------------------------------------------------
 
 
-
-
-
 class UserMainScreen(Screen):
     startButton = ObjectProperty(None)
 
@@ -36,8 +34,8 @@ class SizeScreen(Screen):
     # nextButton1 = ObjectProperty(None)
 
 
-class BaseScreen(Screen):
-    nextButton2 = ObjectProperty(None)
+#class BaseScreen(Screen):
+#    nextButton2 = ObjectProperty(None)
 
 
 class FlavorScreen(Screen):
@@ -50,24 +48,32 @@ class SauceOfMonth(Screen):
 
 class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
-    addButton = ObjectProperty(None)
+    addButtons = ObjectProperty(None)
     removeButton = ObjectProperty(None)
 
     label_text = StringProperty()
 
     def __init__(self, **kwargs):
-        super(AmountScreen, self).__init__(**kwargs)
+        super().__init__()
         self.count = 0
         self.label_text = str(self.count)
-        self.addButton.bind(on_press=lambda x:UserController.increment(self))
+        self.addButtons.bind(on_press=lambda x: UserController.increment(self))
         self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
+
 
 class SplitScreen(Screen):
     step1 = ObjectProperty(None)
+    step2 = ObjectProperty(None)
+    step3 = ObjectProperty(None)
+    step4 = ObjectProperty(None)
     carouselScreen = ObjectProperty(None)
     baseScreen = ObjectProperty(None)
     flavorScreen = ObjectProperty(None)
+    sizeScreen = ObjectProperty(None)
     nextButton1 = ObjectProperty(None)
+    nextButton2 = ObjectProperty(None)
+    nextButton3 = ObjectProperty(None)
+
 
 # -------------------------------------------------------------------
 #                       Screen Manager
@@ -80,18 +86,13 @@ screenManager = ScreenManager()
 
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
-sizeScreen = SizeScreen(name="Cup Size Screen")
-baseScreen = BaseScreen(name="Base Screen")
-flavorScreen = FlavorScreen(name="Flavor Screen")
-sauceOfMonth = SauceOfMonth(name="Sauce Of The Month Screen")
-amountScreen = AmountScreen(name="Amount Adjustment Screen")
 splitScreen = SplitScreen(name="Split Screen")
 
 UserController.initialize_buttons()
 screenManager.add_widget(userMainScreen)
-screenManager.add_widget(sizeScreen)
-screenManager.add_widget(baseScreen)
-screenManager.add_widget(flavorScreen)
-screenManager.add_widget(sauceOfMonth)
-screenManager.add_widget(amountScreen)
+# screenManager.add_widget(sizeScreen)
+# screenManager.add_widget(baseScreen)
+# screenManager.add_widget(flavorScreen)
+# screenManager.add_widget(sauceOfMonth)
+# screenManager.add_widget(amountScreen)
 screenManager.add_widget(splitScreen)

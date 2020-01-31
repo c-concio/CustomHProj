@@ -1,10 +1,17 @@
 <SplitScreen>:
     name: 'Split Screen'
     nextButton1: next1
+    nextButton2: next2
+    nextButton3: next3
     step1: step1
+    step2: step2
+    step3: step3
+    step4: step4
     carouselScreen: carouselS
     baseScreen: baseS
     flavorScreen: flavorS
+    sizeScreen: sizeS
+    amountScreen: amountS
 
     BoxLayout:
         orientation: 'vertical'
@@ -65,6 +72,7 @@
 
         Carousel:
             id: carouselS
+
             SizeScreen:
                 id: sizeS
                 RoundedButton:
@@ -80,14 +88,32 @@
 
             BaseScreen:
                 id: baseS
+                RoundedButton:
+                    id: next2
+                    pos_hint:{"x":0.65,"y":0.05}
+                    size_hint: 0.3, 0.2
+                    font_size: (root.width**2 + root.height**2) / 13**4
+                    font_name: "OstrichSans"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    text: "Next"
 
 
 
             FlavorScreen:
                 id: flavorS
+                RoundedButton:
+                    id: next3
+                    pos_hint:{"x":0.65,"y":0.05}
+                    size_hint: 0.3, 0.2
+                    font_size: (root.width**2 + root.height**2) / 13**4
+                    font_name: "OstrichSans"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    text: "Next"
 
-            #AmountScreen:
-            #    id: amountS
+            AmountScreen:
+                id: amountS
 
 
 
@@ -150,20 +176,21 @@
     toggleButtonMedium: medium
     toggleButtonLarge: large
 
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "View/chiliBowl.png"
     FloatLayout:
 
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'center'
 
-            canvas:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
-                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
-                    #size: (600, 712.5)
-                    source: "View/chiliBowl.png"
 
         Label:
             text:"Choose Cup Size"
@@ -211,22 +238,22 @@
 
 <BaseScreen>:
     sauceOfMonthButton: SauceOfMonth
-    nextButton2: next2
 
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "View/chiliBowl.png"
 
     FloatLayout:
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'center'
-
-            canvas:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
-                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
-                    #size: (600, 712.5)
-                    source: "View/chiliBowl.png"
 
         Label:
             text:"Choose Base"
@@ -248,15 +275,7 @@
 
 
 
-        RoundedButton:
-            id: next2
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Next"
+
 
 
 
@@ -286,7 +305,6 @@
 
 
 <FlavorScreen>:
-    nextButton3: next3
 
     FloatLayout:
 
@@ -311,22 +329,14 @@
             size_hint: 0.35, 0.15
 
 
-        RoundedButton:
-            id: next3
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Next"
+
 
 
 
 <AmountScreen>:
     doneButton: done
     resetButton: reset
-    addButton: add
+    addButtons: addB
     removeButton: remove
     baseAdjustSlider: slider
 
@@ -406,7 +416,7 @@
 
 
         CircleButton:
-            id: add
+            id: addB
             text: '+'
             font_size: (root.width**2 + root.height**2) / 14**4
             size_hint: 0.06, 0.09

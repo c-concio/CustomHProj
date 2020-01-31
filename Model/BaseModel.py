@@ -14,7 +14,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 # Kivy file for Base Screen
-Builder.load_file('View/BaseScreenKivy.kv')
+# Builder.load_file('View/BaseScreenKivy.kv')
 
 
 # //////////////////////////////////////////////////

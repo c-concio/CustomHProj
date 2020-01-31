@@ -34,13 +34,17 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
-    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.amountScreen))
+
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
-    # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
-    # UserModel.baseScreen.nextButton2.bind(on_press=lambda x: switch_screen('Flavor Screen'))
-    UserModel.flavorScreen.nextButton3.bind(on_press=lambda x: switch_screen('Amount Adjustment Screen'))
-    UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
+    UserModel.splitScreen.nextButton1.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.nextButton2.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.nextButton3.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.amountScreen))
+    # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
 
