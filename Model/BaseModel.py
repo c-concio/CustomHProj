@@ -1,6 +1,8 @@
 import sqlite3
 
+from kivy.core.window import Window
 from kivy.uix.button import Button
+from kivy.uix.togglebutton import ToggleButton
 
 from Controller import AdminMainScreenController, MainScreenController, BaseScreenController
 import kivy
@@ -14,7 +16,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 # Kivy file for Base Screen
-Builder.load_file('View/BaseScreenKivy.kv')
+Builder.load_file('View/User/BaseScreenKivy.kv')
 
 
 # //////////////////////////////////////////////////
@@ -22,6 +24,10 @@ Builder.load_file('View/BaseScreenKivy.kv')
 # //////////////////////////////////////////////////
 
 class BaseScreen(Screen):
+    # grid object from kivy file
+    grid = ObjectProperty()
+    nextButton = ObjectProperty()
+    baseList = []
     # backButton = ObjectProperty(None)
 
     # Get ingredient names from database
@@ -31,40 +37,38 @@ class BaseScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlCount = "SELECT COUNT(id) FROM cylinder;"
-        cursor.execute(sqlCount)
-
-        count = cursor.fetchone()
-
-        print(count)
-
-        sqlBase = "SELECT * FROM cylinder;"
+        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
         cursor.close()
 
+        # If screen width is small, have 1 column
+        if (Window.width <= 320):
+            print("Width")
+            self.grid.cols = 1
+        else:
+            self.grid.cols = 2
+
         # Dynamic buttons
         for i, base in enumerate(bases):
-            x_pos_hint = .2
-            y_pos_hint = .8
-            j = 0
-            if(i >= 3):
-                x_pos_hint = .4
-                y_pos_hint = .8
-                j = 0
-            button = Button(text=str(base[1]), size_hint=(.1, .1), pos_hint={'x': x_pos_hint, 'y': y_pos_hint - j/5})
-            print(j/5)
-            j += 1
-            self.add_widget(button)
+            button = ToggleButton(text=str(base[1]))
+            self.grid.add_widget(button)
             print("Base " + str(i) + ": " + base[1])
 
             button.bind(on_press=self.saveButtonName)
 
-    @staticmethod
-    def saveButtonName(self):
+    def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
-        print("Button clicked")
+        if instance.state == 'down':
+            self.baseList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.baseList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove base, it did not exist")
 
 
 # //////////////////////////////////////////////////
@@ -72,7 +76,7 @@ class BaseScreen(Screen):
 # //////////////////////////////////////////////////
 
 # initialize Base Screen manager
-baseScreenManager = ScreenManager()
+# baseScreenManager = ScreenManager()
 
 # initialize Base Screen
 baseScreen = BaseScreen(name='Base Screen')
