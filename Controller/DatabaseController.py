@@ -10,7 +10,7 @@ def update_cylinders():
     DatabaseClass.cylinderArray.clear()
 
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute("SELECT id, ingredient, amount FROM cylinder")
+    cursor.execute("SELECT id, ingredient, steps FROM cylinder")
     result = cursor.fetchall()
 
     for i in result:
