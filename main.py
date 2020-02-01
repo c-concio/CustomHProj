@@ -1,5 +1,9 @@
+from kivy.uix.screenmanager import ScreenManager
+
 from Model import AdminModel, MainModel
 from Controller import AdminMainScreenController, DatabaseController
+from Model import UserModel
+from Controller import UserController
 import kivy
 
 kivy.require('1.11.1')
@@ -13,6 +17,15 @@ class MainApp(App):
         # screenManager = AdminModel.screenManager
         screenManager = MainModel.mainScreenManager
         AdminMainScreenController.setup_inventory_screen()
+        screenManager = UserModel.screenManager
+
+        # testScreenManager = ScreenManager();
+        # splitScreen = UserModel.TestSplitScreen()
+        # #splitScreen.carouselWidget.add_widget(UserModel.AmountScreen())
+
+
+        # testScreenManager.add_widget(splitScreen)
+
         return screenManager
 
 

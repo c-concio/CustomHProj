@@ -16,7 +16,9 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 
 # Kivy file for Base Screen
+
 Builder.load_file('View/User/BaseScreenKivy.kv')
+
 
 
 # //////////////////////////////////////////////////
@@ -34,7 +36,9 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
+
         connect = DatabaseClass.conn
+
         cursor = connect.cursor()
 
         sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
