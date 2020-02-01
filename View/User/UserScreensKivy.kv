@@ -164,8 +164,15 @@
 
 
 <BaseScreen>:
-    sauceOfMonthButton: SauceOfMonth
-    nextButton: nextButton
+    grid: base_grid
+    nextButton: next
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
     AnchorLayout:
         anchor_x: 'right'
@@ -178,37 +185,26 @@
                 pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
                 size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
                 #size: (600, 712.5)
-                source: "View/chiliBowl.png"
+                source: "Images/chiliBowl.png"
+
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        GridLayout:
+            id: base_grid
+            size_hint_x: 0.6
+            size_hint_y: 0.2
+            cols: 2
 
     FloatLayout:
 
-        Label:
-            text:"Choose Base"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.35,"top":0.9}
-            size_hint: 0.35, 0.15
-
-        RoundedButton:
-            id: SauceOfMonth
-            pos_hint:{"x":0.1,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 14**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Sauce Of The \nMonth"
-            halign: 'center'
-
-    RoundedButton:
-        id: nextButton
-        pos_hint:{"x":0.65,"y":0.05}
-        size_hint: 0.3, 0.2
-        font_size: (root.width**2 + root.height**2) / 13**4
-        font_name: "OstrichSans"
-        bold: True
-        color: 0, 0, 0, 1
-        text: "Next"
+        Button:
+            id: next
+            name: next
+            text: 'Next'
+            size_hint: .1,.1
+            pos_hint: {"x":.8, "y":.1}
 
 
 
@@ -241,40 +237,47 @@
 
 
 <FlavorScreen>:
-    nextButton: nextButton
+    grid: flavor_grid
+    nextButton: next
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "Images/chiliBowl.png"
+
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        GridLayout:
+            id: flavor_grid
+            size_hint_x: 0.6
+            size_hint_y: 0.2
+            cols: 2
 
     FloatLayout:
 
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'center'
-
-            canvas:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
-                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
-                    #size: (600, 712.5)
-                    source: "View/chiliBowl.png"
-
-        Label:
-            text:"Choose Flavor"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.35,"top":0.9}
-            size_hint: 0.35, 0.15
-
-    RoundedButton:
-        id: nextButton
-        pos_hint:{"x":0.65,"y":0.05}
-        size_hint: 0.3, 0.2
-        font_size: (root.width**2 + root.height**2) / 13**4
-        font_name: "OstrichSans"
-        bold: True
-        color: 0, 0, 0, 1
-        text: "Next"
-
+        Button:
+            id: next
+            name: next
+            text: 'Next'
+            size_hint: .1,.1
+            pos_hint: {"x":.8, "y":.1}
 
 
 
