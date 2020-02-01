@@ -30,16 +30,15 @@ class UserMainScreen(Screen):
 
 
 class SizeScreen(Screen):
-    pass
-    # nextButton1 = ObjectProperty(None)
+    nextButton = ObjectProperty(None)
 
 
-#class BaseScreen(Screen):
-#    nextButton2 = ObjectProperty(None)
+class BaseScreen(Screen):
+    nextButton = ObjectProperty(None)
 
 
 class FlavorScreen(Screen):
-    nextButton3 = ObjectProperty(None)
+    nextButton = ObjectProperty(None)
 
 
 class SauceOfMonth(Screen):
@@ -53,7 +52,7 @@ class AmountScreen(Screen):
 
     label_text = StringProperty()
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         super().__init__()
         self.count = 0
         self.label_text = str(self.count)
@@ -61,18 +60,25 @@ class AmountScreen(Screen):
         self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
 
 
+
 class SplitScreen(Screen):
+    carouselWidget = ObjectProperty(None)
     step1 = ObjectProperty(None)
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
-    carouselScreen = ObjectProperty(None)
-    baseScreen = ObjectProperty(None)
-    flavorScreen = ObjectProperty(None)
-    sizeScreen = ObjectProperty(None)
-    nextButton1 = ObjectProperty(None)
-    nextButton2 = ObjectProperty(None)
-    nextButton3 = ObjectProperty(None)
+
+
+
+    def __init__(self, name):
+        super().__init__()
+        # screens to be put in carousel
+        self.sizeScreen = SizeScreen()
+        self.baseScreen = BaseScreen()
+        self.flavorScreen = FlavorScreen()
+        self.amountScreen = AmountScreen()
+        UserController.initialize_carousel(self)
+        self.name = name
 
 
 # -------------------------------------------------------------------
@@ -90,9 +96,4 @@ splitScreen = SplitScreen(name="Split Screen")
 
 UserController.initialize_buttons()
 screenManager.add_widget(userMainScreen)
-# screenManager.add_widget(sizeScreen)
-# screenManager.add_widget(baseScreen)
-# screenManager.add_widget(flavorScreen)
-# screenManager.add_widget(sauceOfMonth)
-# screenManager.add_widget(amountScreen)
 screenManager.add_widget(splitScreen)

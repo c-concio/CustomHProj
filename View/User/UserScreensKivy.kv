@@ -1,24 +1,20 @@
 <SplitScreen>:
-    name: 'Split Screen'
-    nextButton1: next1
-    nextButton2: next2
-    nextButton3: next3
+    carouselWidget: carouselWidget
     step1: step1
     step2: step2
     step3: step3
     step4: step4
-    carouselScreen: carouselS
-    baseScreen: baseS
-    flavorScreen: flavorS
-    sizeScreen: sizeS
-    amountScreen: amountS
 
     BoxLayout:
         orientation: 'vertical'
+
         BoxLayout:
             size_hint_y: None
             height: 50
             orientation: 'horizontal'
+
+            size_hint_x: None
+            width: self.parent.width
 
             canvas:
                 Color:
@@ -43,55 +39,7 @@
                 text: 'STEP4'
 
         Carousel:
-            id: carouselS
-
-            SizeScreen:
-                id: sizeS
-                RoundedButton:
-                    id: next1
-                    pos_hint:{"x":0.65,"y":0.05}
-                    size_hint: 0.3, 0.2
-                    font_size: (root.width**2 + root.height**2) / 13**4
-                    font_name: "OstrichSans"
-                    bold: True
-                    color: 0, 0, 0, 1
-                    text: "Next"
-
-
-            BaseScreen:
-                id: baseS
-                RoundedButton:
-                    id: next2
-                    pos_hint:{"x":0.65,"y":0.05}
-                    size_hint: 0.3, 0.2
-                    font_size: (root.width**2 + root.height**2) / 13**4
-                    font_name: "OstrichSans"
-                    bold: True
-                    color: 0, 0, 0, 1
-                    text: "Next"
-
-
-
-            FlavorScreen:
-                id: flavorS
-                RoundedButton:
-                    id: next3
-                    pos_hint:{"x":0.65,"y":0.05}
-                    size_hint: 0.3, 0.2
-                    font_size: (root.width**2 + root.height**2) / 13**4
-                    font_name: "OstrichSans"
-                    bold: True
-                    color: 0, 0, 0, 1
-                    text: "Next"
-
-            AmountScreen:
-                id: amountS
-
-
-
-
-
-
+            id: carouselWidget
 
 <UserMainScreen>:
     # objectProperty names
@@ -144,6 +92,7 @@
     toggleButtonSmall: small
     toggleButtonMedium: medium
     toggleButtonLarge: large
+    nextButton: nextButton
 
     AnchorLayout:
         anchor_x: 'right'
@@ -199,6 +148,15 @@
                 font_name: "Pacifico"
                 bold: True
 
+    RoundedButton:
+        id: nextButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Next"
 
 
 
@@ -207,7 +165,7 @@
 
 <BaseScreen>:
     sauceOfMonthButton: SauceOfMonth
-
+    nextButton: nextButton
 
     AnchorLayout:
         anchor_x: 'right'
@@ -242,6 +200,15 @@
             text: "Sauce Of The \nMonth"
             halign: 'center'
 
+    RoundedButton:
+        id: nextButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Next"
 
 
 
@@ -274,6 +241,7 @@
 
 
 <FlavorScreen>:
+    nextButton: nextButton
 
     FloatLayout:
 
@@ -297,6 +265,16 @@
             pos_hint: {"x":0.35,"top":0.9}
             size_hint: 0.35, 0.15
 
+    RoundedButton:
+        id: nextButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Next"
+
 
 
 
@@ -308,6 +286,7 @@
     addButtons: addB
     removeButton: remove
     baseAdjustSlider: slider
+
 
     FloatLayout:
         AnchorLayout:

@@ -34,19 +34,26 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
-    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.sizeScreen))
-    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
 
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
-    UserModel.splitScreen.nextButton1.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.nextButton2.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.nextButton3.bind(on_press=lambda x: UserModel.splitScreen.carouselScreen.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
+
+def initialize_carousel(split_screen):
+    # add all the screens to the carousel
+    split_screen.carouselWidget.add_widget(split_screen.sizeScreen)
+    split_screen.carouselWidget.add_widget(split_screen.baseScreen)
+    split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
+    split_screen.carouselWidget.add_widget(split_screen.amountScreen)
 
 
 

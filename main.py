@@ -1,3 +1,5 @@
+from kivy.uix.screenmanager import ScreenManager
+
 from Model import AdminModel, MainModel
 from Controller import AdminMainScreenController, DatabaseController
 from Model import UserModel
@@ -16,6 +18,14 @@ class MainApp(App):
         screenManager = MainModel.mainScreenManager
         AdminMainScreenController.setup_inventory_screen()
         screenManager = UserModel.screenManager
+
+        # testScreenManager = ScreenManager();
+        # splitScreen = UserModel.TestSplitScreen()
+        # #splitScreen.carouselWidget.add_widget(UserModel.AmountScreen())
+
+
+        # testScreenManager.add_widget(splitScreen)
+
         return screenManager
 
 
