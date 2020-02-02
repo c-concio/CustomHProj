@@ -33,7 +33,6 @@ class AdminMainScreen(Screen):
     inventoryButton = ObjectProperty(None)
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
-    print("AdminMainScreen")
 
 
 class InventoryScreen(Screen):
