@@ -3,7 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from Controller import AdminMainScreenController, MainScreenController
 import kivy
 
-from Model import AdminModel, BaseModel, FlavorModel, UserModel
+from Model import AdminModel, UserModel
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition

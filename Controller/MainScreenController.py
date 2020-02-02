@@ -1,5 +1,5 @@
 from Controller import DatabaseController
-from Model import AdminModel, BaseModel, DatabaseClass, MainModel, FlavorModel, UserModel
+from Model import AdminModel, DatabaseClass, MainModel, UserModel
 
 
 # -------------------------------------------------------------------
@@ -23,28 +23,28 @@ def getBaseList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for base in BaseModel.baseScreen.baseList:
+    for base in UserModel.baseScreen.baseList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
         connect.commit()
 
         print("Added " + base + " to Temporary table")
     cursor.close()
 
-    print(BaseModel.baseScreen.baseList)
+    print(UserModel.baseScreen.baseList)
 
 
 def getFlavorList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for flavor in FlavorModel.flavorScreen.flavorList:
+    for flavor in UserModel.flavorScreen.flavorList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
         connect.commit()
 
         print("Added " + flavor + " to Temporary table")
     cursor.close()
 
-    print(FlavorModel.flavorScreen.flavorList)
+    print(UserModel.flavorScreen.flavorList)
 
 
 def initialize_buttons():

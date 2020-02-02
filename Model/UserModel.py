@@ -14,7 +14,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
 from Controller import UserController
-from Model import BaseModel, DatabaseClass
+from Model import DatabaseClass
 
 kivy.require('1.9.0')
 
