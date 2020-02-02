@@ -73,6 +73,7 @@ def add_inventory_template(cylinder_item):
 
     # setup the percent label
     inventory_item_template.percentLabel.text = str(cylinder_item.amount)
+    print(cylinder_item.amount)
     inventory_item_template.progressBar.value = cylinder_item.amount
 
     # bind the reset button to change the label text and rebind on press

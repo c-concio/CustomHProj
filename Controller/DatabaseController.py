@@ -74,13 +74,13 @@ def add_ingredient(new_ingredient):
 
 def ascend_cylinders():
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute("SELECT * FROM cylinder ORDER BY amount ASC")
+    cursor.execute("SELECT * FROM cylinder ORDER BY steps ASC")
 
     DatabaseClass.cylinderArray.clear()
 
     result = cursor.fetchall()
 
     for i in result:
-        DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[2]))
+        DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[3]))
 
     cursor.close()

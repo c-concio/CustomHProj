@@ -36,7 +36,6 @@ class AdminMainScreen(Screen):
 
 
 class InventoryScreen(Screen):
-    # TODO: Make inventory items then grid them up
     grid = ObjectProperty(None)
     backButton = ObjectProperty(None)
     editIngredientButton = ObjectProperty(None)
@@ -85,6 +84,7 @@ adminMainScreen = AdminMainScreen(name='Admin Main Screen')
 inventoryScreen = InventoryScreen(name='Inventory Screen')
 internetSettingsScreen = InternetSettingsScreen(name='Internet Settings Screen')
 
+AdminMainScreenController.setup_inventory_screen()
 AdminMainScreenController.initialize_buttons()
 
 MainModel.mainScreenManager.add_widget(adminMainScreen)
