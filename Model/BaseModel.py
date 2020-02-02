@@ -58,7 +58,6 @@ class BaseScreen(Screen):
         for i, base in enumerate(bases):
             button = ToggleButton(text=str(base[1]))
             self.grid.add_widget(button)
-            print("Base " + str(i) + ": " + base[1])
 
             button.bind(on_press=self.saveButtonName)
 

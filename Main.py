@@ -17,7 +17,7 @@ class MainApp(App):
 
     def build(self):
         # screenManager = AdminModel.screenManager
-        # screenManager = MainModel.mainScreenManager
+        screenManager = MainModel.mainScreenManager
         # AdminMainScreenController.setup_inventory_screen()
         # screenManager = UserModel.screenManager
 
@@ -42,7 +42,7 @@ class MainApp(App):
 
         testScreenManager.add_widget(UserModel.AmountScreen())
 
-        return testScreenManager
+        return screenManager
 
 
 if __name__ == '__main__':
