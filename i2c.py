@@ -1,6 +1,23 @@
 # import smbus2
 import time
 import sqlite3
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BOARD)  # Uses Physical pins on the Raspberry, NOT the GPIO.
+GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW)
+
+
+def activateGPIO(theTime, pin):
+    print("LED CALLED " + str(theTime) + " " + str(pin))
+    count = 0
+    while (count < theTime):
+        GPIO.output(pin, True)
+        time.sleep(0.1)
+        GPIO.output(pin, False)
+        time.sleep(0.1)
+        count += 1
+
 
 # bus = smbus2.SMBus(1)
 #
@@ -9,12 +26,12 @@ import sqlite3
 """
 Hardcode the IDs that will be related to the driver's address.
 """
-# MODULE_ADDRESS1 = 0x60
-#MODULE_ADDRESS2 = 0x02
-#MODULE_ADDRESS3 = 0x03
-#MODULE_ADDRESS4 = 0x04
-#MODULE_ADDRESS5 = 0x05
-#MODULE_ADDRESS6 = 0x06
+MODULE_ADDRESS1 = 0x60
+# MODULE_ADDRESS2 = 0x02
+# MODULE_ADDRESS3 = 0x03
+# MODULE_ADDRESS4 = 0x04
+# MODULE_ADDRESS5 = 0x05
+# MODULE_ADDRESS6 = 0x06
 
 """
 Make a for loop that takes number of calls to either (IN1 and IN2) or (IN3 and IN4) will be made.
@@ -24,27 +41,37 @@ REFER TO 7.6 OF THE DRV8847SPWR SPEC SHEET
 HOWEVER, WILL HAVE TO TEST THE PERFORMANCE. For now, test it to see if it works. Put time delay to see ticks?
 """
 
+flagEmpty = False
 
 
 def run():
     getUserData()
 
+    if (flagEmpty == True):
+        """
+        Light up LED.
+        """
+        print("Empty")
+
+
 """
 Get Data from user and dispense the selections
 """
+
+
 def getUserData():
-    connect = sqlite3.connect(r"database\pysqlite.db")
+    connect = sqlite3.connect(r"database/pysqlite.db")
     cursor = connect.cursor()
 
     sqlTemp = "SELECT cylinder_id, ml FROM temporary"
     cursor.execute(sqlTemp)
     userInputs = cursor.fetchall()
-    #print(userInputs[0][1])
+    # print(userInputs[0][1])
 
     sqlCylinder = "SELECT id, steps from cylinder"
     cursor.execute(sqlCylinder)
     updateStepsList = cursor.fetchall()
-    #print(updateStepsList)
+    # print(updateStepsList)
 
     for combination in userInputs:
         print(combination)
@@ -54,14 +81,16 @@ def getUserData():
         Once extracted, correspond the ID to the driver address.
         """
         # If ID corresponds to the one in array.
-        if(combination[0] == 1):
+        if (combination[0] == 1):
             for count1 in range(combination[1]):
-                #print(combination[1])
+                # print(combination[1])
                 """
                 WE DON'T KNOW IF EACH TICK WOULD BE EVERYTIME WE ENTER THE FOR LOOP
                 OR THE FOR LOOP DOES NOT MATTER.
                 """
                 #bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
+
+                activateGPIO(3, 12)
 
                 """
                 Updating database after dispensing the content.
@@ -74,7 +103,7 @@ def getUserData():
 
             newValue = 0
             for entry in updateStepsList:
-                #print(entry)
+                # print(entry)
                 if (entry[0] == combination[0]):
                     print(entry[0])
                     print(entry[1])
@@ -87,11 +116,17 @@ def getUserData():
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
+            # If the total value is smaller than a certain threshold, breaks the for loop. Stop the whole process. Light up LED.
+            if (newValue < 10):
+                listOfGlobal = globals()
+                listOfGlobal['flagEmpty'] = True
+                break
+
             """
             ADD GPIO BLINK LIGHT HERE -> 3x to update database.
             """
 
-        if(combination[0] == 4):
+        if (combination[0] == 4):
             for count1 in range(combination[1]):
                 # print(combination[1])
                 """
@@ -99,6 +134,8 @@ def getUserData():
                 OR THE FOR LOOP DOES NOT MATTER.
                 """
                 # bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
+
+                activateGPIO(3, 16)
 
                 """
                 Updating database after dispensing the content.
@@ -132,7 +169,7 @@ def getUserData():
     At the end, delete all entries in the TEMPORARY. 
     Something along the line of sql = 'DELETE FROM tasks'.
     Then Cursor.Close() 
-    
+
     ADD GPIO Turning LED up to end the whole dispensing process.
     """
 
@@ -140,7 +177,6 @@ def getUserData():
 """
 Reset the Cylinders whenever the bag is changed OR when it reaches 0.
 """
-
 
 """
 Control the relay?
