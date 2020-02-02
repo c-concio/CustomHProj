@@ -298,12 +298,7 @@
                 size_hint_y: None
                 height: self.height
 
-                canvas.before:
-                    Color:
-                        rgba: 0.5, 0, 1, 1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+
 
                 Label:
                     text:"Summary"
@@ -312,12 +307,7 @@
                     size_hint_y: None
                     font_size: app.headerFont
 
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0.5, 1, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
+
 
             GridLayout:
                 id: bodyGrid
@@ -339,13 +329,9 @@
                         cols: 1
                         size_hint_y: None
                         height: self.minimum_height
+                        spacing: 20
 
-                        canvas.before:
-                            Color:
-                                rgba: 0.5, 0, 1, 1
-                            Rectangle:
-                                size: self.size
-                                pos: self.pos
+
 
                         Label:
                             text: 'Drag to adjust amount'
@@ -356,7 +342,7 @@
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint_y: None
-                            height: 30
+                            height: 60
 
                             Label:
                                 text:"Base 1"
@@ -391,41 +377,6 @@
                             size_hint_y: None
                             height: 40
 
-                        Label:
-                            text:"Flavor 1"
-                            font_name: "Pacifico"
-                            font_size: 18
-                            size_hint_y: None
-                            height: 30
-
-                        BoxLayout:
-                            orientation: 'horizontal'
-                            size_hint_y: None
-                            height: 50
-
-                            CircleButton:
-                                id: addB
-                                text: '+'
-                                font_size: 18
-                                size_hint_x: None
-                                width: self.parent.width * 2/10
-
-
-                            Label:
-                                text: root.label_text
-                                font_size: 18
-                                size_hint_x: None
-                                width: self.parent.width * 6/10
-
-                            CircleButton:
-                                id: remove
-                                text: "-"
-                                font_size: 18
-                                size_hint_x: None
-                                width: self.parent.width * 2/10
-
-
-
 
 
 
@@ -437,12 +388,7 @@
                     height: self.width
 
 
-                    canvas.before:
-                        Color:
-                            rgb: 0, 0, 1, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
+
 
                     Widget:
                         size_hint: None, None
@@ -464,185 +410,57 @@
                                 pos: self.pos
                                 angle_start: slider.value
 
-<AmountScreen1>:
-    ScrollView:
-        do_scroll_x: False
-        do_scroll_y: True
-
-
-        GridLayout:
-            size_hint_y: None
-            size_hint_x: 1
-            height: self.minimum_height
-            cols: 1
-
-
-            GridLayout:
-                text: "hello"
-                size_hint_y: None
-                height: self.height
-                cols: 1
-
-                canvas.before:
-                    Color:
-                        rgba: 0, 0.5, 1, 1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-
-                Button:
-                    text: "hello2"
-                    size_hint_y: None
-                    height: self.height
-
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0.5, 1, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
-
-                Button:
-                    text: "hello1"
-                    size_hint_y: None
-                    height: self.height
-
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0.5, 1, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
-
 
 <BaseSliderLayout>:
 
 
 
 
+<FlavorsLayout>:
+    flavorAddB: flavorAddB
+    flavorRemoveB: flavorRemoveB
+    label_text: label_text
+    orientation: "vertical"
+    size_hint_y: None
+    height: 90
 
 
-<AmountScreenT>:
-    doneButton: done
-    resetButton: reset
-    addButtons: addB
-    removeButton: remove
-    baseAdjustSlider: slider
 
+    Label:
+        text:"Flavor 1"
+        font_name: "Pacifico"
+        font_size: 18
+        size_hint_y: None
+        height: 30
 
-    FloatLayout:
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'center'
-
-            canvas:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
-                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
-                    #size: (600, 712.5)
-                    source: "View/chiliBowl.png"
-
-        Label:
-            text:"Drag to Adjust Amount"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.35,"top":0.9}
-            size_hint: 0.35, 0.15
-
-        RoundedButton:
-            id: done
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Done"
-
-        Slider:
-            id: slider
-            min: 0.
-            max: 360.
-            value: 180.
-            step: 30
-            size_hint_x: 0.3
-            pos_hint: {'x': 0.05, 'top': 1.1}
-
-        Label:
-            text:"Base 1"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':-0.11,'y':0.5}
-            size_hint: 0.35, 0.35
-
-        Label:
-            text:"Base 2"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':0.15,'y':0.5}
-            size_hint: 0.35, 0.35
-
-        RoundedButton2:
-            id: reset
-            text: 'Reset'
-            on_press: reset.value = 180
-            pos_hint:{'x':0.4,'y':0.57}
-            size_hint: 0.07, 0.07
-            on_press: slider.value = 180
-            font_name: "OstrichSans"
-            font_size: (root.width**2 + root.height**2) / 18**4
-            bold: True
-            color: 0, 0, 0, 1
-
-
-        Label:
-            text:"Flavor 1"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':0.03,'y':0.35}
-            size_hint: 0.35, 0.35
-
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
 
         CircleButton:
-            id: addB
+            id: flavorAddB
             text: '+'
-            font_size: (root.width**2 + root.height**2) / 14**4
-            size_hint: 0.06, 0.09
-            pos_hint: {"x":0.09,"y":0.4}
-
-
-
-        CircleButton:
-            id: remove
-            text: "-"
-            font_size: (root.width**2 + root.height**2) / 14**4
-            size_hint: 0.06, 0.09
-            pos_hint: {"x":0.25,"y":0.4}
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
 
 
         Label:
-            text: root.label_text
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {'x':-0.3,'y':-0.05}
+            id: label_text
+            #text: root.label_text
+            font_size: 18
+            size_hint_x: None
+            width: self.parent.width * 6/10
 
-
-        FloatLayout:
-            canvas:
-                Color:
-                    rgb: 1, 1, 1
-                Ellipse:
-                    pos: 100, 90
-                    size: 300,301
-                    source: 'View/c2.png'
-                    angle_start: slider.value
-
-                Ellipse:
-                    pos: 100, 90
-                    size: 300,301
-                    source: 'View/c1.png'
-                    angle_end: slider.value
+        CircleButton:
+            id: flavorRemoveB
+            text: "-"
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
 
 
 
