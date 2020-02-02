@@ -4,7 +4,7 @@ import sqlite3
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BOARD)  # Uses Physical pins on the Raspberry, NOT the GPIO.
-GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(15, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(16, GPIO.OUT, initial=GPIO.LOW)
 
 
@@ -80,7 +80,7 @@ def getUserData():
         Go in the local database in temporary and extract all the stuff.
         Once extracted, correspond the ID to the driver address.
         """
-        # If ID corresponds to the one in array.
+        # If ID corresponds to the one at current combination.
         if (combination[0] == 1):
             for count1 in range(combination[1]):
                 # print(combination[1])
@@ -90,7 +90,8 @@ def getUserData():
                 """
                 #bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
 
-                activateGPIO(3, 12)
+                print("Dispense")
+                activateGPIO(5, 15)
 
                 """
                 Updating database after dispensing the content.
@@ -122,6 +123,8 @@ def getUserData():
                 listOfGlobal['flagEmpty'] = True
                 break
 
+            print("Update values in Database")
+            activateGPIO(3, 15)
             """
             ADD GPIO BLINK LIGHT HERE -> 3x to update database.
             """
@@ -135,7 +138,8 @@ def getUserData():
                 """
                 # bus.write_byte_data(MODULE_ADDRESS1, 0x01, 0b00001100)
 
-                activateGPIO(3, 16)
+                print("Dispense")
+                activateGPIO(5, 16)
 
                 """
                 Updating database after dispensing the content.
@@ -143,7 +147,7 @@ def getUserData():
 
             """
             ADD IN GPIO TO LIGHT THE LED HERE CODE HERE.
-            BLink 5x times to dispense.
+            Blink 5 Times to signify dispense
             """
 
             newValue = 0
@@ -161,8 +165,16 @@ def getUserData():
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
+            # If the total value is smaller than a certain threshold, breaks the for loop. Stop the whole process. Light up LED.
+            if (newValue < 10):
+                listOfGlobal = globals()
+                listOfGlobal['flagEmpty'] = True
+                break
+
+            print("Update values in Database")
+            activateGPIO(3, 16)
             """
-            GPIO blink 3x to show update database
+            ADD GPIO BLINK LIGHT HERE -> 3x to update database.
             """
 
     """
