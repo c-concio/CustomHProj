@@ -3,7 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from Controller import AdminMainScreenController, MainScreenController
 import kivy
 
-from Model import AdminModel, UserModel
+from Model import AdminModel, BaseModel, FlavorModel
 
 kivy.require('1.11.1')  # replace with your current kivy version !
 from kivy.uix.screenmanager import Screen, ScreenManager, CardTransition
@@ -21,7 +21,7 @@ Builder.load_file('View/User/MainScreenKivy.kv')
 
 class MainScreen(Screen):
     adminButton = ObjectProperty(None)
-    userButton = ObjectProperty(None)
+    baseButton = ObjectProperty(None)
 
 
 # //////////////////////////////////////////////////
@@ -36,12 +36,14 @@ mainScreen = MainScreen(name='Main Screen')
 
 # adminScreen = AdminModel.AdminMainScreen(name="Admin Main Screen")
 
-# initialize User screen
-splitScreen = UserModel.splitScreen
+# initialize Base screen
+baseScreen = BaseModel.BaseScreen(name='Base Screen')
+flavorScreen = FlavorModel.FlavorScreen(name='Flavor Screen')
 
 mainScreenManager.add_widget(mainScreen)
 # mainScreenManager.add_widget(adminScreen)
-mainScreenManager.add_widget(splitScreen)
+mainScreenManager.add_widget(baseScreen)
+mainScreenManager.add_widget(flavorScreen)
 
 MainScreenController.initialize_buttons()
 
