@@ -1,4 +1,5 @@
 from kivy.core.window import Window
+
 from kivy.uix.screenmanager import ScreenManager
 
 from Model import AdminModel, MainModel
@@ -43,6 +44,7 @@ class MainApp(App):
         testScreenManager.add_widget(UserModel.AmountScreen())
 
         return testScreenManager
+
 
 
 if __name__ == '__main__':

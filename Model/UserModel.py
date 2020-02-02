@@ -12,7 +12,6 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
-from kivy.uix.widget import Widget
 
 from Controller import UserController
 from Model import BaseModel
@@ -67,12 +66,13 @@ class AmountScreen(Screen):
         # self.addButtons.bind(on_press=lambda x: UserController.increment(self))
         # self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
         self.bodyGrid.cols = 1 if Window.width < 425 else 2
-        
+
         # if only one column, the sliderLayout should have the height of the base grid
 
-        #TODO: look inside DB and add flavors
+        # TODO: look inside DB and add flavors
         self.sliderTemplateGrid.add_widget(FlavorsLayout())
         self.sliderTemplateGrid.add_widget(FlavorsLayout())
+
 
 
 class SplitScreen(Screen):
@@ -109,7 +109,6 @@ class FlavorsLayout(BoxLayout):
         self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
 
 
-
 # -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
@@ -117,13 +116,15 @@ class FlavorsLayout(BoxLayout):
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
 
-# TODO: uncomment
-# screenManager = ScreenManager()
-#
-# # initialize User screens
-# userMainScreen = UserMainScreen(name="User Main Screen")
-# splitScreen = SplitScreen(name="Split Screen")
-#
-# UserController.initialize_buttons()
-# screenManager.add_widget(userMainScreen)
+
+screenManager = ScreenManager()
+
+# initialize User screens
+userMainScreen = UserMainScreen(name="User Main Screen")
+splitScreen = SplitScreen(name="Split Screen")
+baseScreen = BaseScreen(name="Base Screen")
+flavorScreen = FlavorScreen(name="Flavor screen")
+
+UserController.initialize_buttons()
+screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)
