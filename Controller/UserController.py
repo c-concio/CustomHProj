@@ -12,7 +12,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
-from Model import UserModel
+from Model import UserModel, DatabaseClass
 
 kivy.require('1.9.0')
 
@@ -35,6 +35,7 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
+    # Step buttons
     UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
     UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
     UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
@@ -42,12 +43,18 @@ def initialize_buttons():
 
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
+
+    # Screen buttons
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    #UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: )
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
+
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
@@ -59,9 +66,25 @@ def initialize_carousel(split_screen):
 
 
 
+
+
 # -------------------------------------------------------------------
 #                       Base Screen Functions
 # -------------------------------------------------------------------
+
+# get the list of bases selected by user
+def getBaseList():
+    connect = DatabaseClass.conn
+    cursor = connect.cursor()
+
+    for base in UserModel.baseScreen.baseList:
+        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
+        connect.commit()
+
+        print("Added " + base + " to Temporary table")
+    cursor.close()
+
+    print(UserModel.baseScreen.baseList)
 
 # setup the base screen by getting cylinders(bases) from the database
 
@@ -69,6 +92,20 @@ def initialize_carousel(split_screen):
 # -------------------------------------------------------------------
 #                       Flavor Screen Functions
 # -------------------------------------------------------------------
+
+def getFlavorList():
+    connect = DatabaseClass.conn
+    cursor = connect.cursor()
+
+    for flavor in UserModel.flavorScreen.flavorList:
+        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
+        connect.commit()
+
+        print("Added " + flavor + " to Temporary table")
+    cursor.close()
+
+    print(UserModel.flavorScreen.flavorList)
+
 
 # setup the flavor screen by getting cylinders(flavor) from the database
 
