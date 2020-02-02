@@ -4,7 +4,6 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -12,7 +11,6 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
-from kivy.uix.widget import Widget
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -142,23 +140,15 @@ class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
     addButtons = ObjectProperty(None)
     removeButton = ObjectProperty(None)
-    mainGrid = ObjectProperty(None)
-    bodyGrid = ObjectProperty(None)
-    sliderAnchorLayout = ObjectProperty(None)
-    sliderTemplateGrid = ObjectProperty(None)
 
     label_text = StringProperty()
 
     def __init__(self):
         super().__init__()
-        # TODO: uncomment
-        # self.count = 0
-        # self.label_text = str(self.count)
-        # self.addButtons.bind(on_press=lambda x: UserController.increment(self))
-        # self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
-        self.bodyGrid.cols = 1 if Window.width < 425 else 2
-        # if only one column, the sliderLayout should have the height of the base grid
-
+        self.count = 0
+        self.label_text = str(self.count)
+        self.addButtons.bind(on_press=lambda x: UserController.increment(self))
+        self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
 
 
 
@@ -181,9 +171,6 @@ class SplitScreen(Screen):
         UserController.initialize_carousel(self)
         self.name = name
 
-class BaseSliderLayout(AnchorLayout):
-    pass
-
 
 # -------------------------------------------------------------------
 #                       Screen Manager
@@ -191,7 +178,6 @@ class BaseSliderLayout(AnchorLayout):
 
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
-
 
 screenManager = ScreenManager()
 
