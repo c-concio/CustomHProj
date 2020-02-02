@@ -1,5 +1,6 @@
 import kivy
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty
@@ -34,19 +35,27 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
-    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
-    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.step1.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.step2.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.step3.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step4.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
 
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
-    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.sizeScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.baseScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
+
 
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
@@ -54,8 +63,6 @@ def initialize_carousel(split_screen):
     split_screen.carouselWidget.add_widget(split_screen.baseScreen)
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
-
-
 
 
 # -------------------------------------------------------------------
@@ -87,3 +94,21 @@ def decrement(self):
     self.count -= 1
     self.label_text = str(self.count)
     self.label_text
+
+
+def printOut():
+    print('called')
+
+
+# -------------------------------------------------------------------
+#                       Amount Screen Functions
+# -------------------------------------------------------------------
+
+def header_font_size():
+    fontSize = Window.width * 0.05
+    if fontSize < 23:
+        fontSize = 23
+    if fontSize > 36:
+        fontSize = 36
+
+    return fontSize
