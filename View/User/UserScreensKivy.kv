@@ -1,0 +1,539 @@
+<SplitScreen>:
+    carouselWidget: carouselWidget
+    step1: step1
+    step2: step2
+    step3: step3
+    step4: step4
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        BoxLayout:
+            size_hint_y: None
+            height: 50
+            orientation: 'horizontal'
+
+            size_hint_x: None
+            width: self.parent.width
+
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Button:
+                id: step1
+                text: 'STEP1'
+
+            Button:
+                id: step2
+                text: 'STEP2'
+
+            Button:
+                id: step3
+                text: 'STEP3'
+
+            Button:
+                id: step4
+                text: 'STEP4'
+
+        Carousel:
+            id: carouselWidget
+            scroll_distance: 100
+
+<UserMainScreen>:
+    # objectProperty names
+    startButton: start
+
+    FloatLayout:
+
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'center'
+
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                    #size: (600, 712.5)
+                    source: "View/chiliBowl.png"
+
+        Label:
+            text:"Get Your Customized \nHot Sauce"
+            halign: 'center'
+            font_name: "OstrichSans"
+            bold: True
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint: {"x":0.35,"top":0.80}
+            size_hint: 0.35, 0.15
+
+        Label:
+            text:"Or Scan Your \nQR Code Here"
+            halign: 'center'
+            font_name: "OstrichSans"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.07, "bottom":0.3}
+            size_hint: 0.35, 0.15
+
+
+        RoundedButton:
+            id: start
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_name: "OstrichSans"
+            bold: True
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Start"
+            color: 0, 0, 0, 1
+
+<SizeScreen>:
+    toggleButtonSmall: small
+    toggleButtonMedium: medium
+    toggleButtonLarge: large
+    nextButton: nextButton
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "View/chiliBowl.png"
+
+    FloatLayout:
+
+        Label:
+            text:"Choose Cup Size"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+        RelativeLayout:
+            ToggleButton:
+                id: small
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.61}
+                text: 'SMALL'
+                bold: True
+                font_name: "Pacifico"
+                group: 'cupSize'
+
+        RelativeLayout:
+            ToggleButton:
+                id: medium
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.4}
+                text: 'MEDIUM'
+                bold: True
+                font_name: "Pacifico"
+                group: 'cupSize'
+
+
+
+        RelativeLayout:
+            ToggleButton:
+                id: large
+                size_hint: None, None
+                size: 0.15 * root.width, 0.15 * root.height
+                pos_hint:{"x":0.15,"y":0.19}
+                text: 'LARGE'
+                font_name: "Pacifico"
+                bold: True
+                group: 'cupSize'
+
+    RoundedButton:
+        id: nextButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Next"
+
+
+
+
+
+
+<BaseScreen>:
+    grid: base_grid
+    nextButton: next
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "Images/chiliBowl.png"
+
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        GridLayout:
+            id: base_grid
+            size_hint_x: 0.6
+            size_hint_y: 0.2
+            cols: 2
+
+    FloatLayout:
+
+        RoundedButton:
+            id: next
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Next"
+
+
+
+
+
+
+<SauceOfMonth>:
+
+    FloatLayout:
+
+        AnchorLayout:
+            anchor_x: 'right'
+            anchor_y: 'center'
+
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                    #size: (600, 712.5)
+                    source: "View/chiliBowl.png"
+
+        Label:
+            text:"Sauce of the Month"
+            font_name: "Pacifico"
+            font_size: (root.width**2 + root.height**2) / 15**4
+            pos_hint: {"x":0.35,"top":0.9}
+            size_hint: 0.35, 0.15
+
+
+<FlavorScreen>:
+    grid: flavor_grid
+    nextButton: next
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AnchorLayout:
+        anchor_x: 'right'
+        anchor_y: 'center'
+
+        canvas:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
+                size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
+                #size: (600, 712.5)
+                source: "Images/chiliBowl.png"
+
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        GridLayout:
+            id: flavor_grid
+            size_hint_x: 0.6
+            size_hint_y: 0.2
+            cols: 2
+
+    FloatLayout:
+
+        RoundedButton:
+            id: next
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Next"
+
+
+<AmountScreen>:
+    mainGrid: mainGrid
+    bodyGrid: bodyGrid
+    sliderAnchorLayout: sliderAnchorLayout
+    sliderTemplateGrid: sliderTemplateGrid
+    doneButton: doneButton
+
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+
+        GridLayout:
+            id: mainGrid
+            size_hint_y: None
+            cols: 1
+            height: self.minimum_height
+
+
+
+            AnchorLayout:
+                size_hint_y: None
+                height: self.height
+
+
+
+                Label:
+                    text:"Summary"
+                    font_name: "Pacifico"
+                    #pos_hint: {'center_x': 0.5}
+                    size_hint_y: None
+                    #font_size: app.headerFont
+
+
+
+            GridLayout:
+                id: bodyGrid
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 2
+                size: self.size
+
+                # item for the ingredient and flavor sliders
+                AnchorLayout:
+                    id: sliderAnchorLayout
+                    size_hint_y: None
+                    height: self.width if (self.width > sliderTemplateGrid.height) and self.parent.width > 425  else sliderTemplateGrid.height
+                    anchor_y: 'top'
+
+
+                    GridLayout:
+                        id: sliderTemplateGrid
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: 20
+
+
+
+                        Label:
+                            text: 'Drag to adjust amount'
+                            size_hint_y: None
+                            font_name: "Pacifico"
+                            height: 50
+
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint_y: None
+                            height: 60
+
+                            Label:
+                                text:"Base 1"
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                            RoundedButton2:
+                                id: reset
+                                text: 'Reset'
+                                on_press: reset.value = 180
+                                on_press: slider.value = 180
+                                font_name: "OstrichSans"
+                                font_size: 18
+                                bold: True
+                                color: 0, 0, 0, 1
+                                size_hint_y: None
+                                size_hint_x: None
+                                height: self.parent.height
+                                width: self.width
+
+                            Label:
+                                text:"Base 2"
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                        Slider:
+                            id: slider
+                            min: 0
+                            max: 360
+                            value: 180
+                            step: 30
+                            size_hint_y: None
+                            height: 40
+
+
+
+
+                # item for the pi chart
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    size_hint_y: None
+                    height: self.width
+
+
+
+
+                    Widget:
+                        size_hint: None, None
+                        size: self.parent.width*0.9, self.parent.width*0.9
+
+                        canvas:
+                            Color:
+                                rgb: 1, 1, 1, 1
+                            Ellipse:
+                                source: 'View/c2.png'
+                                angle_start: 0
+                                size: self.size
+                                pos: self.pos
+                                angle_end: slider.value
+                            Ellipse:
+                                source: 'View/c1.png'
+                                angle_start: 100
+                                size: self.size
+                                pos: self.pos
+                                angle_start: slider.value
+
+    RoundedButton:
+        id: doneButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Done"
+
+
+
+<BaseSliderLayout>:
+
+
+
+
+<FlavorsLayout>:
+    flavorAddB: flavorAddB
+    flavorRemoveB: flavorRemoveB
+    label_text: label_text
+    orientation: "vertical"
+    size_hint_y: None
+    height: 90
+
+
+
+    Label:
+        text:"Flavor 1"
+        font_name: "Pacifico"
+        font_size: 18
+        size_hint_y: None
+        height: 30
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
+
+        CircleButton:
+            id: flavorAddB
+            text: '+'
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
+
+
+        Label:
+            id: label_text
+            #text: root.label_text
+            font_size: 18
+            size_hint_x: None
+            width: self.parent.width * 6/10
+
+        CircleButton:
+            id: flavorRemoveB
+            text: "-"
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
+
+
+
+
+<RoundedButton2@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [50,50]
+
+<CircleButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [70,70]
+
+
+<RoundedButton@Button>:
+    background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    canvas.before:
+        Color:
+            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [30,]
