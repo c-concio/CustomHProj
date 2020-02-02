@@ -4,6 +4,7 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -11,6 +12,7 @@ from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+from kivy.uix.widget import Widget
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -138,18 +140,29 @@ class SauceOfMonth(Screen):
 
 class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
-    addButtons = ObjectProperty(None)
-    removeButton = ObjectProperty(None)
+    # addButtons = ObjectProperty(None)
+    # removeButton = ObjectProperty(None)
+    mainGrid = ObjectProperty(None)
+    bodyGrid = ObjectProperty(None)
+    sliderAnchorLayout = ObjectProperty(None)
+    sliderTemplateGrid = ObjectProperty(None)
 
-    label_text = StringProperty()
+    # label_text = StringProperty()
 
     def __init__(self):
         super().__init__()
-        self.count = 0
-        self.label_text = str(self.count)
-        self.addButtons.bind(on_press=lambda x: UserController.increment(self))
-        self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
+        # TODO: uncomment
+        # self.count = 0
+        # self.label_text = str(self.count)
+        # self.addButtons.bind(on_press=lambda x: UserController.increment(self))
+        # self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
+        self.bodyGrid.cols = 1 if Window.width < 425 else 2
+        
+        # if only one column, the sliderLayout should have the height of the base grid
 
+        #TODO: look inside DB and add flavors
+        self.sliderTemplateGrid.add_widget(FlavorsLayout())
+        self.sliderTemplateGrid.add_widget(FlavorsLayout())
 
 
 class SplitScreen(Screen):
@@ -158,8 +171,6 @@ class SplitScreen(Screen):
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
-
-
 
     def __init__(self, name):
         super().__init__()
@@ -172,12 +183,30 @@ class SplitScreen(Screen):
         self.name = name
 
 
+class BaseSliderLayout(AnchorLayout):
+    pass
+
+
+class FlavorsLayout(BoxLayout):
+    flavorAddB = ObjectProperty(None)
+    flavorRemoveB = ObjectProperty(None)
+    label_text = ObjectProperty(None)
+
+    def __init__(self):
+        super().__init__()
+        self.label_text.text = "0"
+        self.flavorAddB.bind(on_press=lambda x: UserController.increment(self.label_text))
+        self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
+
+
+
 # -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
 
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
+
 
 screenManager = ScreenManager()
 
