@@ -1,3 +1,5 @@
+from kivy.core.window import Window
+
 from kivy.uix.screenmanager import ScreenManager
 
 from Model import AdminModel, MainModel
@@ -13,20 +15,36 @@ from kivy.app import App
 
 class MainApp(App):
 
+
     def build(self):
         # screenManager = AdminModel.screenManager
-        screenManager = MainModel.mainScreenManager
-        AdminMainScreenController.setup_inventory_screen()
+        # screenManager = MainModel.mainScreenManager
+        # AdminMainScreenController.setup_inventory_screen()
         # screenManager = UserModel.screenManager
 
-        # testScreenManager = ScreenManager();
-        # splitScreen = UserModel.TestSplitScreen()
-        # #splitScreen.carouselWidget.add_widget(UserModel.AmountScreen())
+        # iPhone screen size
+        # Window.size = (320, 540)
 
 
-        # testScreenManager.add_widget(splitScreen)
+        # iPhone XR screen size
+        # Window.size = (414, 896)
 
-        return screenManager
+        # Nexus 9
+        # Window.size = (768, 1024)
+
+        # FullScreen
+        # Window.fullscreen = True
+
+        self.headerFont = UserController.header_font_size()
+
+
+        testScreenManager = ScreenManager();
+
+
+        testScreenManager.add_widget(UserModel.AmountScreen())
+
+        return testScreenManager
+
 
 
 if __name__ == '__main__':

@@ -40,7 +40,6 @@
 
         Carousel:
             id: carouselWidget
-            scroll_distance: 100
 
 <UserMainScreen>:
     # objectProperty names
@@ -281,151 +280,191 @@
             pos_hint: {"x":.8, "y":.1}
 
 
-
-
-
 <AmountScreen>:
-    doneButton: done
-    resetButton: reset
-    addButtons: addB
-    removeButton: remove
-    baseAdjustSlider: slider
-    flavor_layout: flavor_layout
+    mainGrid: mainGrid
+    bodyGrid: bodyGrid
+    sliderAnchorLayout: sliderAnchorLayout
+    sliderTemplateGrid: sliderTemplateGrid
 
-    FloatLayout:
-        AnchorLayout:
-            anchor_x: 'right'
-            anchor_y: 'center'
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
 
-            canvas:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: ((2/3)*self.width, 0) if self.width*0.88 > self.height else ((1/4)*self.width, 0)
-                    size: ((1/3)*self.width, ((1/3)*self.width)*1.1875) if self.width*0.88 > self.height else ((4/5)*self.width, ((4/5)*self.width)*1.1875)
-                    #size: (600, 712.5)
-                    source: "View/chiliBowl.png"
+        GridLayout:
+            id: mainGrid
+            size_hint_y: None
+            cols: 1
+            height: self.minimum_height
+
+
+
+            AnchorLayout:
+                size_hint_y: None
+                height: self.height
+
+
+
+                Label:
+                    text:"Summary"
+                    font_name: "Pacifico"
+                    #pos_hint: {'center_x': 0.5}
+                    size_hint_y: None
+                    #font_size: app.headerFont
+
+
+
+            GridLayout:
+                id: bodyGrid
+                size_hint_y: None
+                height: self.minimum_height
+                cols: 2
+                size: self.size
+
+                # item for the ingredient and flavor sliders
+                AnchorLayout:
+                    id: sliderAnchorLayout
+                    size_hint_y: None
+                    height: self.width if (self.width > sliderTemplateGrid.height) and self.parent.width > 425  else sliderTemplateGrid.height
+                    anchor_y: 'top'
+
+
+                    GridLayout:
+                        id: sliderTemplateGrid
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: 20
+
+
+
+                        Label:
+                            text: 'Drag to adjust amount'
+                            size_hint_y: None
+                            font_name: "Pacifico"
+                            height: 50
+
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint_y: None
+                            height: 60
+
+                            Label:
+                                text:"Base 1"
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                            RoundedButton2:
+                                id: reset
+                                text: 'Reset'
+                                on_press: reset.value = 180
+                                on_press: slider.value = 180
+                                font_name: "OstrichSans"
+                                font_size: 18
+                                bold: True
+                                color: 0, 0, 0, 1
+                                size_hint_y: None
+                                size_hint_x: None
+                                height: self.parent.height
+                                width: self.width
+
+                            Label:
+                                text:"Base 2"
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                        Slider:
+                            id: slider
+                            min: 0
+                            max: 360
+                            value: 180
+                            step: 30
+                            size_hint_y: None
+                            height: 40
+
+
+
+
+                # item for the pi chart
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    size_hint_y: None
+                    height: self.width
+
+
+
+
+                    Widget:
+                        size_hint: None, None
+                        size: self.parent.width*0.9, self.parent.width*0.9
+
+                        canvas:
+                            Color:
+                                rgb: 1, 1, 1, 1
+                            Ellipse:
+                                source: 'View/c2.png'
+                                angle_start: 0
+                                size: self.size
+                                pos: self.pos
+                                angle_end: slider.value
+                            Ellipse:
+                                source: 'View/c1.png'
+                                angle_start: 100
+                                size: self.size
+                                pos: self.pos
+                                angle_start: slider.value
+
+
+<BaseSliderLayout>:
+
+
+
+
+<FlavorsLayout>:
+    flavorAddB: flavorAddB
+    flavorRemoveB: flavorRemoveB
+    label_text: label_text
+    orientation: "vertical"
+    size_hint_y: None
+    height: 90
+
+
+
+    Label:
+        text:"Flavor 1"
+        font_name: "Pacifico"
+        font_size: 18
+        size_hint_y: None
+        height: 30
 
     BoxLayout:
-        orientation: 'vertical'
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 50
 
-        #Top message
+        CircleButton:
+            id: flavorAddB
+            text: '+'
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
+
+
         Label:
-            text:"Drag to Adjust Amount"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.35,"top":0.9}
-            size_hint: 0.35, 0.15
+            id: label_text
+            #text: root.label_text
+            font_size: 18
+            size_hint_x: None
+            width: self.parent.width * 6/10
 
-        BoxLayout:
-            orientation: 'horizontal'
-
-            BoxLayout:
-                id: flavor_layout
-                orientation: 'vertical'
-                size_hint_y: None
-
-                BoxLayout:
-                    orientation: 'horizontal'
-
-                    #Base list
-                    Label:
-                        text:"Base 1"
-                        font_name: "Pacifico"
-                        font_size: (root.width**2 + root.height**2) / 17**4
-                        pos_hint: {'x':-0.11,'y':0.5}
-                        size_hint: 0.35, 0.35
-
-                    Slider:
-                        id: slider
-                        min: 0.
-                        max: 360.
-                        value: 180.
-                        step: 30
-                        size_hint_x: 0.6
-                        pos_hint: {'x': 0.05, 'top': 1.1}
-
-                    Label:
-                        text:"Base 2"
-                        font_name: "Pacifico"
-                        font_size: (root.width**2 + root.height**2) / 17**4
-                        pos_hint: {'x':0.15,'y':0.5}
-                        size_hint: 0.35, 0.35
-
-                    RoundedButton2:
-                        id: reset
-                        text: 'Reset'
-                        on_press: reset.value = 180
-                        pos_hint:{'x':0.4,'y':0.57}
-                        size_hint: 0.1, 0.3
-                        on_press: slider.value = 180
-                        font_name: "OstrichSans"
-                        font_size: (root.width**2 + root.height**2) / 17**4
-                        bold: True
-                        color: 0, 0, 0, 1
-
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: 0.4, 1
-
-                    #Flavor list
-                    Label:
-                        text:"Flavor 1"
-                        font_name: "Pacifico"
-                        font_size: (root.width**2 + root.height**2) / 17**4
-                        size_hint: 0.35, 0.35
-
-                    CircleButton:
-                        id: remove
-                        text: "-"
-                        font_size: (root.width**2 + root.height**2) / 14**4
-                        size_hint: 0.06, 0.09
-
-                    Label:
-                        text: root.label_text
-                        font_size: (root.width**2 + root.height**2) / 15**4
-                        size_hint: 0.3, 0.1
-
-                    CircleButton:
-                        id: addB
-                        text: '+'
-                        font_size: (root.width**2 + root.height**2) / 14**4
-                        size_hint: 0.06, 0.09
-
-
-
-
-            #Ellipse
-            Widget:
-                id: w_canvas
-                canvas:
-                    Color:
-                        rgb: 1, 1, 1
-
-                    Ellipse:
-                        pos: [self.center_x, self.center_y]
-                        size: 100, 100
-                        source: 'View/c2.png'
-                        angle_start: slider.value
-
-                    Ellipse:
-                        pos: [self.center_x, self.center_y]
-                        size: 100, 100
-                        source: 'View/c1.png'
-                        angle_end: slider.value
-
-
-        RoundedButton:
-            id: done
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Done"
-
+        CircleButton:
+            id: flavorRemoveB
+            text: "-"
+            font_size: 18
+            size_hint_x: None
+            size_hint_y: None
+            width: self.parent.width * 2/10
 
 
 
