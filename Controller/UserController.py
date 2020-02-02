@@ -1,5 +1,6 @@
 import kivy
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty
@@ -87,3 +88,20 @@ def decrement(self):
     self.count -= 1
     self.label_text = str(self.count)
     self.label_text
+
+def printOut():
+    print('called')
+
+
+# -------------------------------------------------------------------
+#                       Amount Screen Functions
+# -------------------------------------------------------------------
+
+def header_font_size():
+    fontSize = Window.width * 0.05
+    if fontSize < 23:
+        fontSize = 23
+    if fontSize > 36:
+        fontSize = 36
+
+    return fontSize
