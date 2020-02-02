@@ -140,14 +140,14 @@ class SauceOfMonth(Screen):
 
 class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
-    addButtons = ObjectProperty(None)
-    removeButton = ObjectProperty(None)
+    # addButtons = ObjectProperty(None)
+    # removeButton = ObjectProperty(None)
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
 
-    label_text = StringProperty()
+    # label_text = StringProperty()
 
     def __init__(self):
         super().__init__()
@@ -157,9 +157,12 @@ class AmountScreen(Screen):
         # self.addButtons.bind(on_press=lambda x: UserController.increment(self))
         # self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
         self.bodyGrid.cols = 1 if Window.width < 425 else 2
+        
         # if only one column, the sliderLayout should have the height of the base grid
 
-
+        #TODO: look inside DB and add flavors
+        self.sliderTemplateGrid.add_widget(FlavorsLayout())
+        self.sliderTemplateGrid.add_widget(FlavorsLayout())
 
 
 class SplitScreen(Screen):
@@ -168,8 +171,6 @@ class SplitScreen(Screen):
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
-
-
 
     def __init__(self, name):
         super().__init__()
@@ -181,8 +182,22 @@ class SplitScreen(Screen):
         UserController.initialize_carousel(self)
         self.name = name
 
+
 class BaseSliderLayout(AnchorLayout):
     pass
+
+
+class FlavorsLayout(BoxLayout):
+    flavorAddB = ObjectProperty(None)
+    flavorRemoveB = ObjectProperty(None)
+    label_text = ObjectProperty(None)
+
+    def __init__(self):
+        super().__init__()
+        self.label_text.text = "0"
+        self.flavorAddB.bind(on_press=lambda x: UserController.increment(self.label_text))
+        self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
+
 
 
 # -------------------------------------------------------------------
