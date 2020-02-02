@@ -40,6 +40,7 @@
 
         Carousel:
             id: carouselWidget
+            scroll_distance: 100
 
 <UserMainScreen>:
     # objectProperty names
@@ -289,7 +290,7 @@
     addButtons: addB
     removeButton: remove
     baseAdjustSlider: slider
-
+    flavor_layout: flavor_layout
 
     FloatLayout:
         AnchorLayout:
@@ -305,12 +306,115 @@
                     #size: (600, 712.5)
                     source: "View/chiliBowl.png"
 
+    BoxLayout:
+        orientation: 'vertical'
+
+        #Top message
         Label:
             text:"Drag to Adjust Amount"
             font_name: "Pacifico"
             font_size: (root.width**2 + root.height**2) / 15**4
             pos_hint: {"x":0.35,"top":0.9}
             size_hint: 0.35, 0.15
+
+        BoxLayout:
+            orientation: 'horizontal'
+
+            BoxLayout:
+                id: flavor_layout
+                orientation: 'vertical'
+                size_hint_y: None
+
+                BoxLayout:
+                    orientation: 'horizontal'
+
+                    #Base list
+                    Label:
+                        text:"Base 1"
+                        font_name: "Pacifico"
+                        font_size: (root.width**2 + root.height**2) / 17**4
+                        pos_hint: {'x':-0.11,'y':0.5}
+                        size_hint: 0.35, 0.35
+
+                    Slider:
+                        id: slider
+                        min: 0.
+                        max: 360.
+                        value: 180.
+                        step: 30
+                        size_hint_x: 0.6
+                        pos_hint: {'x': 0.05, 'top': 1.1}
+
+                    Label:
+                        text:"Base 2"
+                        font_name: "Pacifico"
+                        font_size: (root.width**2 + root.height**2) / 17**4
+                        pos_hint: {'x':0.15,'y':0.5}
+                        size_hint: 0.35, 0.35
+
+                    RoundedButton2:
+                        id: reset
+                        text: 'Reset'
+                        on_press: reset.value = 180
+                        pos_hint:{'x':0.4,'y':0.57}
+                        size_hint: 0.1, 0.3
+                        on_press: slider.value = 180
+                        font_name: "OstrichSans"
+                        font_size: (root.width**2 + root.height**2) / 17**4
+                        bold: True
+                        color: 0, 0, 0, 1
+
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 0.4, 1
+
+                    #Flavor list
+                    Label:
+                        text:"Flavor 1"
+                        font_name: "Pacifico"
+                        font_size: (root.width**2 + root.height**2) / 17**4
+                        size_hint: 0.35, 0.35
+
+                    CircleButton:
+                        id: remove
+                        text: "-"
+                        font_size: (root.width**2 + root.height**2) / 14**4
+                        size_hint: 0.06, 0.09
+
+                    Label:
+                        text: root.label_text
+                        font_size: (root.width**2 + root.height**2) / 15**4
+                        size_hint: 0.3, 0.1
+
+                    CircleButton:
+                        id: addB
+                        text: '+'
+                        font_size: (root.width**2 + root.height**2) / 14**4
+                        size_hint: 0.06, 0.09
+
+
+
+
+            #Ellipse
+            Widget:
+                id: w_canvas
+                canvas:
+                    Color:
+                        rgb: 1, 1, 1
+
+                    Ellipse:
+                        pos: [self.center_x, self.center_y]
+                        size: 100, 100
+                        source: 'View/c2.png'
+                        angle_start: slider.value
+
+                    Ellipse:
+                        pos: [self.center_x, self.center_y]
+                        size: 100, 100
+                        source: 'View/c1.png'
+                        angle_end: slider.value
+
 
         RoundedButton:
             id: done
@@ -321,89 +425,6 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Done"
-
-        Slider:
-            id: slider
-            min: 0.
-            max: 360.
-            value: 180.
-            step: 30
-            size_hint_x: 0.3
-            pos_hint: {'x': 0.05, 'top': 1.1}
-
-        Label:
-            text:"Base 1"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':-0.11,'y':0.5}
-            size_hint: 0.35, 0.35
-
-        Label:
-            text:"Base 2"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':0.15,'y':0.5}
-            size_hint: 0.35, 0.35
-
-        RoundedButton2:
-            id: reset
-            text: 'Reset'
-            on_press: reset.value = 180
-            pos_hint:{'x':0.4,'y':0.57}
-            size_hint: 0.07, 0.07
-            on_press: slider.value = 180
-            font_name: "OstrichSans"
-            font_size: (root.width**2 + root.height**2) / 18**4
-            bold: True
-            color: 0, 0, 0, 1
-
-
-        Label:
-            text:"Flavor 1"
-            font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 17**4
-            pos_hint: {'x':0.03,'y':0.35}
-            size_hint: 0.35, 0.35
-
-
-        CircleButton:
-            id: addB
-            text: '+'
-            font_size: (root.width**2 + root.height**2) / 14**4
-            size_hint: 0.06, 0.09
-            pos_hint: {"x":0.09,"y":0.4}
-
-
-
-        CircleButton:
-            id: remove
-            text: "-"
-            font_size: (root.width**2 + root.height**2) / 14**4
-            size_hint: 0.06, 0.09
-            pos_hint: {"x":0.25,"y":0.4}
-
-
-        Label:
-            text: root.label_text
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {'x':-0.3,'y':-0.05}
-
-
-        FloatLayout:
-            canvas:
-                Color:
-                    rgb: 1, 1, 1
-                Ellipse:
-                    pos: 100, 90
-                    size: 300,301
-                    source: 'View/c2.png'
-                    angle_start: slider.value
-
-                Ellipse:
-                    pos: 100, 90
-                    size: 300,301
-                    source: 'View/c1.png'
-                    angle_end: slider.value
 
 
 
