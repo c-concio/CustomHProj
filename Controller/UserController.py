@@ -12,6 +12,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
+import i2c
 from Model import UserModel, DatabaseClass
 
 kivy.require('1.9.0')
@@ -48,7 +49,8 @@ def initialize_buttons():
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
-    #UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: )
+    #UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.splitScreen.nextButton1.bind(on_press=lambda x: switch_screen('Base Screen'))
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
