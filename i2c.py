@@ -116,6 +116,7 @@ def getUserData():
             data = (newValue, combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
+            cursor.close()
 
             # If the total value is smaller than a certain threshold, breaks the for loop. Stop the whole process. Light up LED.
             if (newValue < 10):
@@ -164,6 +165,7 @@ def getUserData():
             data = (newValue, combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
+            cursor.close()
 
             # If the total value is smaller than a certain threshold, breaks the for loop. Stop the whole process. Light up LED.
             if (newValue < 10):
