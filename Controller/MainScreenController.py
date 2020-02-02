@@ -1,5 +1,5 @@
 from Controller import DatabaseController
-from Model import AdminModel, BaseModel, DatabaseClass, MainModel, FlavorModel
+from Model import AdminModel, DatabaseClass, MainModel, UserModel
 
 
 # -------------------------------------------------------------------
@@ -23,36 +23,48 @@ def getBaseList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for base in BaseModel.baseScreen.baseList:
+    for base in UserModel.baseScreen.baseList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
         connect.commit()
 
         print("Added " + base + " to Temporary table")
     cursor.close()
 
-    print(BaseModel.baseScreen.baseList)
+    print(UserModel.baseScreen.baseList)
 
 
 def getFlavorList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for flavor in FlavorModel.flavorScreen.flavorList:
+    for flavor in UserModel.flavorScreen.flavorList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
         connect.commit()
 
         print("Added " + flavor + " to Temporary table")
     cursor.close()
 
-    print(FlavorModel.flavorScreen.flavorList)
+    print(UserModel.flavorScreen.flavorList)
 
 
 def initialize_buttons():
+    # Admin and User screens
     MainModel.mainScreen.adminButton.bind(on_press=lambda x: switch_screen('Admin Main Screen'))
-    MainModel.mainScreen.baseButton.bind(on_press=lambda x: switch_screen('Base Screen'))
-    MainModel.baseScreen.nextButton.bind(on_press=lambda x: switch_screen('Flavor Screen'))
+    MainModel.mainScreen.userButton.bind(on_press=lambda x: switch_screen('Split Screen'))
 
-    MainModel.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
-    MainModel.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
+    # Carousel screens
+    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+
+
+    # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
+    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
     # BaseModel.baseScreen.backButton.bind(on_press=lambda x: return_screen('Main Screen'))
