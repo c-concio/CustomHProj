@@ -117,16 +117,16 @@ def getFlavorList():
 # -------------------------------------------------------------------
 
 
-def increment(self):
-    self.count += 1
-    self.label_text = str(self.count)
-    self.label_text
+def increment(label_text):
+    amount = int(label_text.text)
+    amount += 1
+    label_text.text = str(amount)
 
 
-def decrement(self):
-    self.count -= 1
-    self.label_text = str(self.count)
-    self.label_text
+def decrement(label_text):
+    amount = int(label_text.text)
+    amount -= 1
+    label_text.text = str(amount)
 
 def printOut():
     print('called')
