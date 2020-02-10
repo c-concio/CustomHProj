@@ -14,6 +14,7 @@ from kivy.app import App
 
 class MainApp(App):
 
+# TODO: Dynamic flavor buttons and number of bases for the AmountScreen
 
     def build(self):
         # screenManager = AdminModel.screenManager
