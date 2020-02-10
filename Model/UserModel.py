@@ -10,6 +10,7 @@ from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
@@ -137,16 +138,11 @@ class SauceOfMonth(Screen):
     pass
 
 
-class AmountScreen(Screen):
-    doneButton = ObjectProperty(None)
-    # addButtons = ObjectProperty(None)
-    # removeButton = ObjectProperty(None)
+class AmountScreenChild(ScrollView):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
-
-    # label_text = StringProperty()
 
     def __init__(self):
         super().__init__()
@@ -160,8 +156,11 @@ class AmountScreen(Screen):
         # if only one column, the sliderLayout should have the height of the base grid
 
         # TODO: look inside DB and add flavors
-        self.sliderTemplateGrid.add_widget(FlavorsLayout())
-        self.sliderTemplateGrid.add_widget(FlavorsLayout())
+        self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
+        self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 2"))
+
+class AmountScreen(Screen):
+    pass
 
 
 
@@ -179,6 +178,7 @@ class SplitScreen(Screen):
         self.baseScreen = BaseScreen()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
+        self.amountScreen.add_widget(AmountScreenChild())
         UserController.initialize_carousel(self)
         self.name = name
 
@@ -192,11 +192,12 @@ class FlavorsLayout(BoxLayout):
     flavorRemoveB = ObjectProperty(None)
     label_text = ObjectProperty(None)
 
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
         self.label_text.text = "0"
         self.flavorAddB.bind(on_press=lambda x: UserController.increment(self.label_text))
         self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
+        self.flavorName.text = name
 
 
 # -------------------------------------------------------------------
