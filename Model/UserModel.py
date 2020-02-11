@@ -143,6 +143,8 @@ class AmountScreenChild(ScrollView):
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
+    base1 = ObjectProperty(None)
+    base2 = ObjectProperty(None)
 
     def __init__(self):
         super().__init__()
@@ -156,8 +158,21 @@ class AmountScreenChild(ScrollView):
         # if only one column, the sliderLayout should have the height of the base grid
 
         # TODO: look inside DB and add flavors
-        self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
-        self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 2"))
+        #self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
+    def reload(self):
+        try:
+            self.base1.text = baseScreen.baseList[0]
+        except:
+            print("Nothing inside list")
+
+        try:
+            self.base2.text = baseScreen.baseList[1]
+        except:
+            print("Only 1 base was chosen")
+
+        for flavor in flavorScreen.flavorList:
+            self.sliderTemplateGrid.add_widget(FlavorsLayout(flavor))
+
 
 class AmountScreen(Screen):
     pass
@@ -178,7 +193,8 @@ class SplitScreen(Screen):
         self.baseScreen = BaseScreen()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
-        self.amountScreen.add_widget(AmountScreenChild())
+        self.amountScreenChild = AmountScreenChild()
+        self.amountScreen.add_widget(self.amountScreenChild)
         UserController.initialize_carousel(self)
         self.name = name
 
@@ -214,7 +230,8 @@ Builder.load_file('View/User/UserScreensKivy.kv')
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 baseScreen = BaseScreen(name="Base Screen")
-flavorScreen = FlavorScreen(name="Flavor screen")
+flavorScreen = FlavorScreen(name="Flavor Screen")
+amountScreen = AmountScreen(name="Amount Screen")
 
 UserController.initialize_buttons()
 # screenManager.add_widget(userMainScreen)

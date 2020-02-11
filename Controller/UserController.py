@@ -58,6 +58,10 @@ def initialize_buttons():
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
+    # Trigger Amount screen properties
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
+
+
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
     split_screen.carouselWidget.add_widget(split_screen.sizeScreen)
@@ -107,6 +111,12 @@ def getFlavorList():
     cursor.close()
 
     print(UserModel.flavorScreen.flavorList)
+
+def reloadAmountScreen():
+    UserModel.splitScreen.amountScreenChild.reload()
+    #UserModel.splitScreen.amountScreen.mainGrid.do_layout()
+    #UserModel.splitScreen.amountScreen.remove_widget(UserModel.splitScreen.amountScreenChild)
+    print("Called")
 
 
 # setup the flavor screen by getting cylinders(flavor) from the database
