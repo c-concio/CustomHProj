@@ -41,6 +41,7 @@ class BaseScreen(Screen):
     grid = ObjectProperty()
     nextButton = ObjectProperty()
     baseList = []
+    baseToggleList = []
     # backButton = ObjectProperty(None)
 
     # Get ingredient names from database
@@ -68,8 +69,8 @@ class BaseScreen(Screen):
         # Dynamic buttons
         for i, base in enumerate(bases):
             button = ToggleButton(text=str(base[1]))
+            self.baseToggleList.append(button)
             self.grid.add_widget(button)
-
             button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
@@ -84,12 +85,25 @@ class BaseScreen(Screen):
             except:
                 print("Could not remove base, it did not exist")
 
+        # Disable other buttons when 2 bases are chosen
+        if len(self.baseList) >= 2:
+            for button in self.baseToggleList:
+                if button.text not in self.baseList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in self.baseToggleList:
+                if button.text not in self.baseList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
+
 
 class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
     flavorList = []
+    flavorToggleList = []
 
     # backButton = ObjectProperty(None)
 
@@ -116,8 +130,8 @@ class FlavorScreen(Screen):
         # Dynamic buttons
         for i, base in enumerate(bases):
             button = ToggleButton(text=str(base[1]))
+            self.flavorToggleList.append(button)
             self.grid.add_widget(button)
-            # print("Base " + str(i) + ": " + base[1])
 
             button.bind(on_press=self.saveButtonName)
 
@@ -132,6 +146,18 @@ class FlavorScreen(Screen):
                 print("Removed " + instance.text)
             except:
                 print("Could not remove base, it did not exist")
+
+        # Disable other buttons when 3 flavors are chosen
+        if len(self.flavorList) >= 3:
+            for button in self.flavorToggleList:
+                if button.text not in self.flavorList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in self.flavorToggleList:
+                if button.text not in self.flavorList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
 
 
 class SauceOfMonth(Screen):
@@ -165,18 +191,18 @@ class AmountScreen(Screen):
 
     def reload(self):
         try:
-            self.base1.text = baseScreen.baseList[0]
+            self.base1.text = splitScreen.baseScreen.baseList[0]
         except:
             self.base1.text = ""
             print("Nothing inside list")
 
         try:
-            self.base2.text = baseScreen.baseList[1]
+            self.base2.text = splitScreen.baseScreen.baseList[1]
         except:
             self.base2.text = ""
             print("No second base was chosen")
 
-        for i, flavor in enumerate(flavorScreen.flavorList):
+        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
             try:
                 self.flavorLayoutList.append(FlavorsLayout(flavor))
                 self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
@@ -184,7 +210,7 @@ class AmountScreen(Screen):
                 print("Flavor already added")
 
     def delete(self):
-        for i, flavor in enumerate(flavorScreen.flavorList):
+        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
             try:
                 self.sliderTemplateGrid.remove_widget(self.flavorLayoutList[i])
                 self.flavorLayoutList.remove(FlavorsLayout(flavor))
@@ -242,8 +268,8 @@ Builder.load_file('View/User/UserScreensKivy.kv')
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
-baseScreen = BaseScreen(name="Base Screen")
-flavorScreen = FlavorScreen(name="Flavor Screen")
+#baseScreen = BaseScreen(name="Base Screen")
+#flavorScreen = FlavorScreen(name="Flavor Screen")
 #amountScreen = AmountScreen(name="Amount Screen")
 
 UserController.initialize_buttons()
