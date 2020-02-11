@@ -143,6 +143,7 @@ class AmountScreenChild(ScrollView):
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
+    doneButton = ObjectProperty(None)
     base1 = ObjectProperty(None)
     base2 = ObjectProperty(None)
 
@@ -163,11 +164,13 @@ class AmountScreenChild(ScrollView):
         try:
             self.base1.text = baseScreen.baseList[0]
         except:
+            self.base1.text = ""
             print("Nothing inside list")
 
         try:
             self.base2.text = baseScreen.baseList[1]
         except:
+            self.base2.text = ""
             print("Only 1 base was chosen")
 
         for flavor in flavorScreen.flavorList:

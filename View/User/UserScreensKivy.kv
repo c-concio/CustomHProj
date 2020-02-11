@@ -314,6 +314,7 @@
     bodyGrid: bodyGrid
     sliderAnchorLayout: sliderAnchorLayout
     sliderTemplateGrid: sliderTemplateGrid
+    doneButton: doneButton
     base1: base1
     base2: base2
 
@@ -397,7 +398,7 @@
 
                         Label:
                             id: base2
-                            text:"Base 2"
+                            text:""
                             font_name: "Pacifico"
                             font_size: 18
 
@@ -442,6 +443,16 @@
                             size: self.size
                             pos: self.pos
                             angle_start: slider.value
+
+        RoundedButton:
+            id: doneButton
+            pos_hint:{"x":0.65,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Done"
 
 
 
