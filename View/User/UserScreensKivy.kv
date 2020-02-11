@@ -298,17 +298,7 @@
 
 
 <AmountScreen>:
-    canvas.before:
-        Color:
-            rgba: 0.19, 0.19, 0.19, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
-
-
-<AmountScreenChild>:
-    id: child
 
     mainGrid: mainGrid
     bodyGrid: bodyGrid
@@ -318,141 +308,155 @@
     base1: base1
     base2: base2
 
-    GridLayout:
-        id: mainGrid
-        size_hint_y: None
-        cols: 1
-        height: self.minimum_height
-
-
-
-        AnchorLayout:
-            size_hint_y: None
-            height: self.height
-
-
-
-            Label:
-                text:"Summary"
-                font_name: "Pacifico"
-                #pos_hint: {'center_x': 0.5}
-                size_hint_y: None
-                #font_size: app.headerFont
-
-
-
-        GridLayout:
-            id: bodyGrid
-            size_hint_y: None
-            height: self.minimum_height
-            cols: 2
+    canvas.before:
+        Color:
+            rgba: 0.19, 0.19, 0.19, 1
+        Rectangle:
+            pos: self.pos
             size: self.size
 
-            # item for the ingredient and flavor sliders
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+
+        GridLayout:
+            id: mainGrid
+            size_hint_y: None
+            cols: 1
+            height: self.minimum_height
+
+
+
             AnchorLayout:
-                id: sliderAnchorLayout
                 size_hint_y: None
-                height: self.width if (self.width > sliderTemplateGrid.height) and self.parent.width > 425  else sliderTemplateGrid.height
-                anchor_y: 'top'
+                height: self.height
 
 
-                GridLayout:
-                    id: sliderTemplateGrid
-                    cols: 1
+
+                Label:
+                    text:"Summary"
+                    font_name: "Pacifico"
+                    #pos_hint: {'center_x': 0.5}
                     size_hint_y: None
-                    height: self.minimum_height
-                    spacing: 20
+                    #font_size: app.headerFont
 
 
 
-                    Label:
-                        text: 'Drag to adjust amount'
-                        size_hint_y: None
-                        font_name: "Pacifico"
-                        height: 50
-
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        height: 60
-
-                        Label:
-                            id: base1
-                            text:"Base 1"
-                            font_name: "Pacifico"
-                            font_size: 18
-
-                        RoundedButton2:
-                            id: reset
-                            text: 'Reset'
-                            on_press: reset.value = 180
-                            on_press: slider.value = 180
-                            font_name: "OstrichSans"
-                            font_size: 18
-                            bold: True
-                            color: 0, 0, 0, 1
-                            size_hint_y: None
-                            size_hint_x: None
-                            height: self.parent.height
-                            width: self.width
-
-                        Label:
-                            id: base2
-                            text:""
-                            font_name: "Pacifico"
-                            font_size: 18
-
-                    Slider:
-                        id: slider
-                        min: 0
-                        max: 360
-                        value: 180
-                        step: 30
-                        size_hint_y: None
-                        height: 40
-
-
-
-
-            # item for the pi chart
-            AnchorLayout:
-                anchor_x: 'center'
-                anchor_y: 'center'
+            GridLayout:
+                id: bodyGrid
                 size_hint_y: None
-                height: self.width
+                height: self.minimum_height
+                cols: 2
+                size: self.size
+
+                # item for the ingredient and flavor sliders
+                AnchorLayout:
+                    id: sliderAnchorLayout
+                    size_hint_y: None
+                    height: self.width if (self.width > sliderTemplateGrid.height) and self.parent.width > 425  else sliderTemplateGrid.height
+                    anchor_y: 'top'
+
+
+                    GridLayout:
+                        id: sliderTemplateGrid
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: 20
+
+
+
+                        Label:
+                            text: 'Drag to adjust amount'
+                            size_hint_y: None
+                            font_name: "Pacifico"
+                            height: 50
+
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint_y: None
+                            height: 60
+
+                            Label:
+                                id: base1
+                                text:"Base 1"
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                            RoundedButton2:
+                                id: reset
+                                text: 'Reset'
+                                on_press: reset.value = 180
+                                on_press: slider.value = 180
+                                font_name: "OstrichSans"
+                                font_size: 18
+                                bold: True
+                                color: 0, 0, 0, 1
+                                size_hint_y: None
+                                size_hint_x: None
+                                height: self.parent.height
+                                width: self.width
+
+                            Label:
+                                id: base2
+                                text:""
+                                font_name: "Pacifico"
+                                font_size: 18
+
+                        Slider:
+                            id: slider
+                            min: 0
+                            max: 360
+                            value: 180
+                            step: 30
+                            size_hint_y: None
+                            height: 40
 
 
 
 
-                Widget:
-                    size_hint: None, None
-                    size: self.parent.width*0.9, self.parent.width*0.9
 
-                    canvas:
-                        Color:
-                            rgb: 1, 1, 1, 1
-                        Ellipse:
-                            source: 'View/c2.png'
-                            angle_start: 0
-                            size: self.size
-                            pos: self.pos
-                            angle_end: slider.value
-                        Ellipse:
-                            source: 'View/c1.png'
-                            angle_start: 100
-                            size: self.size
-                            pos: self.pos
-                            angle_start: slider.value
 
-        RoundedButton:
-            id: doneButton
-            pos_hint:{"x":0.65,"y":0.05}
-            size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
-            font_name: "OstrichSans"
-            bold: True
-            color: 0, 0, 0, 1
-            text: "Done"
+                # item for the pi chart
+                AnchorLayout:
+                    anchor_x: 'center'
+                    anchor_y: 'center'
+                    size_hint_y: None
+                    height: self.width
+
+
+
+
+                    Widget:
+                        size_hint: None, None
+                        size: self.parent.width*0.9, self.parent.width*0.9
+
+                        canvas:
+                            Color:
+                                rgb: 1, 1, 1, 1
+                            Ellipse:
+                                source: 'View/c2.png'
+                                angle_start: 0
+                                size: self.size
+                                pos: self.pos
+                                angle_end: slider.value
+                            Ellipse:
+                                source: 'View/c1.png'
+                                angle_start: 100
+                                size: self.size
+                                pos: self.pos
+                                angle_start: slider.value
+
+    RoundedButton:
+        id: doneButton
+        pos_hint:{"x":0.65,"y":0.05}
+        size_hint: 0.3, 0.2
+        font_size: (root.width**2 + root.height**2) / 13**4
+        font_name: "OstrichSans"
+        bold: True
+        color: 0, 0, 0, 1
+        text: "Done"
+
 
 
 

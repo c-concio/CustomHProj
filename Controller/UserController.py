@@ -37,18 +37,30 @@ def switch_screen(screen_name):
 # Button switches to
 def initialize_buttons():
     # Step buttons
-    UserModel.splitScreen.step1.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
-    UserModel.splitScreen.step2.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.step3.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.step4.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.step1.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.step2.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.step3.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.step4.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+
+    UserModel.splitScreen.step1.bind(on_press=lambda x: deleteAmountScreen())
+    UserModel.splitScreen.step2.bind(on_press=lambda x: deleteAmountScreen())
+    UserModel.splitScreen.step3.bind(on_press=lambda x: deleteAmountScreen())
+    UserModel.splitScreen.step4.bind(on_press=lambda x: reloadAmountScreen())
 
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
     # Screen buttons
-    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.sizeScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.baseScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
@@ -68,10 +80,6 @@ def initialize_carousel(split_screen):
     split_screen.carouselWidget.add_widget(split_screen.baseScreen)
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
-
-
-
-
 
 
 # -------------------------------------------------------------------
@@ -112,11 +120,13 @@ def getFlavorList():
 
     print(UserModel.flavorScreen.flavorList)
 
+
 def reloadAmountScreen():
-    UserModel.splitScreen.amountScreenChild.reload()
-    #UserModel.splitScreen.amountScreen.mainGrid.do_layout()
-    #UserModel.splitScreen.amountScreen.remove_widget(UserModel.splitScreen.amountScreenChild)
-    print("Called")
+    UserModel.splitScreen.amountScreen.reload()
+
+
+def deleteAmountScreen():
+    UserModel.splitScreen.amountScreen.delete()
 
 
 # setup the flavor screen by getting cylinders(flavor) from the database
@@ -137,6 +147,7 @@ def decrement(label_text):
     amount = int(label_text.text)
     amount -= 1
     label_text.text = str(amount)
+
 
 def printOut():
     print('called')

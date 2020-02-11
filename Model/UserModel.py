@@ -138,7 +138,8 @@ class SauceOfMonth(Screen):
     pass
 
 
-class AmountScreenChild(ScrollView):
+
+class AmountScreen(Screen):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
@@ -146,6 +147,7 @@ class AmountScreenChild(ScrollView):
     doneButton = ObjectProperty(None)
     base1 = ObjectProperty(None)
     base2 = ObjectProperty(None)
+    flavorLayoutList = []
 
     def __init__(self):
         super().__init__()
@@ -159,7 +161,8 @@ class AmountScreenChild(ScrollView):
         # if only one column, the sliderLayout should have the height of the base grid
 
         # TODO: look inside DB and add flavors
-        #self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
+        # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
+
     def reload(self):
         try:
             self.base1.text = baseScreen.baseList[0]
@@ -171,14 +174,23 @@ class AmountScreenChild(ScrollView):
             self.base2.text = baseScreen.baseList[1]
         except:
             self.base2.text = ""
-            print("Only 1 base was chosen")
+            print("No second base was chosen")
 
-        for flavor in flavorScreen.flavorList:
-            self.sliderTemplateGrid.add_widget(FlavorsLayout(flavor))
+        for i, flavor in enumerate(flavorScreen.flavorList):
+            try:
+                self.flavorLayoutList.append(FlavorsLayout(flavor))
+                self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
+            except:
+                print("Flavor already added")
 
+    def delete(self):
+        for i, flavor in enumerate(flavorScreen.flavorList):
+            try:
+                self.sliderTemplateGrid.remove_widget(self.flavorLayoutList[i])
+                self.flavorLayoutList.remove(FlavorsLayout(flavor))
+            except:
+                print("Flavor already removed")
 
-class AmountScreen(Screen):
-    pass
 
 
 
@@ -196,8 +208,6 @@ class SplitScreen(Screen):
         self.baseScreen = BaseScreen()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
-        self.amountScreenChild = AmountScreenChild()
-        self.amountScreen.add_widget(self.amountScreenChild)
         UserController.initialize_carousel(self)
         self.name = name
 
@@ -234,7 +244,7 @@ userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 baseScreen = BaseScreen(name="Base Screen")
 flavorScreen = FlavorScreen(name="Flavor Screen")
-amountScreen = AmountScreen(name="Amount Screen")
+#amountScreen = AmountScreen(name="Amount Screen")
 
 UserController.initialize_buttons()
 # screenManager.add_widget(userMainScreen)
