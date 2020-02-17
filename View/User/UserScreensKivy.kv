@@ -304,6 +304,7 @@
     bodyGrid: bodyGrid
     sliderAnchorLayout: sliderAnchorLayout
     sliderTemplateGrid: sliderTemplateGrid
+    slider: slider
     doneButton: doneButton
     base1: base1
     base2: base2
@@ -436,16 +437,14 @@
                                 rgb: 1, 1, 1, 1
                             Ellipse:
                                 source: 'View/c2.png'
-                                angle_start: 0
-                                size: self.size
-                                pos: self.pos
-                                angle_end: slider.value
-                            Ellipse:
-                                source: 'View/c1.png'
-                                angle_start: 100
                                 size: self.size
                                 pos: self.pos
                                 angle_start: slider.value
+                            Ellipse:
+                                source: 'View/c1.png'
+                                size: self.size
+                                pos: self.pos
+                                angle_end: slider.value
 
     RoundedButton:
         id: doneButton

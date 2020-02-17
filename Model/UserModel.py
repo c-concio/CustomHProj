@@ -170,6 +170,7 @@ class AmountScreen(Screen):
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
+    slider = ObjectProperty(None)
     doneButton = ObjectProperty(None)
     base1 = ObjectProperty(None)
     base2 = ObjectProperty(None)
@@ -208,6 +209,12 @@ class AmountScreen(Screen):
                 self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
             except:
                 print("Flavor already added")
+        try:
+            if (len(splitScreen.baseScreen.baseList) == 0 or 1):
+                self.sliderTemplateGrid.remove_widget(self.slider)
+        except:
+            print("Base list is not empty")
+            print(len(splitScreen.baseScreen.baseList))
 
     def delete(self):
         for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
