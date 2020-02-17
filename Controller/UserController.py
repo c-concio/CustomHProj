@@ -91,14 +91,14 @@ def getBaseList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for base in UserModel.baseScreen.baseList:
+    for base in UserModel.splitScreen.baseScreen.baseList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
         connect.commit()
 
         print("Added " + base + " to Temporary table")
     cursor.close()
 
-    print(UserModel.baseScreen.baseList)
+    print(UserModel.splitScreen.baseScreen.baseList)
 
 # setup the base screen by getting cylinders(bases) from the database
 
@@ -111,14 +111,14 @@ def getFlavorList():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
-    for flavor in UserModel.flavorScreen.flavorList:
+    for flavor in UserModel.splitScreen.flavorScreen.flavorList:
         cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
         connect.commit()
 
         print("Added " + flavor + " to Temporary table")
     cursor.close()
 
-    print(UserModel.flavorScreen.flavorList)
+    print(UserModel.splitScreen.flavorScreen.flavorList)
 
 
 def reloadAmountScreen():
