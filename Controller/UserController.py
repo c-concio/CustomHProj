@@ -61,6 +61,11 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+
+    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: enableStep4())
+
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
     # UserModel.amountScreen.doneButton.bind(on_press=lambda x: switch_screen('Split Screen'))
@@ -148,6 +153,14 @@ def decrement(label_text):
     amount -= 1
     label_text.text = str(amount)
 
+def enableStep2():
+    UserModel.splitScreen.step2.disabled = False
+
+def enableStep3():
+    UserModel.splitScreen.step3.disabled = False
+
+def enableStep4():
+    UserModel.splitScreen.step4.disabled = False
 
 def printOut():
     print('called')

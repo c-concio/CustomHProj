@@ -33,7 +33,40 @@ class UserMainScreen(Screen):
 
 
 class SizeScreen(Screen):
+    toggleButtonSmall = ObjectProperty(None)
+    toggleButtonMedium = ObjectProperty(None)
+    toggleButtonLarge = ObjectProperty(None)
     nextButton = ObjectProperty(None)
+    sizeList = []
+
+    def __init__(self):
+        super().__init__()
+
+        self.toggleButtonSmall.bind(on_press=self.saveSize)
+        self.toggleButtonMedium.bind(on_press=self.saveSize)
+        self.toggleButtonLarge.bind(on_press=self.saveSize)
+
+
+    def saveSize(self, instance):
+        # Save size of cup
+        if instance.state == 'down':
+            self.sizeList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.sizeList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove base, it did not exist")
+
+        if len(self.sizeList) < 1:
+            self.nextButton.disabled = True
+        else:
+            self.nextButton.disabled = False
+
+
+
+
 
 
 class BaseScreen(Screen):
@@ -84,6 +117,11 @@ class BaseScreen(Screen):
                 print("Removed " + instance.text)
             except:
                 print("Could not remove base, it did not exist")
+
+        if len(self.baseList) < 1:
+            self.nextButton.disabled = True
+        else:
+            self.nextButton.disabled = False
 
         # Disable other buttons when 2 bases are chosen
         if len(self.baseList) >= 2:
@@ -191,6 +229,14 @@ class AmountScreen(Screen):
         # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
 
     def reload(self):
+
+        if (len(splitScreen.baseScreen.baseList) == 0):
+            print("asdasd")
+
+        if (len(splitScreen.baseScreen.baseList) == 1):
+            self.sliderTemplateGrid.remove_widget(self.slider)
+            print(len(splitScreen.baseScreen.baseList))
+
         try:
             self.base1.text = splitScreen.baseScreen.baseList[0]
         except:
@@ -209,12 +255,9 @@ class AmountScreen(Screen):
                 self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
             except:
                 print("Flavor already added")
-        try:
-            if (len(splitScreen.baseScreen.baseList) == 0 or 1):
-                self.sliderTemplateGrid.remove_widget(self.slider)
-        except:
-            print("Base list is not empty")
-            print(len(splitScreen.baseScreen.baseList))
+
+
+
 
     def delete(self):
         for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
