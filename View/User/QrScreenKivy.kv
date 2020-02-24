@@ -1,0 +1,40 @@
+#:kivy 1.11.1
+
+<QrScreen>:
+    titleLabel: titleLabel
+    img: img
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        canvas.before:
+            Color:
+                rgb: (0.2, 0.2, 0.2)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        Label:
+            id: titleLabel
+            text: 'Please scan the QR code'
+            size_hint_y: None
+            font_size: app.headerFont
+
+            canvas.before:
+                Color:
+                    rgb: (0.1, 0.1, 0.1)
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+
+
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
+
+            Image:
+                id: img
+                size_hint: (None, None)
+                size: (200, 200)
+                allow_stretch: True

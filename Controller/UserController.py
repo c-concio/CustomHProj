@@ -143,4 +143,6 @@ def header_font_size():
     if fontSize > 36:
         fontSize = 36
 
+    # fontSize = 100
+
     return fontSize

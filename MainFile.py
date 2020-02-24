@@ -1,7 +1,7 @@
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
-from Model import AdminModel, MainModel
+from Model import AdminModel, MainModel, QrModel
 from Controller import AdminMainScreenController, DatabaseController
 from Model import UserModel
 from Controller import UserController
@@ -25,9 +25,8 @@ class MainApp(App):
         # iPhone screen size
         # Window.size = (320, 540)
 
-
         # iPhone XR screen size
-        # Window.size = (414, 896)
+        Window.size = (414, 896)
 
         # Nexus 9
         # Window.size = (768, 1024)
@@ -41,7 +40,7 @@ class MainApp(App):
         testScreenManager = ScreenManager();
 
 
-        testScreenManager.add_widget(UserModel.AmountScreen())
+        testScreenManager.add_widget(QrModel.QrScreen(name="Qr"))
 
         return screenManager
 
