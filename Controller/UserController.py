@@ -13,7 +13,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
 import i2c
-from Model import UserModel, DatabaseClass
+from Model import UserModel, DatabaseClass, MainModel
 
 kivy.require('1.9.0')
 
@@ -24,8 +24,8 @@ kivy.require('1.9.0')
 
 # function takes in a screen and switches the screenManager to the passed screen
 def switch_screen(screen_name):
-    UserModel.screenManager.transition.direction = 'left'
-    UserModel.screenManager.current = screen_name
+    MainModel.mainScreenManager.transition.direction = 'left'
+    MainModel.mainScreenManager.current = screen_name
     return
 
 
@@ -51,7 +51,6 @@ def initialize_buttons():
     UserModel.splitScreen.step3.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step4.bind(on_press=lambda x: reloadAmountScreen())
 
-    UserModel.userMainScreen.startButton.bind(on_press=lambda x: switch_screen('Split Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
     # Screen buttons
@@ -73,11 +72,18 @@ def initialize_buttons():
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
+    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: deleteAmountScreen())
+
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
     # Trigger Amount screen properties
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
 
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: switch_screen("Main Screen"))
+
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
+        UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
 
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
@@ -86,6 +92,15 @@ def initialize_carousel(split_screen):
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
 
+# -------------------------------------------------------------------
+#                       Size Screen Functions
+# -------------------------------------------------------------------
+def resetSizeScreen():
+    UserModel.splitScreen.sizeScreen.sizeList = []
+    UserModel.splitScreen.sizeScreen.toggleButtonSmall.state = 'normal'
+    UserModel.splitScreen.sizeScreen.toggleButtonMedium.state = 'normal'
+    UserModel.splitScreen.sizeScreen.toggleButtonLarge.state = 'normal'
+    UserModel.splitScreen.sizeScreen.nextButton.disabled = True
 
 # -------------------------------------------------------------------
 #                       Base Screen Functions
@@ -104,6 +119,14 @@ def getBaseList():
     cursor.close()
 
     print(UserModel.splitScreen.baseScreen.baseList)
+
+def resetBaseScreen():
+    for button in UserModel.splitScreen.baseScreen.baseToggleList:
+        button.state = 'normal'
+
+    UserModel.splitScreen.baseScreen.baseList = []
+    UserModel.splitScreen.baseScreen.baseToggleList = []
+    UserModel.splitScreen.baseScreen.nextButton.disabled = True
 
 # setup the base screen by getting cylinders(bases) from the database
 
@@ -133,6 +156,13 @@ def reloadAmountScreen():
 def deleteAmountScreen():
     UserModel.splitScreen.amountScreen.delete()
 
+def resetFlavorScreen():
+    for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
+        button.state = 'normal'
+
+    UserModel.splitScreen.flavorScreen.flavorList = []
+    UserModel.splitScreen.flavorScreen.flavorToggleList = []
+
 
 # setup the flavor screen by getting cylinders(flavor) from the database
 
@@ -161,6 +191,32 @@ def enableStep3():
 
 def enableStep4():
     UserModel.splitScreen.step4.disabled = False
+
+def amountScreenDone():
+    resetSizeScreen()
+    resetBaseScreen()
+    resetFlavorScreen()
+
+    print(UserModel.splitScreen.amountScreen.slider.value)
+    # Update temporary table
+    # connect = DatabaseClass.conn
+    # cursor = connect.cursor()
+    # size = UserModel.splitScreen.sizeScreen.sizeList
+    #
+    # for i, flavor in enumerate(UserModel.splitScreen.amountScreen.flavorLayoutList):
+    #     cursor.execute("UPDATE temporary "
+    #                    "SET ml = ?"
+    #                    "WHERE ingredient = ?",
+    #                    (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
+    #                     UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
+    #
+    #     # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text)
+    #     # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text)
+    #
+    # connect.commit()
+    # cursor.close()
+
+    # Deselect all previous options
 
 def printOut():
     print('called')

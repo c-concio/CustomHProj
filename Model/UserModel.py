@@ -39,8 +39,8 @@ class SizeScreen(Screen):
     nextButton = ObjectProperty(None)
     sizeList = []
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, **kwargs):
+        super(SizeScreen, self).__init__(**kwargs)
 
         self.toggleButtonSmall.bind(on_press=self.saveSize)
         self.toggleButtonMedium.bind(on_press=self.saveSize)
@@ -209,9 +209,12 @@ class AmountScreen(Screen):
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
     slider = ObjectProperty(None)
+    sliderExist = True
     doneButton = ObjectProperty(None)
     base1 = ObjectProperty(None)
     base2 = ObjectProperty(None)
+    baseChartLayout = ObjectProperty(None)
+    baseChart = ObjectProperty(None)
     flavorLayoutList = []
 
     def __init__(self):
@@ -230,12 +233,16 @@ class AmountScreen(Screen):
 
     def reload(self):
 
-        if (len(splitScreen.baseScreen.baseList) == 0):
-            print("asdasd")
-
-        if (len(splitScreen.baseScreen.baseList) == 1):
+        # Remove slider if only 1 base chosen
+        if (len(splitScreen.baseScreen.baseList) <= 1):
             self.sliderTemplateGrid.remove_widget(self.slider)
-            print(len(splitScreen.baseScreen.baseList))
+            self.sliderExist = False
+            # print(len(splitScreen.baseScreen.baseList))
+
+        # Add slider when slider was removed and chosen bases becomes 2
+        if (len(splitScreen.baseScreen.baseList) > 1 and self.sliderExist == False):
+            self.sliderTemplateGrid.add_widget(self.slider)
+            # print("Added slider")
 
         try:
             self.base1.text = splitScreen.baseScreen.baseList[0]
@@ -249,6 +256,7 @@ class AmountScreen(Screen):
             self.base2.text = ""
             print("No second base was chosen")
 
+        # Show flavors based on user selection
         for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
             try:
                 self.flavorLayoutList.append(FlavorsLayout(flavor))
@@ -260,12 +268,17 @@ class AmountScreen(Screen):
 
 
     def delete(self):
+        # Delete flavors when user deselects flavors
         for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
             try:
                 self.sliderTemplateGrid.remove_widget(self.flavorLayoutList[i])
                 self.flavorLayoutList.remove(FlavorsLayout(flavor))
             except:
                 print("Flavor already removed")
+
+        if (len(splitScreen.baseScreen.baseList) <= 1):
+            self.baseChartLayout.remove_widget(self.baseChart)
+            print("Removed chart")
 
 
 
@@ -296,6 +309,7 @@ class FlavorsLayout(BoxLayout):
     flavorAddB = ObjectProperty(None)
     flavorRemoveB = ObjectProperty(None)
     label_text = ObjectProperty(None)
+    flavorName = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()
@@ -318,6 +332,7 @@ Builder.load_file('View/User/UserScreensKivy.kv')
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
+sizeScreen = SizeScreen(name="Size Screen")
 #baseScreen = BaseScreen(name="Base Screen")
 #flavorScreen = FlavorScreen(name="Flavor Screen")
 #amountScreen = AmountScreen(name="Amount Screen")

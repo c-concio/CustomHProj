@@ -280,15 +280,19 @@
                 #size: (600, 712.5)
                 source: "Images/chiliBowl.png"
 
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
 
-    AnchorLayout:
-        anchor_x: 'center'
+        AnchorLayout:
+            anchor_x: 'center'
+            anchor_y: 'center'
 
-        GridLayout:
-            id: flavor_grid
-            size_hint_x: 0.6
-            size_hint_y: 0.2
-            cols: 2
+            GridLayout:
+                id: flavor_grid
+                size_hint_x: 0.6
+                size_hint_y: 0.6
+                cols: 2
 
     FloatLayout:
 
@@ -314,6 +318,8 @@
     doneButton: doneButton
     base1: base1
     base2: base2
+    baseChartLayout: baseChartLayout
+    baseChart: baseChart
 
     canvas.before:
         Color:
@@ -426,17 +432,20 @@
 
                 # item for the pi chart
                 AnchorLayout:
+                    id: baseChartLayout
                     anchor_x: 'center'
                     anchor_y: 'center'
                     size_hint_y: None
                     height: self.width
+                    width: self.width
 
 
 
 
                     Widget:
+                        id: baseChart
                         size_hint: None, None
-                        size: self.parent.width*0.9, self.parent.width*0.9
+                        size: root.width*0.4, root.width*0.4
 
                         canvas:
                             Color:
