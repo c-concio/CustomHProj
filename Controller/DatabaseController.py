@@ -18,6 +18,7 @@ def update_cylinders():
 
     cursor.close()
 
+
 def get_cylinder(cylinder_id):
     for i in DatabaseClass.cylinderArray:
         if i.cylinderID == cylinder_id:
@@ -41,6 +42,7 @@ def update_ingredients():
 def database_close():
     DatabaseClass.conn.close()
 
+
 # delete the ingredient selected
 def delete_ingredient(ingredient):
     cursor = DatabaseClass.conn.cursor()
@@ -53,6 +55,7 @@ def delete_ingredient(ingredient):
     AdminMainScreenController.setup_inventory_screen()
     AdminMainScreenController.refresh_popup()
     cursor.close()
+
 
 #
 def edit_ingredient():
@@ -71,7 +74,6 @@ def add_ingredient(new_ingredient):
     cursor.close()
 
 
-
 def ascend_cylinders():
     cursor = DatabaseClass.conn.cursor()
     cursor.execute("SELECT * FROM cylinder ORDER BY steps ASC")
@@ -83,4 +85,14 @@ def ascend_cylinders():
     for i in result:
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[3]))
 
+    cursor.close()
+
+
+def update_steps_amount(id, amount):
+    cursor = DatabaseClass.conn.cursor()
+    sql = "UPDATE cylinder SET steps = {} WHERE id = {}".format(amount, id)
+
+    cursor.execute(sql)
+
+    DatabaseClass.conn.commit()
     cursor.close()

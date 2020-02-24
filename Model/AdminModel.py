@@ -34,6 +34,10 @@ class AdminMainScreen(Screen):
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
 
+    def on_enter(self, *args):
+        AdminMainScreenController.initialize_admin_buttons()
+        AdminMainScreenController.setup_inventory_screen()
+
 
 class InventoryScreen(Screen):
     grid = ObjectProperty(None)
@@ -46,9 +50,8 @@ class InventoryScreen(Screen):
         self.name = name
         self.grid.bind(minimum_height=self.grid.setter('height'))
 
-
-class InternetSettingsScreen(Screen):
-    pass
+    def on_enter(self, *args):
+        AdminMainScreenController.initialize_inventory_buttons()
 
 
 class InventoryItemTemplate(BoxLayout):
@@ -82,14 +85,9 @@ class InventoryPopupButtonLayout(BoxLayout):
 # initialize admin screens
 adminMainScreen = AdminMainScreen(name='Admin Main Screen')
 inventoryScreen = InventoryScreen(name='Inventory Screen')
-internetSettingsScreen = InternetSettingsScreen(name='Internet Settings Screen')
-
-AdminMainScreenController.setup_inventory_screen()
-AdminMainScreenController.initialize_buttons()
 
 MainModel.mainScreenManager.add_widget(adminMainScreen)
 MainModel.mainScreenManager.add_widget(inventoryScreen)
-MainModel.mainScreenManager.add_widget(internetSettingsScreen)
 
 # popup variable for inventory screen
 popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
