@@ -30,11 +30,11 @@ def update_ingredients():
     DatabaseClass.ingredientArray.clear()
 
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute("SELECT * FROM ingredient")
+    cursor.execute("SELECT * FROM ingredients")
     result = cursor.fetchall()
 
     for i in result:
-        DatabaseClass.ingredientArray.append(DatabaseClass.Ingredient(i[0], i[1]))
+        DatabaseClass.ingredientArray.append(DatabaseClass.Ingredient(i[0], i[1], i[2]))
 
     cursor.close()
 
@@ -46,7 +46,7 @@ def database_close():
 # delete the ingredient selected
 def delete_ingredient(ingredient):
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute('DELETE FROM ingredient WHERE IngredientType =?', [ingredient])
+    cursor.execute('DELETE FROM ingredients WHERE Ingredient =?', [ingredient])
     cursor.execute("UPDATE cylinder SET ingredient = 'None' WHERE ingredient =?", [ingredient])
     DatabaseClass.conn.commit()
 
@@ -56,15 +56,25 @@ def delete_ingredient(ingredient):
     AdminMainScreenController.refresh_popup()
     cursor.close()
 
+# if the button given if a base, change type to flavor and change the color as well
+def change_ingredient_type(button):
+    cursor = DatabaseClass.conn.cursor()
+    cursor.execute("SELECT Type FROM ingredients WHERE ID = {}".format(button.parent.parent.ingredientID))
 
-#
-def edit_ingredient():
-    pass
+    result = cursor.fetchall()
+    if (result[0][0] == "base"):
+        cursor.execute("UPDATE ingredients SET Type = 'flavor' Where ID = {}".format(button.parent.parent.ingredientID))
+        button.background_color = (0.5, 0.5, 1, 0.8)
+    elif (result[0][0] == "flavor"):
+        cursor.execute("UPDATE ingredients SET Type = 'base' Where ID = {}".format(button.parent.parent.ingredientID))
+        button.background_color = (0.8, 0.3, 0.3, 1)
+
+    DatabaseClass.conn.commit()
 
 
 def add_ingredient(new_ingredient):
     cursor = DatabaseClass.conn.cursor()
-    cursor.execute("INSERT INTO ingredient(IngredientType) VALUES (?)", (new_ingredient,))
+    cursor.execute("INSERT INTO ingredients(Ingredient) VALUES (?)", (new_ingredient,))
     DatabaseClass.conn.commit()
     AdminMainScreenController.refresh_popup()
     # refresh page and popup

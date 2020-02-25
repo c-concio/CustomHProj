@@ -62,7 +62,6 @@ class InventoryItemTemplate(BoxLayout):
     percentButton = ObjectProperty(None)
     progressBar = ObjectProperty(None)
     resetButton = ObjectProperty(None)
-    # colorTemp = ObjectProperty(None)
 
     def __init__(self, cylinderID):
         super().__init__()
@@ -81,11 +80,14 @@ class InventoryItemTemplate(BoxLayout):
         self._rectangle.pos = self.pos
 
 
-
-
 class InventoryPopupButtonLayout(BoxLayout):
     ingredientButton = ObjectProperty(None)
     deleteButton = ObjectProperty(None)
+
+    def __init__(self, ingredientID, type):
+        super().__init__()
+        self.ingredientID = ingredientID
+        self.type = type
 
 
 # //////////////////////////////////////////////////

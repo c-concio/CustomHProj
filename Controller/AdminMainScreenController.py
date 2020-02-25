@@ -114,7 +114,7 @@ def set_up_cylinder(button):
 def set_ingredient_list(spinner):
     ingredientArray = []
     for i in DatabaseClass.ingredientArray:
-        ingredientArray.append(i.ingredientType)
+        ingredientArray.append(i.ingredient)
     spinner.values = ingredientArray
 
 
@@ -124,71 +124,6 @@ def update_ingredient_choice(spinner, text):
     cursor = DatabaseClass.conn.cursor()
     cursor.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
-
-
-# open popup window and show ingredient items
-def open_popup():
-    popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
-    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
-    DatabaseController.update_ingredients()
-    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
-    DatabaseController.update_ingredients()
-
-    for i in DatabaseClass.ingredientArray:
-        template = AdminModel.InventoryPopupButtonLayout()
-        template.ingredientButton.text = i.ingredientType
-        bind_ingredient_button(template.ingredientButton)
-        bind_delete_button(template.deleteButton, i.ingredientType)
-        gridLayout.add_widget(template)
-
-    add_ingredient_button = Button(text='Add Ingredient Type', size_hint_y=None, height=40)
-    add_ingredient_button.bind(on_press=lambda x: add_text_field(add_ingredient_button, gridLayout))
-    gridLayout.add_widget(add_ingredient_button)
-    # add_text_field(add_ingredient_button, gridLayout)
-
-    ingredient_list_scroll_view.add_widget(gridLayout)
-    AdminModel.popup.content = ingredient_list_scroll_view
-    AdminModel.popup.open()
-
-
-def add_text_field(addInventoryButton, gridLayout):
-    AdminModel.text_input = TextInput(pos=addInventoryButton.pos, size=addInventoryButton.size)
-    AdminModel.text_input.multiline = False
-    AdminModel.text_input.bind(on_text_validate=lambda x: DatabaseController.add_ingredient(AdminModel.text_input.text))
-    gridLayout.height = len(DatabaseClass.ingredientArray) * 50 + 90
-    gridLayout.add_widget(AdminModel.text_input)
-    # disable the button
-    addInventoryButton.disabled = True
-
-
-def refresh_popup():
-    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
-    DatabaseController.update_ingredients()
-    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
-    DatabaseController.update_ingredients()
-    for i in DatabaseClass.ingredientArray:
-        template = AdminModel.InventoryPopupButtonLayout()
-        template.ingredientButton.text = i.ingredientType
-        bind_ingredient_button(template.ingredientButton)
-        bind_delete_button(template.deleteButton, i.ingredientType)
-        gridLayout.add_widget(template)
-
-    add_ingredient_button = Button(text='Add Ingredient Type', size_hint_y=None, height=40)
-    add_ingredient_button.bind(on_press=lambda x: add_text_field(add_ingredient_button, gridLayout))
-    gridLayout.add_widget(add_ingredient_button)
-    # add_text_field(add_ingredient_button, gridLayout)
-
-    ingredient_list_scroll_view.add_widget(gridLayout)
-    AdminModel.popup.content = ingredient_list_scroll_view
-
-
-def bind_delete_button(button, ingredient):
-    button.bind(on_press=lambda x: DatabaseController.delete_ingredient(ingredient))
-
-
-def bind_ingredient_button(button):
-    button.bind(on_press=lambda x: DatabaseController.edit_ingredient())
-
 
 def sort_cylinder_inventory(self):
     # update the cylinderArray
@@ -240,3 +175,79 @@ def refresh_inventory_button(cylinderID):
         AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
 
     return button
+
+# -------------------------------------------------------------------
+#                       Popup Screen Functions
+# -------------------------------------------------------------------
+
+# open popup window and show ingredient items
+def open_popup():
+    popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
+    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
+    DatabaseController.update_ingredients()
+    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
+    DatabaseController.update_ingredients()
+
+    for i in DatabaseClass.ingredientArray:
+        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.type)
+        template.ingredientButton.text = i.ingredient
+        bind_ingredient_button(template.ingredientButton)
+        bind_delete_button(template.deleteButton, i.ingredient)
+        if (i.type == "base"):
+            template.ingredientButton.background_color = (0.8, 0.3, 0.3, 1)
+        elif (i.type == "flavor"):
+            template.ingredientButton.background_color = (0.5, 0.5, 1, 0.8)
+        gridLayout.add_widget(template)
+
+    add_ingredient_button = Button(text='Add Ingredient Type', size_hint_y=None, height=40)
+    add_ingredient_button.bind(on_press=lambda x: add_text_field(add_ingredient_button, gridLayout))
+    gridLayout.add_widget(add_ingredient_button)
+    # add_text_field(add_ingredient_button, gridLayout)
+
+    ingredient_list_scroll_view.add_widget(gridLayout)
+    AdminModel.popup.content = ingredient_list_scroll_view
+    AdminModel.popup.open()
+
+
+def add_text_field(addInventoryButton, gridLayout):
+    AdminModel.text_input = TextInput(pos=addInventoryButton.pos, size=addInventoryButton.size)
+    AdminModel.text_input.multiline = False
+    AdminModel.text_input.bind(on_text_validate=lambda x: DatabaseController.add_ingredient(AdminModel.text_input.text))
+    gridLayout.height = len(DatabaseClass.ingredientArray) * 50 + 90
+    gridLayout.add_widget(AdminModel.text_input)
+    # disable the button
+    addInventoryButton.disabled = True
+
+
+def refresh_popup():
+    ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
+    DatabaseController.update_ingredients()
+    gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
+    DatabaseController.update_ingredients()
+    for i in DatabaseClass.ingredientArray:
+        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.type)
+        template.ingredientButton.text = i.ingredient
+        bind_ingredient_button(template.ingredientButton)
+        bind_delete_button(template.deleteButton, i.ingredient)
+        if (i.type == "base"):
+            template.ingredientButton.background_color = (0.8, 0.3, 0.3, 1)
+        elif (i.type == "flavor"):
+            template.ingredientButton.background_color = (0.5, 0.5, 1, 0.8)
+        gridLayout.add_widget(template)
+
+    add_ingredient_button = Button(text='Add Ingredient Type', size_hint_y=None, height=40)
+    add_ingredient_button.bind(on_press=lambda x: add_text_field(add_ingredient_button, gridLayout))
+    gridLayout.add_widget(add_ingredient_button)
+    # add_text_field(add_ingredient_button, gridLayout)
+
+    ingredient_list_scroll_view.add_widget(gridLayout)
+    AdminModel.popup.content = ingredient_list_scroll_view
+
+
+def bind_delete_button(button, ingredient):
+    button.bind(on_press=lambda x: DatabaseController.delete_ingredient(ingredient))
+
+
+def bind_ingredient_button(button):
+    button.bind(on_press=lambda x: DatabaseController.change_ingredient_type(button))
+

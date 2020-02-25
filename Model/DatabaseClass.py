@@ -16,6 +16,8 @@ class Cylinder:
 
 
 class Ingredient:
-    def __init__(self, ingredientID, ingredientType):
+    def __init__(self, ingredientID, ingredient, type):
         self.ingredientID = ingredientID
-        self.ingredientType = ingredientType
+        self.ingredient = ingredient
+        self.type = type
+
