@@ -215,6 +215,7 @@ class AmountScreen(Screen):
     base2 = ObjectProperty(None)
     baseChartLayout = ObjectProperty(None)
     baseChart = ObjectProperty(None)
+    baseChartExist = True
     flavorLayoutList = []
 
     def __init__(self):
@@ -234,15 +235,24 @@ class AmountScreen(Screen):
     def reload(self):
 
         # Remove slider if only 1 base chosen
-        if (len(splitScreen.baseScreen.baseList) <= 1):
+        if len(splitScreen.baseScreen.baseList) <= 1:
             self.sliderTemplateGrid.remove_widget(self.slider)
             self.sliderExist = False
             # print(len(splitScreen.baseScreen.baseList))
-
         # Add slider when slider was removed and chosen bases becomes 2
-        if (len(splitScreen.baseScreen.baseList) > 1 and self.sliderExist == False):
+        elif len(splitScreen.baseScreen.baseList) == 2 and self.sliderExist == False:
             self.sliderTemplateGrid.add_widget(self.slider)
+            self.sliderExist = True
             # print("Added slider")
+
+        # Delete or add pie chart
+        if len(splitScreen.baseScreen.baseList) <= 1:
+            self.baseChartLayout.remove_widget(self.baseChart)
+            self.baseChartExist = False
+            print("Removed chart")
+        elif len(splitScreen.baseScreen.baseList) == 2 and self.baseChartExist == False:
+            self.baseChartLayout.add_widget(self.baseChart)
+            self.baseChartExist = True
 
         try:
             self.base1.text = splitScreen.baseScreen.baseList[0]
@@ -276,9 +286,8 @@ class AmountScreen(Screen):
             except:
                 print("Flavor already removed")
 
-        if (len(splitScreen.baseScreen.baseList) <= 1):
-            self.baseChartLayout.remove_widget(self.baseChart)
-            print("Removed chart")
+
+
 
 
 

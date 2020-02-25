@@ -123,6 +123,7 @@ def getBaseList():
 def resetBaseScreen():
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
         button.state = 'normal'
+        button.disabled = False
 
     UserModel.splitScreen.baseScreen.baseList = []
     UserModel.splitScreen.baseScreen.baseToggleList = []
@@ -159,6 +160,7 @@ def deleteAmountScreen():
 def resetFlavorScreen():
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
         button.state = 'normal'
+        button.disabled = False
 
     UserModel.splitScreen.flavorScreen.flavorList = []
     UserModel.splitScreen.flavorScreen.flavorToggleList = []
@@ -193,30 +195,79 @@ def enableStep4():
     UserModel.splitScreen.step4.disabled = False
 
 def amountScreenDone():
+    baseList = UserModel.splitScreen.baseScreen.baseList
+    sizeList = UserModel.splitScreen.sizeScreen.sizeList
+    # Update temporary table
+    connect = DatabaseClass.conn
+    cursor = connect.cursor()
+
+    for i, flavor in enumerate(UserModel.splitScreen.amountScreen.flavorLayoutList):
+        cursor.execute("UPDATE temporary "
+                       "SET ml = ?"
+                       "WHERE ingredient = ?",
+                       (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
+                        UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
+
+        # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text)
+        # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text)
+
+    # When 1 base is chosen (slider defaults to 180)
+    if len(baseList) == 1 and UserModel.splitScreen.amountScreen.slider.value == 180:
+        print("1 Base")
+        if len(sizeList) != 0:
+            if sizeList[0] == "SMALL":
+                cursor.execute("UPDATE temporary "
+                               "SET ml = ?"
+                               "WHERE ingredient = ?",
+                               (10, baseList[0]))
+                print(baseList[0])
+            elif sizeList[0] == "MEDIUM":
+                cursor.execute("UPDATE temporary "
+                               "SET ml = ?"
+                               "WHERE ingredient = ?",
+                               (50, baseList[0]))
+            elif sizeList[0] == "LARGE":
+                cursor.execute("UPDATE temporary "
+                               "SET ml = ?"
+                               "WHERE ingredient = ?",
+                               (100, baseList[0]))
+
+    elif len(baseList) == 2:
+        sliderValue = UserModel.splitScreen.amountScreen.slider.value
+        baseProportionList = [sliderValue, 360-sliderValue]
+        if len(sizeList) != 0:
+            if sizeList[0] == "SMALL":
+                for i, base in enumerate(baseList):
+                    cursor.execute("UPDATE temporary "
+                                   "SET ml = ?"
+                                   "WHERE ingredient = ?",
+                                   (baseProportionList[i]*10/360, baseList[i]))
+                    print(baseProportionList[i] * 10 / 360)
+                    print(baseList[i])
+            elif sizeList[0] == "MEDIUM":
+                for i, base in enumerate(baseList):
+                    cursor.execute("UPDATE temporary "
+                                   "SET ml = ?"
+                                   "WHERE ingredient = ?",
+                                   (baseProportionList[i]*50/360, baseList[i]))
+                    print(baseProportionList[i] * 50 / 360)
+                    print(baseList[i])
+            elif sizeList[0] == "LARGE":
+                for i, base in enumerate(baseList):
+                    cursor.execute("UPDATE temporary "
+                                   "SET ml = ?"
+                                   "WHERE ingredient = ?",
+                                   (baseProportionList[i]*100/360, baseList[i]))
+                    print(baseProportionList[i] * 100 / 360)
+                    print(baseList[i])
+
+    connect.commit()
+    cursor.close()
+
+    # Deselect all previous options
     resetSizeScreen()
     resetBaseScreen()
     resetFlavorScreen()
-
-    print(UserModel.splitScreen.amountScreen.slider.value)
-    # Update temporary table
-    # connect = DatabaseClass.conn
-    # cursor = connect.cursor()
-    # size = UserModel.splitScreen.sizeScreen.sizeList
-    #
-    # for i, flavor in enumerate(UserModel.splitScreen.amountScreen.flavorLayoutList):
-    #     cursor.execute("UPDATE temporary "
-    #                    "SET ml = ?"
-    #                    "WHERE ingredient = ?",
-    #                    (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
-    #                     UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
-    #
-    #     # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text)
-    #     # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text)
-    #
-    # connect.commit()
-    # cursor.close()
-
-    # Deselect all previous options
 
 def printOut():
     print('called')
