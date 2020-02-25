@@ -1,6 +1,8 @@
 import sqlite3
 
 import kivy
+from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -79,8 +81,7 @@ def add_inventory_template(cylinder_item):
     inventory_item_template.progressBar.value = cylinder_item.amount
 
     # bind the reset button to change the label text and rebind on press
-    inventory_item_template.resetButton.bind(
-        on_press=reset_cylinder)
+    inventory_item_template.resetButton.bind(on_press=reset_cylinder)
 
     AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
 

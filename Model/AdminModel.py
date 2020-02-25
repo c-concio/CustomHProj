@@ -1,5 +1,7 @@
 from tkinter import Button
 
+from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
@@ -60,10 +62,25 @@ class InventoryItemTemplate(BoxLayout):
     percentButton = ObjectProperty(None)
     progressBar = ObjectProperty(None)
     resetButton = ObjectProperty(None)
+    # colorTemp = ObjectProperty(None)
 
     def __init__(self, cylinderID):
         super().__init__()
         self.cylinderID = cylinderID
+        if (cylinderID <= 6):
+            with self.canvas.before:
+                self.color_widget = Color(0.8, 0.06, 0.06, 0.3)
+                self._rectangle = Rectangle()
+        else:
+            with self.canvas.before:
+                self.color_widget = Color(0.2, 0.2, 0.8, 0.25)
+                self._rectangle = Rectangle()
+
+    def on_size(self, *args):
+        self._rectangle.size = self.size
+        self._rectangle.pos = self.pos
+
+
 
 
 class InventoryPopupButtonLayout(BoxLayout):
