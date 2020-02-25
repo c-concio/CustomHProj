@@ -90,6 +90,12 @@ class InventoryPopupButtonLayout(BoxLayout):
         self.type = type
 
 
+class AddInventoryPopupLayout(BoxLayout):
+    confirmButton = ObjectProperty(None)
+    declineButton = ObjectProperty(None)
+
+
+
 # //////////////////////////////////////////////////
 #                  Screen Manager
 # //////////////////////////////////////////////////
@@ -109,6 +115,8 @@ MainModel.mainScreenManager.add_widget(adminMainScreen)
 MainModel.mainScreenManager.add_widget(inventoryScreen)
 
 # popup variable for inventory screen
-popup = Popup(title='Ingredients', size_hint=(None, None), size=(Window.width * 0.7, Window.height * 0.7))
+ingredientPopup = Popup()
+addConfirmationPopup = Popup()
+deleteConfirmationPopup = Popup()
 
 text_input = TextInput()

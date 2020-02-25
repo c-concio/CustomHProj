@@ -53,8 +53,10 @@ def delete_ingredient(ingredient):
     # refresh page and popup
     AdminModel.inventoryScreen.grid.clear_widgets()
     AdminMainScreenController.setup_inventory_screen()
-    AdminMainScreenController.refresh_popup()
+    AdminMainScreenController.refresh_ingredient_popup()
     cursor.close()
+
+    AdminModel.deleteConfirmationPopup.dismiss()
 
 
 # if the button given if a base, change type to flavor and change the color as well
@@ -78,7 +80,7 @@ def change_ingredient_type(button):
     # refresh page and popup
     AdminModel.inventoryScreen.grid.clear_widgets()
     AdminMainScreenController.setup_inventory_screen()
-    AdminMainScreenController.refresh_popup()
+    AdminMainScreenController.refresh_ingredient_popup()
 
     cursor.close()
 
@@ -87,12 +89,13 @@ def add_ingredient(new_ingredient):
     cursor = DatabaseClass.conn.cursor()
     cursor.execute("INSERT INTO ingredients(Ingredient) VALUES (?)", (new_ingredient,))
     DatabaseClass.conn.commit()
-    AdminMainScreenController.refresh_popup()
+    AdminMainScreenController.refresh_ingredient_popup()
     # refresh page and popup
     AdminModel.inventoryScreen.grid.clear_widgets()
     AdminMainScreenController.setup_inventory_screen()
-    AdminMainScreenController.refresh_popup()
+    AdminMainScreenController.refresh_ingredient_popup()
     cursor.close()
+    AdminModel.addConfirmationPopup.dismiss()
 
 
 def ascend_cylinders():

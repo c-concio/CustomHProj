@@ -195,3 +195,18 @@
             size_hint_x: None
             size: (40, 40)
             text: 'X'
+
+<AddInventoryPopupLayout>:
+    confirmButton: confirmButton
+    declineButton: declineButton
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Button:
+            id: confirmButton
+            text: "Yes"
+
+        Button:
+            id: declineButton
+            text: "No"
