@@ -109,6 +109,6 @@ MainModel.mainScreenManager.add_widget(adminMainScreen)
 MainModel.mainScreenManager.add_widget(inventoryScreen)
 
 # popup variable for inventory screen
-popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
+popup = Popup(title='Ingredients', size_hint=(None, None), size=(Window.width * 0.7, Window.height * 0.7))
 
 text_input = TextInput()

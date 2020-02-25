@@ -1,6 +1,7 @@
 import sqlite3
 
 import kivy
+from kivy.core.window import Window
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.boxlayout import BoxLayout
@@ -43,10 +44,12 @@ def initialize_inventory_buttons():
     AdminModel.inventoryScreen.editIngredientButton.bind(on_press=lambda x: open_popup())
     AdminModel.inventoryScreen.sortToggleButton.bind(on_press=sort_cylinder_inventory)
 
+
 def initialize_admin_buttons():
     AdminModel.adminMainScreen.inventoryButton.bind(on_press=lambda x: switch_screen('Inventory Screen'))
     AdminModel.adminMainScreen.powerButton.bind(on_press=quit_application)
     AdminModel.inventoryScreen.backButton.bind(on_press=lambda x: return_screen('Admin Main Screen'))
+
 
 # -------------------------------------------------------------------
 #                       Inventory Screen Functions
@@ -73,7 +76,7 @@ def add_inventory_template(cylinder_item):
 
     # setup the values for the ingredientSpinner and bind the function update_ingredient to it
     DatabaseController.update_ingredients()
-    set_ingredient_list(inventory_item_template.ingredientSpinner)
+    set_ingredient_list(inventory_item_template.ingredientSpinner, cylinder_item.cylinderType)
     inventory_item_template.ingredientSpinner.bind(text=update_ingredient_choice)
 
     # setup the percent label
@@ -110,11 +113,14 @@ def set_up_cylinder(button):
     newButton.bind(on_press=reset_cylinder)
     newButton.unbind(on_press=set_up_cylinder)
 
+
 # get the ingredient choices from the database and set it on the spinner values
-def set_ingredient_list(spinner):
+def set_ingredient_list(spinner, cylinderType):
     ingredientArray = []
     for i in DatabaseClass.ingredientArray:
-        ingredientArray.append(i.ingredient)
+        if i.ingredientType == cylinderType:
+            ingredientArray.append(i.ingredient)
+
     spinner.values = ingredientArray
 
 
@@ -124,6 +130,7 @@ def update_ingredient_choice(spinner, text):
     cursor = DatabaseClass.conn.cursor()
     cursor.execute("UPDATE cylinder SET ingredient = ? WHERE id = ?", (text, spinner.parent.cylinderID))
     DatabaseClass.conn.commit()
+
 
 def sort_cylinder_inventory(self):
     # update the cylinderArray
@@ -142,6 +149,7 @@ def un_sort_cylinder_inventory(self):
     self.unbind(on_press=un_sort_cylinder_inventory)
     self.bind(on_press=sort_cylinder_inventory)
 
+
 def refresh_inventory_button(cylinderID):
     AdminModel.inventoryScreen.grid.clear_widgets()
 
@@ -158,7 +166,7 @@ def refresh_inventory_button(cylinderID):
 
         # setup the values for the ingredientSpinner and bind the function update_ingredient to it
         DatabaseController.update_ingredients()
-        set_ingredient_list(inventory_item_template.ingredientSpinner)
+        set_ingredient_list(inventory_item_template.ingredientSpinner, cylinder_item)
         inventory_item_template.ingredientSpinner.bind(text=update_ingredient_choice)
 
         # setup the percent label
@@ -171,10 +179,10 @@ def refresh_inventory_button(cylinderID):
         if (cylinder_item.cylinderID == cylinderID):
             button = inventory_item_template.resetButton
 
-
         AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
 
     return button
+
 
 # -------------------------------------------------------------------
 #                       Popup Screen Functions
@@ -182,20 +190,20 @@ def refresh_inventory_button(cylinderID):
 
 # open popup window and show ingredient items
 def open_popup():
-    popup = Popup(title='Ingredients', size_hint=(None, None), size=(400, 400))
+    AdminModel.popup = Popup(title='Ingredients', size_hint=(None, None), size=(Window.width * 0.7, Window.height * 0.7))
     ingredient_list_scroll_view = ScrollView(do_scroll_x=False, do_scroll_y=True)
     DatabaseController.update_ingredients()
     gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
     DatabaseController.update_ingredients()
 
     for i in DatabaseClass.ingredientArray:
-        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.type)
+        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.ingredientType)
         template.ingredientButton.text = i.ingredient
         bind_ingredient_button(template.ingredientButton)
         bind_delete_button(template.deleteButton, i.ingredient)
-        if (i.type == "base"):
+        if i.ingredientType == "base":
             template.ingredientButton.background_color = (0.8, 0.3, 0.3, 1)
-        elif (i.type == "flavor"):
+        elif i.ingredientType == "flavor":
             template.ingredientButton.background_color = (0.5, 0.5, 1, 0.8)
         gridLayout.add_widget(template)
 
@@ -225,13 +233,13 @@ def refresh_popup():
     gridLayout = GridLayout(cols=1, size_hint_y=None, height=len(DatabaseClass.ingredientArray) * 50 + 40, spacing=10)
     DatabaseController.update_ingredients()
     for i in DatabaseClass.ingredientArray:
-        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.type)
+        template = AdminModel.InventoryPopupButtonLayout(i.ingredientID, i.ingredientType)
         template.ingredientButton.text = i.ingredient
         bind_ingredient_button(template.ingredientButton)
         bind_delete_button(template.deleteButton, i.ingredient)
-        if (i.type == "base"):
+        if i.ingredientType == "base":
             template.ingredientButton.background_color = (0.8, 0.3, 0.3, 1)
-        elif (i.type == "flavor"):
+        elif i.ingredientType == "flavor":
             template.ingredientButton.background_color = (0.5, 0.5, 1, 0.8)
         gridLayout.add_widget(template)
 
