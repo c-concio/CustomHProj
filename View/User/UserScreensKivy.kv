@@ -172,7 +172,7 @@
         bold: True
         color: 0, 0, 0, 1
         disabled: 'True'
-        text: "Next"
+        text: ""
 
 
 
@@ -554,9 +554,11 @@
 
 <RoundedButton@Button>:
     background_color: 0,0,0,0  # the last zero is the critical on, make invisible
+    colour: (0, 0, 0, 0)
     canvas.before:
         Color:
-            rgba: (128,128,128,0.6) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+            rgba: self.colour
+            #rgba: (1,1,1,0) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
         RoundedRectangle:
             pos: self.pos
             size: self.size

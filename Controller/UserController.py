@@ -85,12 +85,21 @@ def initialize_buttons():
     UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
         UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
 
+
+# -------------------------------------------------------------------
+#                       Carousel Functions
+# -------------------------------------------------------------------
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
     split_screen.carouselWidget.add_widget(split_screen.sizeScreen)
     split_screen.carouselWidget.add_widget(split_screen.baseScreen)
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
+
+def resetStepButtons():
+    UserModel.splitScreen.step2.disabled = True
+    UserModel.splitScreen.step3.disabled = True
+    UserModel.splitScreen.step4.disabled = True
 
 # -------------------------------------------------------------------
 #                       Size Screen Functions
@@ -101,6 +110,7 @@ def resetSizeScreen():
     UserModel.splitScreen.sizeScreen.toggleButtonMedium.state = 'normal'
     UserModel.splitScreen.sizeScreen.toggleButtonLarge.state = 'normal'
     UserModel.splitScreen.sizeScreen.nextButton.disabled = True
+    UserModel.splitScreen.sizeScreen.nextButton.colour = (0, 0, 0, 0)
 
 # -------------------------------------------------------------------
 #                       Base Screen Functions
@@ -128,6 +138,7 @@ def resetBaseScreen():
     UserModel.splitScreen.baseScreen.baseList = []
     UserModel.splitScreen.baseScreen.baseToggleList = []
     UserModel.splitScreen.baseScreen.nextButton.disabled = True
+    UserModel.splitScreen.baseScreen.nextButton.colour = (0, 0, 0, 0)
 
 # setup the base screen by getting cylinders(bases) from the database
 
@@ -265,6 +276,7 @@ def amountScreenDone():
     cursor.close()
 
     # Deselect all previous options
+    resetStepButtons()
     resetSizeScreen()
     resetBaseScreen()
     resetFlavorScreen()

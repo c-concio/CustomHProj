@@ -1,6 +1,8 @@
 import kivy
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
@@ -59,10 +61,15 @@ class SizeScreen(Screen):
             except:
                 print("Could not remove base, it did not exist")
 
+        # Next button enable/disable
         if len(self.sizeList) < 1:
             self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1,1,1,0)
         else:
             self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1,1,1,0.6)
 
 
 
@@ -120,8 +127,12 @@ class BaseScreen(Screen):
 
         if len(self.baseList) < 1:
             self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1, 1, 1, 0)
         else:
             self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1, 1, 1, 0.6)
 
         # Disable other buttons when 2 bases are chosen
         if len(self.baseList) >= 2:
@@ -149,6 +160,7 @@ class FlavorScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(FlavorScreen, self).__init__(**kwargs)
+        self.nextButton.colour = (1, 1, 1, 0.6)
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
@@ -220,6 +232,7 @@ class AmountScreen(Screen):
 
     def __init__(self):
         super().__init__()
+        self.doneButton.colour = (1, 1, 1, 0.6)
         # TODO: uncomment
         # self.count = 0
         # self.label_text = str(self.count)
