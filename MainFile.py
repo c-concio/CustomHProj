@@ -25,7 +25,6 @@ class MainApp(App):
         # iPhone screen size
         # Window.size = (320, 540)
 
-
         # iPhone XR screen size
         # Window.size = (414, 896)
 

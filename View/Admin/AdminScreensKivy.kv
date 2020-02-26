@@ -127,6 +127,7 @@
     percentLabel: percentage
     progressBar: progress
     resetButton: reset
+
     orientation: 'vertical'
     padding: 5
 
@@ -136,6 +137,7 @@
         Line:
             width: 2
             rectangle: self.x, self.y, self.width, self.height
+
 
     Button:
         id: cylinder
@@ -193,3 +195,18 @@
             size_hint_x: None
             size: (40, 40)
             text: 'X'
+
+<AddInventoryPopupLayout>:
+    confirmButton: confirmButton
+    declineButton: declineButton
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Button:
+            id: confirmButton
+            text: "Yes"
+
+        Button:
+            id: declineButton
+            text: "No"
