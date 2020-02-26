@@ -163,11 +163,58 @@ def getFlavorList():
 
 
 def reloadAmountScreen():
-    UserModel.splitScreen.amountScreen.reload()
+    splitScreen = UserModel.splitScreen
+    amountScreen = UserModel.splitScreen.amountScreen
+    # Remove slider if only 1 base chosen
+    if len(splitScreen.baseScreen.baseList) <= 1:
+        amountScreen.sliderTemplateGrid.remove_widget(amountScreen.slider)
+        amountScreen.sliderExist = False
+        # print(len(splitScreen.baseScreen.baseList))
+    # Add slider when slider was removed and chosen bases becomes 2
+    elif len(splitScreen.baseScreen.baseList) == 2 and amountScreen.sliderExist == False:
+        amountScreen.sliderTemplateGrid.add_widget(amountScreen.slider)
+        amountScreen.sliderExist = True
+        # print("Added slider")
+
+    # Delete or add pie chart
+    if len(splitScreen.baseScreen.baseList) <= 1:
+        amountScreen.baseChartLayout.remove_widget(amountScreen.baseChart)
+        amountScreen.baseChartExist = False
+        print("Removed chart")
+    elif len(splitScreen.baseScreen.baseList) == 2 and amountScreen.baseChartExist == False:
+        amountScreen.baseChartLayout.add_widget(amountScreen.baseChart)
+        amountScreen.baseChartExist = True
+
+    try:
+        amountScreen.base1.text = splitScreen.baseScreen.baseList[0]
+    except:
+        amountScreen.base1.text = ""
+        print("Nothing inside list")
+
+    try:
+        amountScreen.base2.text = splitScreen.baseScreen.baseList[1]
+    except:
+        amountScreen.base2.text = ""
+        print("No second base was chosen")
+
+    # Show flavors based on user selection
+    for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
+        try:
+            amountScreen.flavorLayoutList.append(UserModel.FlavorsLayout(flavor))
+            amountScreen.sliderTemplateGrid.add_widget(amountScreen.flavorLayoutList[i])
+        except:
+            print("Flavor already added")
 
 
 def deleteAmountScreen():
-    UserModel.splitScreen.amountScreen.delete()
+    amountScreen = UserModel.splitScreen.amountScreen
+    # Delete flavors when user deselects flavors
+    for i, flavor in enumerate(UserModel.splitScreen.flavorScreen.flavorList):
+        try:
+            amountScreen.sliderTemplateGrid.remove_widget(amountScreen.flavorLayoutList[i])
+            amountScreen.flavorLayoutList.remove(UserModel.FlavorsLayout(flavor))
+        except:
+            print("Flavor already removed")
 
 def resetFlavorScreen():
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:

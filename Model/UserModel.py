@@ -245,64 +245,6 @@ class AmountScreen(Screen):
         # TODO: look inside DB and add flavors
         # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
 
-    def reload(self):
-
-        # Remove slider if only 1 base chosen
-        if len(splitScreen.baseScreen.baseList) <= 1:
-            self.sliderTemplateGrid.remove_widget(self.slider)
-            self.sliderExist = False
-            # print(len(splitScreen.baseScreen.baseList))
-        # Add slider when slider was removed and chosen bases becomes 2
-        elif len(splitScreen.baseScreen.baseList) == 2 and self.sliderExist == False:
-            self.sliderTemplateGrid.add_widget(self.slider)
-            self.sliderExist = True
-            # print("Added slider")
-
-        # Delete or add pie chart
-        if len(splitScreen.baseScreen.baseList) <= 1:
-            self.baseChartLayout.remove_widget(self.baseChart)
-            self.baseChartExist = False
-            print("Removed chart")
-        elif len(splitScreen.baseScreen.baseList) == 2 and self.baseChartExist == False:
-            self.baseChartLayout.add_widget(self.baseChart)
-            self.baseChartExist = True
-
-        try:
-            self.base1.text = splitScreen.baseScreen.baseList[0]
-        except:
-            self.base1.text = ""
-            print("Nothing inside list")
-
-        try:
-            self.base2.text = splitScreen.baseScreen.baseList[1]
-        except:
-            self.base2.text = ""
-            print("No second base was chosen")
-
-        # Show flavors based on user selection
-        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
-            try:
-                self.flavorLayoutList.append(FlavorsLayout(flavor))
-                self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
-            except:
-                print("Flavor already added")
-
-
-
-
-    def delete(self):
-        # Delete flavors when user deselects flavors
-        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
-            try:
-                self.sliderTemplateGrid.remove_widget(self.flavorLayoutList[i])
-                self.flavorLayoutList.remove(FlavorsLayout(flavor))
-            except:
-                print("Flavor already removed")
-
-
-
-
-
 
 
 class SplitScreen(Screen):
