@@ -13,6 +13,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
 import i2c
+from Controller import DatabaseController
 from Model import UserModel, DatabaseClass, MainModel
 
 kivy.require('1.9.0')
@@ -187,13 +188,15 @@ def resetFlavorScreen():
 
 def increment(label_text):
     amount = int(label_text.text)
-    amount += 1
+    if amount < 10:
+        amount += 1
     label_text.text = str(amount)
 
 
 def decrement(label_text):
     amount = int(label_text.text)
-    amount -= 1
+    if amount > 0:
+        amount -= 1
     label_text.text = str(amount)
 
 def enableStep2():
@@ -212,15 +215,17 @@ def amountScreenDone():
     connect = DatabaseClass.conn
     cursor = connect.cursor()
 
+    # Update flavors in temporary table
     for i, flavor in enumerate(UserModel.splitScreen.amountScreen.flavorLayoutList):
         cursor.execute("UPDATE temporary "
                        "SET ml = ?"
                        "WHERE ingredient = ?",
                        (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
                         UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
+    # Update flavor cylinder_id in temporary table
+    for flavor in UserModel.splitScreen.flavorScreen.flavorList:
+        DatabaseController.update_temporary_cylinder(flavor)
 
-        # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text)
-        # print(UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text)
 
     # When 1 base is chosen (slider defaults to 180)
     if len(baseList) == 1 and UserModel.splitScreen.amountScreen.slider.value == 180:
@@ -242,7 +247,7 @@ def amountScreenDone():
                                "SET ml = ?"
                                "WHERE ingredient = ?",
                                (100, baseList[0]))
-
+    # When 2 bases are chosen
     elif len(baseList) == 2:
         sliderValue = UserModel.splitScreen.amountScreen.slider.value
         baseProportionList = [sliderValue, 360-sliderValue]
@@ -271,6 +276,10 @@ def amountScreenDone():
                                    (baseProportionList[i]*100/360, baseList[i]))
                     print(baseProportionList[i] * 100 / 360)
                     print(baseList[i])
+
+    # Update base cylinder_id
+    for base in UserModel.splitScreen.baseScreen.baseList:
+        DatabaseController.update_temporary_cylinder(base)
 
     connect.commit()
     cursor.close()
