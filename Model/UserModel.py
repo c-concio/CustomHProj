@@ -174,13 +174,17 @@ class SplitScreen(Screen):
 
     def __init__(self, name):
         super().__init__()
+        self.name = name
+
+    def on_pre_enter(self, *args):
+        print("pre entered")
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
         UserController.initialize_carousel(self)
-        self.name = name
+        UserController.initialize_buttons()
 
 
 class BaseSliderLayout(AnchorLayout):
@@ -215,6 +219,5 @@ splitScreen = SplitScreen(name="Split Screen")
 baseScreen = BaseScreen(name="Base Screen")
 flavorScreen = FlavorScreen(name="Flavor screen")
 
-UserController.initialize_buttons()
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)

@@ -26,7 +26,7 @@ class MainApp(App):
         # Window.size = (320, 540)
 
         # iPhone XR screen size
-        Window.size = (414, 896)
+        # Window.size = (414, 896)
 
         # Nexus 9
         # Window.size = (768, 1024)
