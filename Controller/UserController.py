@@ -8,11 +8,13 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.image import Image
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
 
 import i2c
+from Controller import DatabaseController
 from Model import UserModel, DatabaseClass, MainModel
 
 kivy.require('1.9.0')
@@ -45,11 +47,16 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.step4.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.step5.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+
+
 
     UserModel.splitScreen.step1.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step2.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step3.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step4.bind(on_press=lambda x: reloadAmountScreen())
+    # UserModel.splitScreen.step5.bind(on_press=lambda x: reloadAmountScreen())
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
@@ -60,10 +67,14 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: enableStep4())
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: enableStep5())
+    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: loadOrder())
 
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
@@ -73,6 +84,7 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: deleteAmountScreen())
+    UserModel.splitScreen.baseScreen.flavourOfMonthButton.bind(on_press=lambda x: showPopupWindow())
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
@@ -80,10 +92,12 @@ def initialize_buttons():
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
 
     UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
-    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: switch_screen("Main Screen"))
 
     UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
-        UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+    UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+
+    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: loadingPopupWindow())
+
 
 def initialize_carousel(split_screen):
     # add all the screens to the carousel
@@ -91,6 +105,12 @@ def initialize_carousel(split_screen):
     split_screen.carouselWidget.add_widget(split_screen.baseScreen)
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
+    split_screen.carouselWidget.add_widget(split_screen.confirmScreen)
+
+
+#    split_screen.carouselWidget.add_widget(split_screen.loadingScreen)
+# split_screen.carouselWidget.add_widget(split_screen.flavorOfMonthScreen)
+
 
 # -------------------------------------------------------------------
 #                       Size Screen Functions
@@ -101,6 +121,7 @@ def resetSizeScreen():
     UserModel.splitScreen.sizeScreen.toggleButtonMedium.state = 'normal'
     UserModel.splitScreen.sizeScreen.toggleButtonLarge.state = 'normal'
     UserModel.splitScreen.sizeScreen.nextButton.disabled = True
+
 
 # -------------------------------------------------------------------
 #                       Base Screen Functions
@@ -120,6 +141,7 @@ def getBaseList():
 
     print(UserModel.splitScreen.baseScreen.baseList)
 
+
 def resetBaseScreen():
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
         button.state = 'normal'
@@ -128,8 +150,16 @@ def resetBaseScreen():
     UserModel.splitScreen.baseScreen.baseToggleList = []
     UserModel.splitScreen.baseScreen.nextButton.disabled = True
 
-# setup the base screen by getting cylinders(bases) from the database
 
+# popup windows
+
+# flavor of the month popup window
+def showPopupWindow():
+    show = UserModel.SauceOfMonth()
+    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=show)
+    popupWindow.open()
+
+#TODO add another function for done button --> bind it to amount page
 
 # -------------------------------------------------------------------
 #                       Flavor Screen Functions
@@ -155,6 +185,7 @@ def reloadAmountScreen():
 
 def deleteAmountScreen():
     UserModel.splitScreen.amountScreen.delete()
+
 
 def resetFlavorScreen():
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
@@ -183,14 +214,22 @@ def decrement(label_text):
     amount -= 1
     label_text.text = str(amount)
 
+
 def enableStep2():
     UserModel.splitScreen.step2.disabled = False
+
 
 def enableStep3():
     UserModel.splitScreen.step3.disabled = False
 
+
 def enableStep4():
     UserModel.splitScreen.step4.disabled = False
+
+
+def enableStep5():
+    UserModel.splitScreen.step5.disabled = False
+
 
 def amountScreenDone():
     resetSizeScreen()
@@ -218,6 +257,7 @@ def amountScreenDone():
 
     # Deselect all previous options
 
+
 def printOut():
     print('called')
 
@@ -234,3 +274,23 @@ def header_font_size():
         fontSize = 36
 
     return fontSize
+
+
+# -------------------------------------------------------------------
+#                       Confirm Screen Functions
+# -------------------------------------------------------------------
+
+
+# progressBar (loading) popupwindow
+def loadingPopupWindow():
+    content = UserModel.RootWidget()
+    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=content)
+    popup.open()
+
+
+def loadOrder():
+    DatabaseController.getOrder()
+
+
+
+

@@ -8,11 +8,17 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
+from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+from kivy.graphics import Color, Ellipse, Rectangle
+from kivy.core.text import Label as CoreLabel
+from kivy.animation import Animation
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -46,7 +52,6 @@ class SizeScreen(Screen):
         self.toggleButtonMedium.bind(on_press=self.saveSize)
         self.toggleButtonLarge.bind(on_press=self.saveSize)
 
-
     def saveSize(self, instance):
         # Save size of cup
         if instance.state == 'down':
@@ -65,17 +70,18 @@ class SizeScreen(Screen):
             self.nextButton.disabled = False
 
 
-
-
-
-
 class BaseScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
+    flavourOfMonthButton = ObjectProperty()
     baseList = []
     baseToggleList = []
+
     # backButton = ObjectProperty(None)
+
+    # def btn(self):
+    #     UserController.showPopupWindow()
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
@@ -134,6 +140,15 @@ class BaseScreen(Screen):
                 if button.text not in self.baseList:
                     button.disabled = False
                     # print("This button recovered: " + button.text)
+
+
+class SauceOfMonth(Screen):
+    doneButton: ObjectProperty(None)
+    closeButton: ObjectProperty(None)
+    # title: ObjectProperty(None)
+    # separator_height: ObjectProperty()
+
+    # TODO get sauce choices from db
 
 
 class FlavorScreen(Screen):
@@ -198,11 +213,6 @@ class FlavorScreen(Screen):
                     # print("This button recovered: " + button.text)
 
 
-class SauceOfMonth(Screen):
-    pass
-
-
-
 class AmountScreen(Screen):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
@@ -264,9 +274,6 @@ class AmountScreen(Screen):
             except:
                 print("Flavor already added")
 
-
-
-
     def delete(self):
         # Delete flavors when user deselects flavors
         for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
@@ -281,6 +288,47 @@ class AmountScreen(Screen):
             print("Removed chart")
 
 
+class ConfirmScreen(Screen):
+    orderButton = ObjectProperty(None)
+    confirmLayout = ObjectProperty(None)
+
+
+
+class RootWidget(BoxLayout):
+    pass
+
+
+class CProgressBar(Label):
+    angle = NumericProperty(0)
+    startCount = NumericProperty(20)
+    Count = NumericProperty()
+
+    def __init__(self, **kwargs):
+        super(CProgressBar, self).__init__(**kwargs)
+        Clock.schedule_once(self.set_Circle, 0.1)
+        self.Count = self.startCount
+
+    def set_Circle(self, dt):
+        self.angle = self.angle + dt * 360
+        if self.angle >= 360:
+            self.angle = 0
+            self.Count = self.Count - 1
+        if self.Count > 0:
+            Clock.schedule_once(self.set_Circle, 1.0 / 360)
+
+
+# class LoadingScreen(Screen):
+#     startCount = NumericProperty(10)
+#     angle = NumericProperty(0)
+#
+#     def start(self):
+#         Animation.cancel_all(self)
+#         self.anim = Animation(angle=360 * self.startCount - 1, duration=self.startCount)
+#         self.anim.bind(on_complete=self.finish)
+#         self.anim.start(self)
+#
+#     def finish(self, animation, incr_crude_clock):
+#         incr_crude_clock.text = "FINISHED"
 
 
 class SplitScreen(Screen):
@@ -289,14 +337,17 @@ class SplitScreen(Screen):
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
+    step5 = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
+        # self.flavorOfMonthScreen = FlavorOfMonth()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
+        self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
         self.name = name
 
@@ -326,16 +377,17 @@ class FlavorsLayout(BoxLayout):
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
 
-
-#screenManager = ScreenManager()
+# screenManager = ScreenManager()
 
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 sizeScreen = SizeScreen(name="Size Screen")
-#baseScreen = BaseScreen(name="Base Screen")
-#flavorScreen = FlavorScreen(name="Flavor Screen")
-#amountScreen = AmountScreen(name="Amount Screen")
+# sauceOfMonthScreen = SauceOfMonth(name="Flavor of The Month")
+# loadingScreen = LoadingScreen(name="Loading Screen")
+# baseScreen = BaseScreen(name="Base Screen")
+# flavorScreen = FlavorScreen(name="Flavor Screen")
+# amountScreen = AmountScreen(name="Amount Screen")
 
 UserController.initialize_buttons()
 # screenManager.add_widget(userMainScreen)

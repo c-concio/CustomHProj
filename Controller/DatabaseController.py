@@ -1,7 +1,11 @@
 import sqlite3
 
+from kivy.uix.label import Label
+
 from Controller import AdminMainScreenController
 from Model import DatabaseClass, DatabaseClass, AdminModel
+
+
 
 
 # function that inserts new ingredients
@@ -84,3 +88,27 @@ def ascend_cylinders():
         DatabaseClass.cylinderArray.append(DatabaseClass.Cylinder(i[0], i[1], i[3]))
 
     cursor.close()
+
+
+   #function to get order from temporary tabel
+def getOrder():
+    cursor = DatabaseClass.conn.cursor()
+    cursor.execute("SELECT ingredient FROM temporary")
+
+    result = cursor.fetchall()
+    from Model import UserModel
+
+    UserModel.splitScreen.confirmScreen.confirmLayout.clear_widgets()
+
+    for i in result:
+        newLabel = Label(text=i[0], size_hint_y=0.2, size_hint_x=0.5)
+        UserModel.splitScreen.confirmScreen.confirmLayout.add_widget(newLabel)
+
+    cursor.close()
+
+
+
+
+
+
+
