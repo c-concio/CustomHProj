@@ -306,20 +306,9 @@
             color: 0, 0, 0, 1
             text: "Next"
 
-
 <AmountScreen>:
-
-
-    mainGrid: mainGrid
-    bodyGrid: bodyGrid
-    sliderAnchorLayout: sliderAnchorLayout
-    sliderTemplateGrid: sliderTemplateGrid
-    slider: slider
-    doneButton: doneButton
-    base1: base1
-    base2: base2
-    baseChartLayout: baseChartLayout
-    baseChart: baseChart
+    scroll: scroll
+    box: box
 
     canvas.before:
         Color:
@@ -328,155 +317,240 @@
             pos: self.pos
             size: self.size
 
-    ScrollView:
-        do_scroll_x: False
-        do_scroll_y: True
 
-        GridLayout:
-            id: mainGrid
-            size_hint_y: None
-            cols: 1
-            height: self.minimum_height
+    BoxLayout:
+        orientation: 'vertical'
+        id: box
 
-
-
-            AnchorLayout:
-                size_hint_y: None
-                height: self.height
-
-
-
-                Label:
-                    text:"Summary"
-                    font_name: "Pacifico"
-                    #pos_hint: {'center_x': 0.5}
-                    size_hint_y: None
-                    #font_size: app.headerFont
-
-
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            id: scroll
 
             GridLayout:
-                id: bodyGrid
                 size_hint_y: None
                 height: self.minimum_height
-                cols: 2
-                size: self.size
+                cols: 1
+                padding: [10]
+                spacing: 15
 
-                # item for the ingredient and flavor sliders
-                AnchorLayout:
-                    id: sliderAnchorLayout
+                StackLayout:
                     size_hint_y: None
-                    height: self.width if (self.width > sliderTemplateGrid.height) and self.parent.width > 425  else sliderTemplateGrid.height
-                    anchor_y: 'top'
 
-
-                    GridLayout:
-                        id: sliderTemplateGrid
-                        cols: 1
+                    Label:
+                        text: "Label 1"
                         size_hint_y: None
-                        height: self.minimum_height
-                        spacing: 20
+                        height: 10
+
+                    Label:
+                        text: "Label 2"
 
 
 
-                        Label:
-                            text: 'Drag to adjust amount'
-                            size_hint_y: None
-                            font_name: "Pacifico"
-                            height: 50
+<BaseGridTemplate1>:
+    baseLabel1: baseLabel1
 
-                        BoxLayout:
-                            orientation: 'horizontal'
-                            size_hint_y: None
-                            height: 60
+    cols: 1
+    size_hint_y: None
+    height: self.minimum_height
 
-                            Label:
-                                id: base1
-                                text:"Base 1"
-                                font_name: "Pacifico"
-                                font_size: 18
+    Label:
+        id: baseLabel1
+        size_hint_y: None
+        height: 50
 
-                            RoundedButton2:
-                                id: reset
-                                text: 'Reset'
-                                on_press: reset.value = 180
-                                on_press: slider.value = 180
-                                font_name: "OstrichSans"
-                                font_size: 18
-                                bold: True
-                                color: 0, 0, 0, 1
-                                size_hint_y: None
-                                size_hint_x: None
-                                height: self.parent.height
-                                width: self.width
+    Widget:
+        id: baseChart
+        size_hint_y: None
+        height: root.width
+        size_hint_x: None
+        width: root.width
 
-                            Label:
-                                id: base2
-                                text:""
-                                font_name: "Pacifico"
-                                font_size: 18
-
-                        Slider:
-                            id: slider
-                            min: 0
-                            max: 360
-                            value: 180
-                            step: 30
-                            size_hint_y: None
-                            height: 40
+        canvas:
+            Color:
+                rgb: 1, 1, 1, 1
+            Ellipse:
+                source: 'View/c2.png'
+                size: self.size
+                pos: self.pos
+                angle_start: 360
+            Ellipse:
+                source: 'View/c1.png'
+                size: self.size
+                pos: self.pos
+                angle_end: 360
 
 
+<BaseGridTemplate2>:
+    baseLabel1: baseLabel1
+    baseLabel2: baseLabel2
+
+    cols: 1
+    size_hint_y: None
+    height: self.minimum_height
+
+    Label:
+        size_hint_y: None
+        height: 50
+        text: "Drag to Adjust Amount"
 
 
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 75
+
+        Label:
+            id: baseLabel1
+            text: "Base 1"
+
+        RoundedButton2:
+            id: reset
+            text: 'Reset'
+
+            on_press: reset.value = 180
+            on_press: slider.value = 180
+
+            font_name: "OstrichSans"
+            font_size: 18
+            bold: True
+            color: 0, 0, 0, 1
+
+            size_hint_y: None
+            height: 50
+
+            size_hint_x: None
+            width: self.parent.width * 0.2
+
+            pos_hint: {'center_y': 0.5}
+
+        Label:
+            id: baseLabel2
+            text: "Base 2"
+
+    Slider:
+        id: slider
+        min: 0
+        max: 360
+        value: 180
+        step: 30
+        size_hint_y: None
+        height: 70
+
+    Widget:
+        id: baseChart
+        size_hint_y: None
+        height: root.width
+        size_hint_x: None
+        width: root.width
+
+        canvas:
+            Color:
+                rgb: 1, 1, 1, 1
+            Ellipse:
+                source: 'View/c2.png'
+                size: self.size
+                pos: self.pos
+                angle_start: slider.value
+            Ellipse:
+                source: 'View/c1.png'
+                size: self.size
+                pos: self.pos
+                angle_end: slider.value
+
+<BaseStackTemplate1>:
+    baseLabel1: baseLabel1
+
+    cols: 1
+    size_hint_y: None
+    height: self.minimum_height
+    size_hint_x: None
+
+    Label:
+        id: baseLabel1
+        size_hint_y: None
+        height: 50
+
+<BaseStackTemplate2>:
+    baseLabel1: baseLabel1
+    baseLabel2: baseLabel2
+    slider: slider
+
+    cols: 1
+    size_hint_y: None
+    height: self.minimum_height
+    size_hint_x: None
+
+    Label:
+        size_hint_y: None
+        height: 50
+        text: "Drag to Adjust Amount"
 
 
-                # item for the pi chart
-                AnchorLayout:
-                    id: baseChartLayout
-                    anchor_x: 'center'
-                    anchor_y: 'center'
-                    size_hint_y: None
-                    height: self.width
-                    width: self.width
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: 75
 
+        Label:
+            id: baseLabel1
+            text: "Base 1"
 
+        RoundedButton2:
+            id: reset
+            text: 'Reset'
 
+            on_press: reset.value = 180
+            on_press: slider.value = 180
 
-                    Widget:
-                        id: baseChart
-                        size_hint: None, None
-                        size: root.width*0.4, root.width*0.4
+            font_name: "OstrichSans"
+            font_size: 18
+            bold: True
+            color: 0, 0, 0, 1
 
-                        canvas:
-                            Color:
-                                rgb: 1, 1, 1, 1
-                            Ellipse:
-                                source: 'View/c2.png'
-                                size: self.size
-                                pos: self.pos
-                                angle_start: slider.value
-                            Ellipse:
-                                source: 'View/c1.png'
-                                size: self.size
-                                pos: self.pos
-                                angle_end: slider.value
+            size_hint_y: None
+            height: 50
 
-    RoundedButton:
-        id: doneButton
-        pos_hint:{"x":0.65,"y":0.05}
-        size_hint: 0.3, 0.2
-        font_size: (root.width**2 + root.height**2) / 13**4
-        font_name: "OstrichSans"
-        bold: True
-        color: 0, 0, 0, 1
-        text: "Done"
+            size_hint_x: None
+            width: self.parent.width * 0.2
 
+            pos_hint: {'center_y': 0.5}
 
+        Label:
+            id: baseLabel2
+            text: "Base 2"
 
+    Slider:
+        id: slider
+        min: 0
+        max: 360
+        value: 180
+        step: 30
+        size_hint_y: None
+        height: 70
 
-<BaseSliderLayout>:
+<AmountPieChart>:
 
+    id: baseChart
+    size_hint_y: None
+    height: root.width
+    size_hint_x: None
+    width: root.width
+    pie_chart_value: 180
 
+    canvas:
+        Color:
+            rgb: 1, 1, 1, 1
+        Ellipse:
+            source: 'View/c2.png'
+            size: self.size
+            pos: self.pos
+            angle_start: self.pie_chart_value
+        Ellipse:
+            source: 'View/c1.png'
+            size: self.size
+            pos: self.pos
+            angle_end: self.pie_chart_value
 
 
 <FlavorsLayout>:
@@ -485,48 +559,40 @@
     label_text: label_text
     flavorName: flavorName
 
-    orientation: "vertical"
     size_hint_y: None
-    height: 90
+    height: 75
+    cols: 3
 
-
-
-    Label:
-        id: flavorName
-        text:"Flavor"
-        font_name: "Pacifico"
+    CircleButton:
+        id: flavorAddB
+        text: '+'
         font_size: 18
-        size_hint_y: None
-        height: 30
+        size_hint_x: None
+        width: 75
+        padding: (100, 100)
+
+
 
     BoxLayout:
-        orientation: 'horizontal'
-        size_hint_y: None
-        height: 50
+        orientation: 'vertical'
 
-        CircleButton:
-            id: flavorAddB
-            text: '+'
+        Label:
+            id: flavorName
+            text:"Flavor"
+            font_name: "Pacifico"
             font_size: 18
-            size_hint_x: None
-            size_hint_y: None
-            width: self.parent.width * 2/10
 
 
         Label:
             id: label_text
-            #text: root.label_text
             font_size: 18
-            size_hint_x: None
-            width: self.parent.width * 6/10
 
-        CircleButton:
-            id: flavorRemoveB
-            text: "-"
-            font_size: 18
-            size_hint_x: None
-            size_hint_y: None
-            width: self.parent.width * 2/10
+    CircleButton:
+        id: flavorRemoveB
+        text: "-"
+        font_size: 18
+        size_hint_x: None
+        width: 75
 
 
 
@@ -563,3 +629,30 @@
             pos: self.pos
             size: self.size
             radius: [30,]
+
+<AmountGridLayout>
+    size_hint_y: None
+    height: self.minimum_height
+    cols: 1
+    padding: [10]
+    spacing: 15
+
+<DoneRoundedButton1@RoundedButton>:
+    size_hint_y: 0.1
+    font_size: '25sp'
+    font_name: "OstrichSans"
+    bold: True
+    text: "Done"
+    background_color: 1,1,1,0.5
+    colour: (0, 0, 0, 0)
+
+<DoneRoundedButton2>:
+    pos_hint:{"x":0.65,"y":0.05}
+    size_hint: 0.3, 0.2
+    font_size: '50sp'
+    font_name: "OstrichSans"
+    bold: True
+    text: "Done"
+    background_color: 1,1,1,0.5
+    colour: (0, 0, 0, 0)
+

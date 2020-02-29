@@ -10,11 +10,14 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+from kivy.uix.widget import Widget
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -48,7 +51,6 @@ class SizeScreen(Screen):
         self.toggleButtonMedium.bind(on_press=self.saveSize)
         self.toggleButtonLarge.bind(on_press=self.saveSize)
 
-
     def saveSize(self, instance):
         # Save size of cup
         if instance.state == 'down':
@@ -65,15 +67,11 @@ class SizeScreen(Screen):
         if len(self.sizeList) < 1:
             self.nextButton.disabled = True
             self.nextButton.text = ""
-            self.nextButton.colour = (1,1,1,0)
+            self.nextButton.colour = (1, 1, 1, 0)
         else:
             self.nextButton.disabled = False
             self.nextButton.text = "Next"
-            self.nextButton.colour = (1,1,1,0.6)
-
-
-
-
+            self.nextButton.colour = (1, 1, 1, 0.6)
 
 
 class BaseScreen(Screen):
@@ -82,6 +80,7 @@ class BaseScreen(Screen):
     nextButton = ObjectProperty()
     baseList = []
     baseToggleList = []
+
     # backButton = ObjectProperty(None)
 
     # Get ingredient names from database
@@ -214,8 +213,17 @@ class SauceOfMonth(Screen):
     pass
 
 
-
 class AmountScreen(Screen):
+    doneButton = ObjectProperty(None)
+    scroll = ObjectProperty(None)
+    box = ObjectProperty(None)
+
+
+class AmountGridLayout(GridLayout):
+    pass
+
+
+class AmountScreen1(Screen):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
@@ -246,7 +254,6 @@ class AmountScreen(Screen):
         # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
 
 
-
 class SplitScreen(Screen):
     carouselWidget = ObjectProperty(None)
     step1 = ObjectProperty(None)
@@ -265,11 +272,7 @@ class SplitScreen(Screen):
         self.name = name
 
 
-class BaseSliderLayout(AnchorLayout):
-    pass
-
-
-class FlavorsLayout(BoxLayout):
+class FlavorsLayout(GridLayout):
     flavorAddB = ObjectProperty(None)
     flavorRemoveB = ObjectProperty(None)
     label_text = ObjectProperty(None)
@@ -283,6 +286,35 @@ class FlavorsLayout(BoxLayout):
         self.flavorName.text = name
 
 
+class BaseGridTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class BaseGridTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+
+
+class BaseStackTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class AmountPieChart(Widget):
+    pass
+
+
+class BaseStackTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
+    pie = AmountPieChart
+
+class DoneRoundedButton1(Button):
+    pass
+
+class DoneRoundedButton2(Button):
+    pass
+
 # -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
@@ -290,16 +322,15 @@ class FlavorsLayout(BoxLayout):
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
 
-
-#screenManager = ScreenManager()
+# screenManager = ScreenManager()
 
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 sizeScreen = SizeScreen(name="Size Screen")
-#baseScreen = BaseScreen(name="Base Screen")
-#flavorScreen = FlavorScreen(name="Flavor Screen")
-#amountScreen = AmountScreen(name="Amount Screen")
+# baseScreen = BaseScreen(name="Base Screen")
+# flavorScreen = FlavorScreen(name="Flavor Screen")
+# amountScreen = AmountScreen(name="Amount Screen")
 
 UserController.initialize_buttons()
 # screenManager.add_widget(userMainScreen)
