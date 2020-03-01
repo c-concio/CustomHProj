@@ -156,7 +156,9 @@ def resetBaseScreen():
 # flavor of the month popup window
 def showPopupWindow():
     show = UserModel.SauceOfMonth()
-    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=show)
+    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=show
+                       # , pos_hint={'x': 5.0 / Window.width, 'y': 5.0 / Window.height}
+                        )
     popupWindow.open()
 
 #TODO add another function for done button --> bind it to amount page
@@ -283,8 +285,10 @@ def header_font_size():
 
 # progressBar (loading) popupwindow
 def loadingPopupWindow():
-    content = UserModel.RootWidget()
+    content = UserModel.loadingPopup()
     popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=content)
+    #popup = Popup(title="", separator_height=0, content=content)
+
     popup.open()
 
 

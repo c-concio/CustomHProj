@@ -20,6 +20,7 @@ from kivy.graphics import Color, Ellipse, Rectangle
 from kivy.core.text import Label as CoreLabel
 from kivy.animation import Animation
 
+
 from Controller import UserController
 from Model import DatabaseClass
 
@@ -293,42 +294,29 @@ class ConfirmScreen(Screen):
     confirmLayout = ObjectProperty(None)
 
 
-
-class RootWidget(BoxLayout):
-    pass
-
-
-class CProgressBar(Label):
-    angle = NumericProperty(0)
-    startCount = NumericProperty(20)
-    Count = NumericProperty()
-
-    def __init__(self, **kwargs):
-        super(CProgressBar, self).__init__(**kwargs)
-        Clock.schedule_once(self.set_Circle, 0.1)
-        self.Count = self.startCount
-
-    def set_Circle(self, dt):
-        self.angle = self.angle + dt * 360
-        if self.angle >= 360:
-            self.angle = 0
-            self.Count = self.Count - 1
-        if self.Count > 0:
-            Clock.schedule_once(self.set_Circle, 1.0 / 360)
+class loadingPopup(BoxLayout):
+    gif = ObjectProperty(None)
 
 
-# class LoadingScreen(Screen):
-#     startCount = NumericProperty(10)
+# class CProgressBar(Label):
 #     angle = NumericProperty(0)
+#     startCount = NumericProperty(20)
+#     Count = NumericProperty()
 #
-#     def start(self):
-#         Animation.cancel_all(self)
-#         self.anim = Animation(angle=360 * self.startCount - 1, duration=self.startCount)
-#         self.anim.bind(on_complete=self.finish)
-#         self.anim.start(self)
+#     def __init__(self, **kwargs):
+#         super(CProgressBar, self).__init__(**kwargs)
+#         Clock.schedule_once(self.set_Circle, 0.1)
+#         self.Count = self.startCount
 #
-#     def finish(self, animation, incr_crude_clock):
-#         incr_crude_clock.text = "FINISHED"
+#     def set_Circle(self, dt):
+#         self.angle = self.angle + dt * 360
+#         if self.angle >= 360:
+#             self.angle = 0
+#             self.Count = self.Count - 1
+#         if self.Count > 0:
+#             Clock.schedule_once(self.set_Circle, 1.0 / 360)
+
+
 
 
 class SplitScreen(Screen):
