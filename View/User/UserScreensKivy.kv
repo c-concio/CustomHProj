@@ -327,25 +327,6 @@
             do_scroll_y: True
             id: scroll
 
-            GridLayout:
-                size_hint_y: None
-                height: self.minimum_height
-                cols: 1
-                padding: [10]
-                spacing: 15
-
-                StackLayout:
-                    size_hint_y: None
-
-                    Label:
-                        text: "Label 1"
-                        size_hint_y: None
-                        height: 10
-
-                    Label:
-                        text: "Label 2"
-
-
 
 <BaseGridTemplate1>:
     baseLabel1: baseLabel1
@@ -358,6 +339,8 @@
         id: baseLabel1
         size_hint_y: None
         height: 50
+        font_name: "Pacifico"
+        font_size: "18sp"
 
     Widget:
         id: baseChart
@@ -393,6 +376,8 @@
         size_hint_y: None
         height: 50
         text: "Drag to Adjust Amount"
+        font_name: "Pacifico"
+        font_size: "18sp"
 
 
     BoxLayout:
@@ -403,6 +388,8 @@
         Label:
             id: baseLabel1
             text: "Base 1"
+            font_name: "Pacifico"
+            font_size: "18sp"
 
         RoundedButton2:
             id: reset
@@ -427,6 +414,8 @@
         Label:
             id: baseLabel2
             text: "Base 2"
+            font_name: "Pacifico"
+            font_size: "18sp"
 
     Slider:
         id: slider
@@ -469,7 +458,10 @@
     Label:
         id: baseLabel1
         size_hint_y: None
+        size_hint_x: None
         height: 50
+        font_name: "Pacifico"
+        font_size: "18sp"
 
 <BaseStackTemplate2>:
     baseLabel1: baseLabel1
@@ -485,6 +477,8 @@
         size_hint_y: None
         height: 50
         text: "Drag to Adjust Amount"
+        font_name: "Pacifico"
+        font_size: "22sp"
 
 
     BoxLayout:
@@ -495,6 +489,8 @@
         Label:
             id: baseLabel1
             text: "Base 1"
+            font_name: "Pacifico"
+            font_size: "18sp"
 
         RoundedButton2:
             id: reset
@@ -519,6 +515,8 @@
         Label:
             id: baseLabel2
             text: "Base 2"
+            font_name: "Pacifico"
+            font_size: "18sp"
 
     Slider:
         id: slider

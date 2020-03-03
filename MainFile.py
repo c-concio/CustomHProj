@@ -40,10 +40,10 @@ class MainApp(App):
         testScreenManager = ScreenManager();
 
         screen = UserModel.AmountScreen()
-        UserController.buildAmountScreen(screen)
+        # UserController.buildAmountScreen(screen)
         testScreenManager.add_widget(screen)
 
-        return testScreenManager
+        return screenManager
 
 
 if __name__ == '__main__':

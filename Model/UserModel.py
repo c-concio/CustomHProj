@@ -217,6 +217,7 @@ class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
     scroll = ObjectProperty(None)
     box = ObjectProperty(None)
+    built = False
 
 
 class AmountGridLayout(GridLayout):

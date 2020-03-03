@@ -53,8 +53,6 @@ def initialize_buttons():
     UserModel.splitScreen.step1.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step2.bind(on_press=lambda x: deleteAmountScreen())
     UserModel.splitScreen.step3.bind(on_press=lambda x: deleteAmountScreen())
-    # TODO: uncomment
-    # UserModel.splitScreen.step4.bind(on_press=lambda x: reloadAmountScreen())
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
@@ -85,6 +83,7 @@ def initialize_buttons():
     # TODO: uncomment
     # Trigger Amount screen properties
     # UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
+    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: switch_screen("Main Screen"))
@@ -359,24 +358,34 @@ def printOut():
 
 
 def buildAmountScreen(amountScreen):
+    amountScreen.scroll.clear_widgets()
     if Window.width < 770:
-        amountScreen.box.add_widget(UserModel.DoneRoundedButton1())
+        if not amountScreen.built:
+            button = UserModel.DoneRoundedButton1()
+            button.bind(on_press=lambda x: amountScreenDone())
+            button.bind(on_press=lambda x: switch_screen("Main Screen"))
+            amountScreen.box.add_widget(button)
         buildAmountScreenGridLayout(amountScreen)
     else:
-        amountScreen.add_widget(UserModel.DoneRoundedButton2())
+        if not amountScreen.built:
+            button = UserModel.DoneRoundedButton2()
+            button.bind(on_press=lambda x: amountScreenDone())
+            button.bind(on_press=lambda x: switch_screen("Main Screen"))
+            amountScreen.add_widget(button)
         buildAmountScreenStackLayout(amountScreen)
+
+    amountScreen.built = True
 
 
 def buildAmountScreenGridLayout(amountScreen):
-    amountScreen.scroll.clear_widgets()
     # add grid layout into the scroll view
 
     grid = UserModel.AmountGridLayout()
 
     # check the base array in the UserModel and add corresponding layout to grid
     # TODO: replace baselist with actual baselist
-    baseList = ["Ketchup", "Mus"]
-    flavorList = ["Flav 1", "Flav 2", "Flav 3"]
+    baseList = UserModel.splitScreen.baseScreen.baseList
+    flavorList = UserModel.splitScreen.flavorScreen.flavorList
 
     # if there is only one base selected, then the layout should only have one base, no slider, and show the full pie
     if len(baseList) == 1:
@@ -401,8 +410,8 @@ def buildAmountScreenStackLayout(amountScreen):
     amountScreen.scroll.clear_widgets()
 
     # TODO: replace baselist with actual baselist
-    baseList = ["Ketchup", "Mus"]
-    flavorList = ["Flav 1", "Flav 2", "Flav 3"]
+    baseList = UserModel.splitScreen.baseScreen.baseList
+    flavorList = UserModel.splitScreen.flavorScreen.flavorList
 
     # variable to count the total height of all the elements in layout
     totalHeight = 20
@@ -417,6 +426,7 @@ def buildAmountScreenStackLayout(amountScreen):
     if len(baseList) == 1:
         baseTemplate = UserModel.BaseStackTemplate1()
         baseTemplate.baseLabel1.text = baseList[0]
+        baseTemplate.baseLabel1.width = Window.width * 0.5
         stack.add_widget(baseTemplate)
         totalHeight += 50 + (2 * space)
     else:
