@@ -93,7 +93,7 @@ def select_first_row_from_condition(ingredient):
                        "row_number() over (PARTITION BY ingredient ORDER BY steps DESC) as rownum "
                        "FROM cylinder"
                        ") cylinder "
-                       "WHERE ingredient = ? AND steps > 10 AND rownum = 1);", (ingredient,))
+                       "WHERE ingredient = ? AND rownum = 1);", (ingredient,))
 
         rows = cursor.fetchone()
         print("Fetched first row")

@@ -50,9 +50,7 @@ def initialize_buttons():
     UserModel.splitScreen.step4.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
 
-    UserModel.splitScreen.step1.bind(on_press=lambda x: deleteAmountScreen())
-    UserModel.splitScreen.step2.bind(on_press=lambda x: deleteAmountScreen())
-    UserModel.splitScreen.step3.bind(on_press=lambda x: deleteAmountScreen())
+
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
@@ -76,7 +74,6 @@ def initialize_buttons():
     # UserModel.amountScreen.addButton.bind(on_press=lambda x: switch_screen('Loading Screen'))
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
-    UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: deleteAmountScreen())
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
@@ -172,62 +169,6 @@ def getFlavorList():
     print(UserModel.splitScreen.flavorScreen.flavorList)
 
 
-# # TODO: uncomment
-# def reloadAmountScreen():
-#     splitScreen = UserModel.splitScreen
-#     amountScreen = UserModel.splitScreen.amountScreen
-#     # Remove slider if only 1 base chosen
-#     if len(splitScreen.baseScreen.baseList) <= 1:
-#         amountScreen.sliderTemplateGrid.remove_widget(amountScreen.slider)
-#         amountScreen.sliderExist = False
-#         # print(len(splitScreen.baseScreen.baseList))
-#     # Add slider when slider was removed and chosen bases becomes 2
-#     elif len(splitScreen.baseScreen.baseList) == 2 and amountScreen.sliderExist == False:
-#         amountScreen.sliderTemplateGrid.add_widget(amountScreen.slider)
-#         amountScreen.sliderExist = True
-#         # print("Added slider")
-#
-#     # Delete or add pie chart
-#     if len(splitScreen.baseScreen.baseList) <= 1:
-#         amountScreen.baseChartLayout.remove_widget(amountScreen.baseChart)
-#         amountScreen.baseChartExist = False
-#         print("Removed chart")
-#     elif len(splitScreen.baseScreen.baseList) == 2 and amountScreen.baseChartExist == False:
-#         amountScreen.baseChartLayout.add_widget(amountScreen.baseChart)
-#         amountScreen.baseChartExist = True
-#
-#     try:
-#         amountScreen.base1.text = splitScreen.baseScreen.baseList[0]
-#     except:
-#         amountScreen.base1.text = ""
-#         print("Nothing inside list")
-#
-#     try:
-#         amountScreen.base2.text = splitScreen.baseScreen.baseList[1]
-#     except:
-#         amountScreen.base2.text = ""
-#         print("No second base was chosen")
-#
-#     # Show flavors based on user selection
-#     for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
-#         try:
-#             amountScreen.flavorLayoutList.append(UserModel.FlavorsLayout(flavor))
-#             amountScreen.sliderTemplateGrid.add_widget(amountScreen.flavorLayoutList[i])
-#         except:
-#             print("Flavor already added")
-
-
-def deleteAmountScreen():
-    amountScreen = UserModel.splitScreen.amountScreen
-    # Delete flavors when user deselects flavors
-    for i, flavor in enumerate(UserModel.splitScreen.flavorScreen.flavorList):
-        try:
-            amountScreen.sliderTemplateGrid.remove_widget(amountScreen.flavorLayoutList[i])
-            amountScreen.flavorLayoutList.remove(UserModel.FlavorsLayout(flavor))
-        except:
-            print("Flavor already removed")
-
-
 def resetFlavorScreen():
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
         button.state = 'normal'
@@ -289,8 +230,8 @@ def amountScreenDone():
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
         DatabaseController.update_temporary_cylinder(flavor)
 
-    # When 1 base is chosen (slider defaults to 180)
-    if len(baseList) == 1 and UserModel.splitScreen.amountScreen.slider.value == 180:
+    # When 1 base is chosen
+    if len(baseList) == 1:
         print("1 Base")
         if len(sizeList) != 0:
             if sizeList[0] == "SMALL":
@@ -398,6 +339,7 @@ def buildAmountScreenGridLayout(amountScreen):
         baseTemplate.baseLabel1.text = baseList[0]
         baseTemplate.baseLabel2.text = baseList[1]
         grid.add_widget(baseTemplate)
+        amountScreen.slider = baseTemplate.slider
 
     # check how many flavors and add flavor templates
     for f in flavorList:
@@ -437,6 +379,7 @@ def buildAmountScreenStackLayout(amountScreen):
         baseTemplate.baseLabel2.text = baseList[1]
         stack.add_widget(baseTemplate)
         totalHeight += 50 + 75 + 70 + (2 * space)
+        amountScreen.slider = baseTemplate.slider
 
     # check how many flavors and add flavor templates
     for f in flavorList:

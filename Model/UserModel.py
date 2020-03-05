@@ -218,6 +218,7 @@ class AmountScreen(Screen):
     scroll = ObjectProperty(None)
     box = ObjectProperty(None)
     built = False
+    flavorLayoutList = []
 
 
 class AmountGridLayout(GridLayout):
@@ -294,6 +295,7 @@ class BaseGridTemplate1(GridLayout):
 class BaseGridTemplate2(GridLayout):
     baseLabel1 = ObjectProperty(None)
     baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
 
 
 class BaseStackTemplate1(GridLayout):
