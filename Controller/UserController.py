@@ -286,7 +286,7 @@ def header_font_size():
 # progressBar (loading) popupwindow
 def loadingPopupWindow():
     content = UserModel.loadingPopup()
-    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=content)
+    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(Window.width*0.5, Window.height*0.8), content=content)
     #popup = Popup(title="", separator_height=0, content=content)
 
     popup.open()

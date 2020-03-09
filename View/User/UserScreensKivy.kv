@@ -581,19 +581,18 @@
     Label:
         text: "Preparing Your Order"
         font_name: "Pacifico"
-        font_size: (root.width**2 + root.height**2) / 13**4
+        font_size: '24sp'
         pos_hint: {"x":0.35,"top":1}
         size_hint: 0.35, 0.15
 
-
     Image:
         id: gif
-        source: 'View/giphy.gif'
+        source: 'View/loading2.gif'
         center: self.parent.center
         size: 500, 500
         #allow_stretch: True
-        anim_delay: 0.09
-        #anim_loop: 3
+        anim_delay: 0.03
+        #anim_loop: 1
 
 
 
