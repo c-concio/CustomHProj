@@ -21,22 +21,9 @@ bus = smbus.SMBus(1)
 count = 0
 
 """
-ADDRESS 0 - 9 --> BASES
-ADDRESS 10+ --> FLAVOURS
+ADDRESS 1 - 12 --> BASES: ID FROM THE DATABASE
+ADDRESS 13 - 34 --> FLAVOURS: ID FROM THE DATABASE
 """
-MODULE_ADDRESS0 = 0x00
-MODULE_ADDRESS1 = 0x01
-MODULE_ADDRESS2 = 0x02
-MODULE_ADDRESS3 = 0x03
-MODULE_ADDRESS4 = 0x04
-MODULE_ADDRESS5 = 0x05
-MODULE_ADDRESS6 = 0x06
-MODULE_ADDRESS7 = 0x07
-MODULE_ADDRESS8 = 0x08
-MODULE_ADDRESS9 = 0x09
-MODULE_ADDRESS10 = 0x0A
-MODULE_ADDRESS11 = 0x0B
-MODULE_ADDRESS12 = 0x0C
 MODULE_ADDRESS13 = 0x0D
 MODULE_ADDRESS14 = 0x0E
 MODULE_ADDRESS15 = 0x0F
@@ -56,21 +43,11 @@ MODULE_ADDRESS28 = 0x1C
 MODULE_ADDRESS29 = 0x1D
 MODULE_ADDRESS30 = 0x1E
 MODULE_ADDRESS31 = 0x1F
+MODULE_ADDRESS32 = 0x20
+MODULE_ADDRESS33 = 0x21
+MODULE_ADDRESS34 = 0x22
 
 AddressList = [
-    MODULE_ADDRESS0,
-    MODULE_ADDRESS1,
-    MODULE_ADDRESS2,
-    MODULE_ADDRESS3,
-    MODULE_ADDRESS4,
-    MODULE_ADDRESS5,
-    MODULE_ADDRESS6,
-    MODULE_ADDRESS7,
-    MODULE_ADDRESS8,
-    MODULE_ADDRESS9,
-    MODULE_ADDRESS10,
-    MODULE_ADDRESS11,
-    MODULE_ADDRESS12,
     MODULE_ADDRESS13,
     MODULE_ADDRESS14,
     MODULE_ADDRESS15,
@@ -90,8 +67,10 @@ AddressList = [
     MODULE_ADDRESS29,
     MODULE_ADDRESS30,
     MODULE_ADDRESS31,
+    MODULE_ADDRESS32,
+    MODULE_ADDRESS33,
+    MODULE_ADDRESS34
 ]
-
 
 def GPIO_High_Low(pinNumber, binary):
     if (binary == 1):
@@ -104,17 +83,19 @@ def addressInit():
     Resetting default address of each driver to their corresponding address.
     DEFAULT SET TO 32 DRIVERS FOR 32 MOTORS.
     """
+    # SET DISFLT TO 1 AT FIRST FOR ALL DRIVERS. Since they're all 0x60 at the beginning, it sends to all of them
+    bus.write_byte_data(0x60, 0x02, 0b01000000)
+
     for i in range(0, AddressList.__len__()):
         # For the decoder to each activate the nfault pin on the driver. Enabling to change the address
         binaryString = format(count, '#07b')
         binaryNumArray = list(binaryString)  # Index 0 = MSB | Last Index = LSB
 
         """
-        For the purpose of the project, we are only using 6 Bases and 22 Flavours.
-        Therefore, we're omitting addresses 6 to 9.
+        For the purpose of the project, we are only using 6 Bases, 6 Bases with Solenoids and 22 Flavours.
+        Since we're using decoder, 00000 would talk to the first driver connected. That driver would have address 12.
+        So on and so forth.
         """
-        if (i == 6 or i == 7 or i == 8 or i == 9):
-            continue
 
         GPIO_High_Low(PIN27, int(binaryNumArray[0]))
         GPIO_High_Low(PIN29, int(binaryNumArray[1]))
@@ -131,6 +112,7 @@ def addressInit():
         time.sleep(0.01)
         # Writing address for designated driver numbers.
         bus.write_byte_data(0x60, 0x00, AddressList[i])
+        bus.write_byte_data(AddressList[i], 0x02, 0x00)     # SET DISFLT TO 0 AFTER EACH ADDRESS CHANGE
 
 
 """

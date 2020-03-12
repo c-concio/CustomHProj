@@ -7,22 +7,9 @@ import smbus
 bus = smbus.SMBus(1)
 
 """
-ADDRESS 0 - 9 --> BASES
-ADDRESS 10+ --> FLAVOURS
+ADDRESS 1 - 12 --> BASES
+ADDRESS 13+ --> FLAVOURS
 """
-# MODULE_ADDRESS0 = 0x00
-# MODULE_ADDRESS1 = 0x01
-# MODULE_ADDRESS2 = 0x02
-# MODULE_ADDRESS3 = 0x03
-# MODULE_ADDRESS4 = 0x04
-# MODULE_ADDRESS5 = 0x05
-# MODULE_ADDRESS6 = 0x06
-# MODULE_ADDRESS7 = 0x07
-# MODULE_ADDRESS8 = 0x08
-# MODULE_ADDRESS9 = 0x09
-# MODULE_ADDRESS10 = 0x0A
-# MODULE_ADDRESS11 = 0x0B
-# MODULE_ADDRESS12 = 0x0C
 # MODULE_ADDRESS13 = 0x0D
 # MODULE_ADDRESS14 = 0x0E
 # MODULE_ADDRESS15 = 0x0F
@@ -42,6 +29,9 @@ ADDRESS 10+ --> FLAVOURS
 # MODULE_ADDRESS29 = 0x1D
 # MODULE_ADDRESS30 = 0x1E
 # MODULE_ADDRESS31 = 0x1F
+# MODULE_ADDRESS32 = 0x20
+# MODULE_ADDRESS33 = 0x21
+# MODULE_ADDRESS34 = 0x22
 
 """
 1 FOR LOOP = 4 TICKS ON THE DRIVER
@@ -52,10 +42,6 @@ timeDelay = 0.01
 def forwardStep(address, step):
     for i in range(0, step):
         # Driving forward
-        # 1 & 4 high
-        bus.write_byte_data(address, 0x01, 0b01001100)
-        time.sleep(timeDelay)
-        print("1 & 4 high")
         # 1 & 3 high
         bus.write_byte_data(address, 0x01, 0b00101100)
         time.sleep(timeDelay)
@@ -68,10 +54,19 @@ def forwardStep(address, step):
         bus.write_byte_data(address, 0x01, 0b01010100)
         time.sleep(timeDelay)
         print("2 & 4 high")
+        # 1 & 4 high
+        bus.write_byte_data(address, 0x01, 0b01001100)
+        time.sleep(timeDelay)
+        print("1 & 4 high")
 
+    bus.write_byte_data(address, 0x01, 0b00000100)
 
 def backwardStep(address, step):
     for i in range(0, step):
+        # 1 & 4 high
+        bus.write_byte_data(address, 0x01, 0b01001100)
+        time.sleep(timeDelay)
+        print("1 & 4 high")
         # 2 & 4 high
         bus.write_byte_data(address, 0x01, 0b01010100)
         time.sleep(timeDelay)
@@ -84,7 +79,5 @@ def backwardStep(address, step):
         bus.write_byte_data(address, 0x01, 0b00101100)
         time.sleep(timeDelay)
         print("1 & 3 high")
-        # 1 & 4 high
-        bus.write_byte_data(address, 0x01, 0b01001100)
-        time.sleep(timeDelay)
-        print("1 & 4 high")
+
+    bus.write_byte_data(address, 0x01, 0b00000100)
