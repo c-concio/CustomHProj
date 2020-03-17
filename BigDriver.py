@@ -7,8 +7,8 @@ dirPin = 7  # direction pin     0: Forward  1: Backward
 stepPin8 = 8  # step GPIO pin     MSB
 stepPin10 = 10  # step GPIO pin
 stepPin12 = 12  # step GPIO pin
-stepPin14 = 14  # step GPIO pin     LSB
-stepPinControl = 16  # Designated pin (1 to drive, 0 to stop drive).
+stepPin32 = 32  # step GPIO pin     LSB
+stepPinControl = 37  # Designated pin (1 to drive, 0 to stop drive).
 
 CW = 1  # clockwise Rotation
 CCW = 0  # Counterclockwise Rotation
@@ -19,17 +19,17 @@ GPIO.setup(dirPin, GPIO.OUT)
 GPIO.setup(stepPin8, GPIO.OUT)
 GPIO.setup(stepPin10, GPIO.OUT)
 GPIO.setup(stepPin12, GPIO.OUT)
-GPIO.setup(stepPin14, GPIO.OUT)
+GPIO.setup(stepPin32, GPIO.OUT)
 GPIO.setup(stepPinControl, GPIO.OUT)
 
 timeDelay = 0.01
 
 """
 Work in term of the decoder
+stepPin also means which ID of the cylinder.
 """
 
-
-def driveBigMotorForward(directionPin, stepPin, step):
+def driveBigMotorForward(stepPin, step):
     binaryStringStepPin = format(stepPin, '#06b')
     binaryNumArrayStepPin = list(binaryStringStepPin)
 
@@ -38,7 +38,7 @@ def driveBigMotorForward(directionPin, stepPin, step):
     setup.GPIO_High_Low(stepPin8, int(binaryNumArrayStepPin[0]))
     setup.GPIO_High_Low(stepPin10, int(binaryNumArrayStepPin[1]))
     setup.GPIO_High_Low(stepPin12, int(binaryNumArrayStepPin[2]))
-    setup.GPIO_High_Low(stepPin14, int(binaryNumArrayStepPin[3]))
+    setup.GPIO_High_Low(stepPin32, int(binaryNumArrayStepPin[3]))
 
     for i in range(0, step):
 
@@ -48,12 +48,12 @@ def driveBigMotorForward(directionPin, stepPin, step):
         """
 
         # Forward drive block
-        GPIO.output(directionPin, GPIO.OUT, GPIO.LOW)
+        GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
         GPIO.output(stepPinControl, GPIO.OUT, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
-        GPIO.output(directionPin, GPIO.OUT, GPIO.LOW)
+        GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
         GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
 
         time.sleep(timeDelay)
@@ -72,7 +72,7 @@ def driveBigMotorForward(directionPin, stepPin, step):
 
     GPIO.cleanup()
 
-def driveBigMotorBackward(directionPin, stepPin, step):
+def driveBigMotorBackward(stepPin, step):
 
     binaryStringStepPin = format(stepPin, '#06b')
     binaryNumArrayStepPin = list(binaryStringStepPin)
@@ -82,7 +82,7 @@ def driveBigMotorBackward(directionPin, stepPin, step):
     setup.GPIO_High_Low(stepPin8, int(binaryNumArrayStepPin[0]))
     setup.GPIO_High_Low(stepPin10, int(binaryNumArrayStepPin[1]))
     setup.GPIO_High_Low(stepPin12, int(binaryNumArrayStepPin[2]))
-    setup.GPIO_High_Low(stepPin14, int(binaryNumArrayStepPin[3]))
+    setup.GPIO_High_Low(stepPin32, int(binaryNumArrayStepPin[3]))
 
     for i in range(0, step):
         """
@@ -91,12 +91,12 @@ def driveBigMotorBackward(directionPin, stepPin, step):
         """
 
         # Forward drive block
-        GPIO.output(directionPin, GPIO.OUT, GPIO.HIGH)
+        GPIO.output(dirPin, GPIO.OUT, GPIO.HIGH)
         GPIO.output(stepPinControl, GPIO.OUT, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
-        GPIO.output(directionPin, GPIO.OUT, GPIO.HIGH)
+        GPIO.output(dirPin, GPIO.OUT, GPIO.HIGH)
         GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
 
         # GPIO.OUT(stepPin, GPIO.HIGH)

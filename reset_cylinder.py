@@ -10,6 +10,11 @@ def i2cResetCylinder(address, step):
 
     i2c.backwardStep(address, step)
 
+    # """
+    # Steps to be fed in. better to update database on hardware side.
+    # Will do (steps fed - remaining amount). Then backward this steps.
+    # """
+    #
     # connect = sqlite3.connect(r"database/pysqlite.db")
     # cursor = connect.cursor()
     #
@@ -22,11 +27,17 @@ def i2cResetCylinder(address, step):
     #
     # for ingredient in ingredientList:
     #     if(ingredient[0] == address):
-    #         i2c.backwardStep(ingredient[1])
+    #         total = step - ingredient[1]
+    #         i2c.backwardStep(address, total)
+    #
+    #         sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
+    #         data = (step, ingredient[0])
+    #         cursor.execute(sqlCylinderNew, data)
+    #         cursor.commit()
     #
     # cursor.close()
 
-def bigResetCylinder(dirPin, stepPin, step):
+def bigResetCylinder(stepPin, step):
 
     """
     :param dirPin: It's the one pin. So hardcorded pin set to either 1 (clockwise) or 0 (counter clockwise).
@@ -35,7 +46,7 @@ def bigResetCylinder(dirPin, stepPin, step):
     :return:
     """
 
-    BigDriver.driveBigMotorBackward(dirPin, stepPin, step)
+    BigDriver.driveBigMotorBackward(stepPin, step)
 
     # connect = sqlite3.connect(r"database/pysqlite.db")
     # cursor = connect.cursor()
@@ -48,4 +59,13 @@ def bigResetCylinder(dirPin, stepPin, step):
     # ingredientList = cursor.fetchall()
     #
     # for ingredient in ingredientList:
-    #     if(ingredient[0] == )
+    #     if(ingredient[0] == stepPin):
+    #         total = step - ingredient[1]
+    #         BigDriver.driveBigMotorForward(stepPin, total)
+    #
+    #         sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
+    #         data = (step, ingredient[0])
+    #         cursor.execute(sqlCylinderNew, data)
+    #         cursor.commit()
+    #
+    # cursor.close()

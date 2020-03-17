@@ -13,14 +13,22 @@ bus = smbus.SMBus(1)
 GPIO ON THE PI TO CONTROL THE SOLENOIDS' PINCH VALVES
 NOT WHICH PINS IS YET TO BE SET
 """
-solenoidPin20 = 20
-solenoidPin21 = 21
+solenoidPin16 = 16
+solenoidPin18 = 18
+solenoidPin22 = 22
+solenoidPin24 = 24
+solenoidPin26 = 26
+solenoidPin28 = 28
 GPIO.setmode(GPIO.BOARD)  # Uses Physical pins on the Raspberry, NOT the GPIO.
-GPIO.setup(solenoidPin20, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin21, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin16, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin18, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin22, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin24, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin26, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(solenoidPin28, GPIO.OUT, initial=GPIO.LOW)
 
 """
-GPIO Pins for the Big Motor. GOES TO DECODER. NOT SET IN STONE YET.
+GPIO Pins for the Big Motor. GOES TO DEMUX. NOT SET IN STONE YET.
 """
 dirPin = 7  # direction pin
 
@@ -163,10 +171,10 @@ def getUserData():
             used for it. ONLY for the step pin's select line
             """
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            pinchValveOpen(solenoidPin20)
+            pinchValveOpen(solenoidPin16)
             BigDriver.driveBigMotorForward(dirPin, combination[0] - 1, stepCount)
             BigDriver.driveBigMotorBackward(dirPin, combination[0] - 1, 10)  # Don't know if Big Cylinder use
-            pinchValveClose(solenoidPin20)
+            pinchValveClose(solenoidPin16)
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
