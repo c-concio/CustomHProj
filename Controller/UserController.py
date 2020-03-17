@@ -1,4 +1,5 @@
 import kivy
+import pymysql
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -49,7 +50,6 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.step4.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
-
 
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
@@ -292,6 +292,10 @@ def amountScreenDone():
     resetSizeScreen()
     resetBaseScreen()
     resetFlavorScreen()
+    # Push data to online database
+    updateOnlineDatabase()
+    # Reset temporary table
+    reset_temporary_table()
 
 
 def printOut():
@@ -413,6 +417,40 @@ def buildAmountScreenStackLayout(amountScreen):
 
 def updatePie(instance, value):
     instance.parent.pie.pie_chart_value = instance.value
+
+def updateOnlineDatabase():
+    # Get ingredients from temporary table
+    local_conn = DatabaseClass.conn
+    local_cursor = local_conn.cursor()
+    temporary = "SELECT ingredient FROM temporary;"
+    local_cursor.execute(temporary)
+    ingredients = local_cursor.fetchall()
+
+    conn = pymysql.connect(host='127.0.0.1',
+                           user='root',
+                           password='customh',
+                           db='cylinder')
+
+    for ingredient in ingredients:
+        print(ingredient[0])
+        # Put ordered ingredients to online database
+        insert = "INSERT INTO online(ingredient) VALUES(?);"
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
+        conn.commit()
+
+    local_cursor.close()
+    cursor.close()
+
+def reset_temporary_table():
+    conn = DatabaseClass.conn
+    cursor = conn.cursor()
+
+    sql = "DELETE FROM temporary;"
+
+    cursor.execute(sql)
+    conn.commit()
+    cursor.close()
 
 
 # -------------------------------------------------------------------
