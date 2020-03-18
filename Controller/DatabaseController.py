@@ -90,7 +90,7 @@ def ascend_cylinders():
     cursor.close()
 
 
-   #function to get order from temporary tabel
+# function to get order from temporary tabel
 def getOrder():
     cursor = DatabaseClass.conn.cursor()
     cursor.execute("SELECT ingredient FROM temporary")
