@@ -9,13 +9,13 @@ import BigDriver as BigDriver
 # Initialization of the i2c bus.
 bus = smbus.SMBus(1)
 
-dir1 = 11
-dir2 = 19
+dir1 = 6
+dir2 = 13
 
-stepPin1 = 13
-stepPin2 = 21
+stepPin1 = 12
+stepPin2 = 16
 
-solenoidPin16 = 16
+solenoidPin26 = 26
 solenoidPin18 = 18
 
 GPIO.setmode(GPIO.BOARD)
@@ -23,7 +23,7 @@ GPIO.setup(dir1, GPIO.OUT)
 GPIO.setup(dir2, GPIO.OUT)
 GPIO.setup(stepPin1, GPIO.OUT)
 GPIO.setup(stepPin2, GPIO.OUT)
-GPIO.setup(solenoidPin16, GPIO.OUT)
+GPIO.setup(solenoidPin26, GPIO.OUT)
 GPIO.setup(solenoidPin18, GPIO.OUT)
 
 def Test():
@@ -124,7 +124,7 @@ def Test():
             """
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
 
-            GPIO.output(solenoidPin16, GPIO.OUT, GPIO.HIGH)
+            GPIO.output(solenoidPin26, GPIO.OUT, GPIO.HIGH)
 
             # Forward
             for i in range(0, stepCount):
@@ -152,7 +152,7 @@ def Test():
                 time.sleep(0.01)
             GPIO.cleanup()
 
-            GPIO.output(solenoidPin16, GPIO.OUT, GPIO.LOW)
+            GPIO.output(solenoidPin26, GPIO.OUT, GPIO.LOW)
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
