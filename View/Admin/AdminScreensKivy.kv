@@ -51,9 +51,11 @@
     BoxLayout:
         orientation: 'vertical'
 
-        AnchorLayout:
+        BoxLayout:
             size_hint_y: None
             height: 38
+            orientation: 'horizontal'
+
             canvas:
                 Color:
                     rgba: 0.1, 0.1, 0.1, 1
@@ -61,65 +63,55 @@
                     pos: self.pos
                     size: self.size
 
-            BoxLayout:
+            Button:
+                id: back
+                text: 'Back'
+                size_hint_x: None
+                width: 80
                 size_hint_y: None
-                height: 38
-                orientation: 'horizontal'
-                size_hint_max_x: 1325
+                height: 36
 
-
-
-                Button:
-                    id: back
-                    text: 'Back'
-                    size_hint_x: None
-                    width: 80
-                    size_hint_y: None
-                    height: 36
+            BoxLayout:
+                orientation: 'vertical'
 
                 BoxLayout:
-                    orientation: 'vertical'
+                    orientation: 'horizontal'
+                    size_hint_x: None
+                    width: self.minimum_width
+                    pos_hint: {'right': 1}
 
-                    BoxLayout:
-                        orientation: 'horizontal'
+                    ToggleButton:
+                        id: sort
+                        text: 'Sort'
                         size_hint_x: None
-                        width: self.minimum_width
-                        pos_hint: {'right': 1}
+                        width: 45
+                        size_hint_y: None
+                        height: 36
 
-                        ToggleButton:
-                            id: sort
-                            text: 'Sort'
-                            size_hint_x: None
-                            width: 45
-                            size_hint_y: None
-                            height: 36
+                    Button:
+                        id: editIngredient
+                        text: 'Edit Ingredients'
+                        size_hint_x: None
+                        width: 120
+                        size_hint_y: None
+                        height: 36
 
-                        Button:
-                            id: editIngredient
-                            text: 'Edit Ingredients'
-                            size_hint_x: None
-                            width: 120
-                            size_hint_y: None
-                            height: 36
 
-        AnchorLayout:
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            size: self.size
 
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                size: self.size
-                size_hint_max_x: 1350
-
-                GridLayout:
-                    size_hint_y: None
-                    size_hint_x: 1
-                    padding: [15]
-                    id: gridLayout
-                    cols: 3
-                    row_force_default: True
-                    row_default_height: 150
-                    valign: 'middle'
-                    spacing: [25, 40]
+            GridLayout:
+                size_hint_y: None
+                size_hint_x: 1
+                padding: [15]
+                id: gridLayout
+                cols: 3
+                row_force_default: True
+                row_default_height: 150
+                valign: 'middle'
+                spacing: [15, 15]
 
 <InventoryItemTemplate>:
     cylinderButton: cylinder
@@ -127,41 +119,29 @@
     percentLabel: percentage
     progressBar: progress
     resetButton: reset
-
     orientation: 'vertical'
-    padding: 5
-
-    canvas:
-        Color:
-            rgba: 0.3, 0.3, 0.3, 1
-        Line:
-            width: 2
-            rectangle: self.x, self.y, self.width, self.height
-
 
     Button:
         id: cylinder
         text: 'Cylinder Name'
         text_size: self.size
-        halign: 'center'
+        halign: 'left'
         valign: 'middle'
         background_color: [0, 0, 0, 0]
-        bold: True
 
     Spinner:
         id: ingredient
         text: 'Default Ingredient'
         text_size: self.size
-        halign: 'center'
+        halign: 'left'
         valign: 'middle'
-        background_normal: ''
-        background_color: [0.28, 0.28, 0.28, 1]
+        background_color: [0, 0, 0, 0]
 
     Label:
         id: percentage
         text: "Percentage"
         text_size: self.size
-        halign: 'center'
+        halign: 'left'
         valign: 'middle'
         background_color: [0, 0, 0, 0]
 
@@ -173,8 +153,6 @@
     Button:
         id: reset
         text: 'Reset'
-        background_normal: ''
-        background_color: [0.135, 0.135, 0.135, 1]
 
 <InventoryPopupButtonLayout>:
     ingredientButton: ingredient
@@ -195,18 +173,3 @@
             size_hint_x: None
             size: (40, 40)
             text: 'X'
-
-<AddInventoryPopupLayout>:
-    confirmButton: confirmButton
-    declineButton: declineButton
-
-    BoxLayout:
-        orientation: 'horizontal'
-
-        Button:
-            id: confirmButton
-            text: "Yes"
-
-        Button:
-            id: declineButton
-            text: "No"
