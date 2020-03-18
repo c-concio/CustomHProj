@@ -53,12 +53,9 @@ def create_table():
                                         ); """
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
-                                                        base text,
-                                                        base_cylinder_id integer,
-                                                        base_mL integer,
-                                                        flavor text,
-                                                        flavor_cylinder_id integer,
-                                                        flavor_mL integer
+                                                        ingredient TEXT,
+                                                        cylinder_id,
+                                                        ml
                                                 ); """
 
         sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredients (
@@ -226,10 +223,10 @@ def cylinder_setup():
     cursor.close()
 
 def main():
-    # create_table()
-
     create_table()
-    cylinder_setup()
+
+    # create_table()
+    # cylinder_setup()
 
     # print(select_first_row_from_condition('Ketchup'))
 
@@ -249,10 +246,10 @@ def main():
     # connect = sqlite3.connect(r"database\pysqlite.db")
     # cursor = connect.cursor()
     #
-    # sql = "SELECT * FROM cylinder;"
+    # sql = "DROP TABLE temporary;"
     #
     # cursor.execute(sql)
-    #
+
     # bases = cursor.fetchall()
     # print("Table contents:")
     #
@@ -261,30 +258,30 @@ def main():
     #
     # cursor.close()
 
-    serverName = r'LAPTOP-1682377I\SQLEXPRESS'
-    print(serverName)
-
-    # conn = pyodbc.connect('Driver={SQL SERVER};'
-    #                       'Server=LAPTOP-1682377I\SQLEXPRESS;'
-    #                       'Database=CustomHDatabase;'
-    #                       'Trusted_Connection=yes;')
-
-    create = 'CREATE TABLE cylinder(id int NOT NULL AUTO_INCREMENT, ingredient text, type text, steps int, PRIMARY KEY(id));'
-    conn = pymysql.connect(host='127.0.0.1',
-                                port=3306,
-                                 user='root',
-                                 password='customh',
-                                 db='cylinder')
-    sql = 'SELECT * FROM cylinder;'
-    #insert = '''INSERT INTO cylinder(ingredient, steps, type) VALUES('Mustard', 80, 'Base');'''
-    cursor = conn.cursor()
-    #cursor.execute(insert)
-    #conn.commit()
-    cursor.execute(sql)
-
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
+    # serverName = r'LAPTOP-1682377I\SQLEXPRESS'
+    # print(serverName)
+    #
+    # # conn = pyodbc.connect('Driver={SQL SERVER};'
+    # #                       'Server=LAPTOP-1682377I\SQLEXPRESS;'
+    # #                       'Database=CustomHDatabase;'
+    # #                       'Trusted_Connection=yes;')
+    #
+    # create = 'CREATE TABLE cylinder(id int NOT NULL AUTO_INCREMENT, ingredient text, type text, steps int, PRIMARY KEY(id));'
+    # conn = pymysql.connect(host='127.0.0.1',
+    #                             port=3306,
+    #                              user='root',
+    #                              password='customh',
+    #                              db='cylinder')
+    # sql = 'SELECT * FROM cylinder;'
+    # #insert = '''INSERT INTO cylinder(ingredient, steps, type) VALUES('Mustard', 80, 'Base');'''
+    # cursor = conn.cursor()
+    # #cursor.execute(insert)
+    # #conn.commit()
+    # cursor.execute(sql)
+    #
+    # rows = cursor.fetchall()
+    # for row in rows:
+    #     print(row)
 
 
 

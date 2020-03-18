@@ -75,8 +75,8 @@ def initialize_buttons():
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: enableStep4())
-    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: enableStep5())
-    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: loadOrder())
+#    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: enableStep5())
+#    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: loadOrder())
 
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
@@ -86,7 +86,7 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
-    UserModel.splitScreen.baseScreen.sauceOfMonth.bind(on_press=lambda x: showPopupWindow())
+    UserModel.splitScreen.baseScreen.flavourOfMonthButton.bind(on_press=lambda x: showPopupWindow())
 
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
@@ -96,10 +96,10 @@ def initialize_buttons():
     # UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
-    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
+    # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
 
-    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
-    UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+    # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
+    # UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
     UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: loadingPopupWindow())
 
@@ -461,19 +461,20 @@ def updateOnlineDatabase():
     temporary = "SELECT ingredient FROM temporary;"
     local_cursor.execute(temporary)
     ingredients = local_cursor.fetchall()
+    try:
+        conn = pymysql.connect(host='127.0.0.1',
+                               user='root',
+                               password='customh',
+                               db='cylinder')
 
-    conn = pymysql.connect(host='127.0.0.1',
-                           user='root',
-                           password='customh',
-                           db='cylinder')
-
-    for ingredient in ingredients:
-        print(ingredient[0])
-        # Put ordered ingredients to online database
-        insert = "INSERT INTO online(ingredient) VALUES(?);"
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
-        conn.commit()
+        for ingredient in ingredients:
+            print(ingredient[0])
+            # Put ordered ingredients to online database
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
+            conn.commit()
+    except:
+        print("Proxy not setup, could not push temporary table to online database")
 
     local_cursor.close()
     cursor.close()
