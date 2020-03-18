@@ -11,13 +11,22 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
+from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+
 from kivy.uix.widget import Widget
+
+from kivy.graphics import Color, Ellipse, Rectangle
+from kivy.core.text import Label as CoreLabel
+from kivy.animation import Animation
+
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -74,14 +83,19 @@ class SizeScreen(Screen):
             self.nextButton.colour = (1, 1, 1, 0.6)
 
 
+
 class BaseScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
+    flavourOfMonthButton = ObjectProperty()
     baseList = []
     baseToggleList = []
 
     # backButton = ObjectProperty(None)
+
+    # def btn(self):
+    #     UserController.showPopupWindow()
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
@@ -144,6 +158,15 @@ class BaseScreen(Screen):
                 if button.text not in self.baseList:
                     button.disabled = False
                     # print("This button recovered: " + button.text)
+
+
+class SauceOfMonth(Screen):
+    doneButton: ObjectProperty(None)
+    closeButton: ObjectProperty(None)
+    # title: ObjectProperty(None)
+    # separator_height: ObjectProperty()
+
+    # TODO get sauce choices from db
 
 
 class FlavorScreen(Screen):
@@ -209,10 +232,6 @@ class FlavorScreen(Screen):
                     # print("This button recovered: " + button.text)
 
 
-class SauceOfMonth(Screen):
-    pass
-
-
 class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
     scroll = ObjectProperty(None)
@@ -256,20 +275,51 @@ class AmountScreen1(Screen):
         # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
 
 
+class ConfirmScreen(Screen):
+    orderButton = ObjectProperty(None)
+    confirmLayout = ObjectProperty(None)
+
+
+class loadingPopup(BoxLayout):
+    gif = ObjectProperty(None)
+
+
+# class CProgressBar(Label):
+#     angle = NumericProperty(0)
+#     startCount = NumericProperty(20)
+#     Count = NumericProperty()
+#
+#     def __init__(self, **kwargs):
+#         super(CProgressBar, self).__init__(**kwargs)
+#         Clock.schedule_once(self.set_Circle, 0.1)
+#         self.Count = self.startCount
+#
+#     def set_Circle(self, dt):
+#         self.angle = self.angle + dt * 360
+#         if self.angle >= 360:
+#             self.angle = 0
+#             self.Count = self.Count - 1
+#         if self.Count > 0:
+#             Clock.schedule_once(self.set_Circle, 1.0 / 360)
+
+
 class SplitScreen(Screen):
     carouselWidget = ObjectProperty(None)
     step1 = ObjectProperty(None)
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
+    step5 = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
+        self.sauceOfMonth = SauceOfMonth()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
+        self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
         self.name = name
 
@@ -331,6 +381,10 @@ Builder.load_file('View/User/UserScreensKivy.kv')
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 sizeScreen = SizeScreen(name="Size Screen")
+
+# sauceOfMonthScreen = SauceOfMonth(name="Flavor of The Month")
+# loadingScreen = LoadingScreen(name="Loading Screen")
+
 # baseScreen = BaseScreen(name="Base Screen")
 # flavorScreen = FlavorScreen(name="Flavor Screen")
 # amountScreen = AmountScreen(name="Amount Screen")
