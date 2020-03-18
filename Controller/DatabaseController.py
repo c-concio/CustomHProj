@@ -149,3 +149,54 @@ def update_steps_amount(id, amount):
     DatabaseClass.conn.commit()
     cursor.close()
 
+
+
+def select_first_row_from_condition(ingredient):
+    try:
+        cursor = DatabaseClass.conn.cursor()
+
+        cursor.execute("SELECT ID FROM(SELECT * FROM (SELECT *, "
+                       "row_number() over (PARTITION BY ingredient ORDER BY steps DESC) as rownum "
+                       "FROM cylinder"
+                       ") cylinder "
+                       "WHERE ingredient = ? AND rownum = 1);", (ingredient,))
+
+        rows = cursor.fetchone()
+        print("Fetched first row")
+
+        cursor.close()
+
+        for row in rows:
+            # print(row)
+            return row
+
+    except sqlite3.Error as e:
+        print("Failed to select first row", e)
+
+    # finally:
+    #     if (connect):
+    #         connect.close()
+
+def update_temporary_cylinder(ingredient):
+    try:
+        cursor = DatabaseClass.conn.cursor()
+
+        cylinder_id = 0
+
+        try:
+            # select the cylinder id with ingredient name
+            cylinder_id = select_first_row_from_condition(ingredient)
+            print("Cylinder id", cylinder_id)
+
+        except:
+            print("No corresponding cylinder with this name")
+
+        sql = "UPDATE temporary SET cylinder_id = ? WHERE ingredient = ?"
+        cursor.execute(sql, (cylinder_id, ingredient))
+
+        print("Updated single row to temporary table")
+        # cursor.close()
+    except sqlite3.Error as e:
+        print("Failed to update temporary table. ", e)
+    return cursor.lastrowid
+

@@ -1,6 +1,8 @@
 import kivy
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
@@ -8,14 +10,19 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+
+from kivy.uix.widget import Widget
+
 from kivy.graphics import Color, Ellipse, Rectangle
 from kivy.core.text import Label as CoreLabel
 from kivy.animation import Animation
@@ -65,10 +72,16 @@ class SizeScreen(Screen):
             except:
                 print("Could not remove base, it did not exist")
 
+        # Next button enable/disable
         if len(self.sizeList) < 1:
             self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1, 1, 1, 0)
         else:
             self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1, 1, 1, 0.6)
+
 
 
 class BaseScreen(Screen):
@@ -127,8 +140,12 @@ class BaseScreen(Screen):
 
         if len(self.baseList) < 1:
             self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1, 1, 1, 0)
         else:
             self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1, 1, 1, 0.6)
 
         # Disable other buttons when 2 bases are chosen
         if len(self.baseList) >= 2:
@@ -165,6 +182,7 @@ class FlavorScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(FlavorScreen, self).__init__(**kwargs)
+        self.nextButton.colour = (1, 1, 1, 0.6)
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
@@ -215,6 +233,18 @@ class FlavorScreen(Screen):
 
 
 class AmountScreen(Screen):
+    doneButton = ObjectProperty(None)
+    scroll = ObjectProperty(None)
+    box = ObjectProperty(None)
+    built = False
+    flavorLayoutList = []
+
+
+class AmountGridLayout(GridLayout):
+    pass
+
+
+class AmountScreen1(Screen):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
@@ -226,10 +256,12 @@ class AmountScreen(Screen):
     base2 = ObjectProperty(None)
     baseChartLayout = ObjectProperty(None)
     baseChart = ObjectProperty(None)
+    baseChartExist = True
     flavorLayoutList = []
 
     def __init__(self):
         super().__init__()
+        self.doneButton.colour = (1, 1, 1, 0.6)
         # TODO: uncomment
         # self.count = 0
         # self.label_text = str(self.count)
@@ -241,52 +273,6 @@ class AmountScreen(Screen):
 
         # TODO: look inside DB and add flavors
         # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
-
-    def reload(self):
-
-        # Remove slider if only 1 base chosen
-        if (len(splitScreen.baseScreen.baseList) <= 1):
-            self.sliderTemplateGrid.remove_widget(self.slider)
-            self.sliderExist = False
-            # print(len(splitScreen.baseScreen.baseList))
-
-        # Add slider when slider was removed and chosen bases becomes 2
-        if (len(splitScreen.baseScreen.baseList) > 1 and self.sliderExist == False):
-            self.sliderTemplateGrid.add_widget(self.slider)
-            # print("Added slider")
-
-        try:
-            self.base1.text = splitScreen.baseScreen.baseList[0]
-        except:
-            self.base1.text = ""
-            print("Nothing inside list")
-
-        try:
-            self.base2.text = splitScreen.baseScreen.baseList[1]
-        except:
-            self.base2.text = ""
-            print("No second base was chosen")
-
-        # Show flavors based on user selection
-        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
-            try:
-                self.flavorLayoutList.append(FlavorsLayout(flavor))
-                self.sliderTemplateGrid.add_widget(self.flavorLayoutList[i])
-            except:
-                print("Flavor already added")
-
-    def delete(self):
-        # Delete flavors when user deselects flavors
-        for i, flavor in enumerate(splitScreen.flavorScreen.flavorList):
-            try:
-                self.sliderTemplateGrid.remove_widget(self.flavorLayoutList[i])
-                self.flavorLayoutList.remove(FlavorsLayout(flavor))
-            except:
-                print("Flavor already removed")
-
-        if (len(splitScreen.baseScreen.baseList) <= 1):
-            self.baseChartLayout.remove_widget(self.baseChart)
-            print("Removed chart")
 
 
 class ConfirmScreen(Screen):
@@ -317,8 +303,6 @@ class loadingPopup(BoxLayout):
 #             Clock.schedule_once(self.set_Circle, 1.0 / 360)
 
 
-
-
 class SplitScreen(Screen):
     carouselWidget = ObjectProperty(None)
     step1 = ObjectProperty(None)
@@ -340,11 +324,7 @@ class SplitScreen(Screen):
         self.name = name
 
 
-class BaseSliderLayout(AnchorLayout):
-    pass
-
-
-class FlavorsLayout(BoxLayout):
+class FlavorsLayout(GridLayout):
     flavorAddB = ObjectProperty(None)
     flavorRemoveB = ObjectProperty(None)
     label_text = ObjectProperty(None)
@@ -357,6 +337,36 @@ class FlavorsLayout(BoxLayout):
         self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
         self.flavorName.text = name
 
+
+class BaseGridTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class BaseGridTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
+
+
+class BaseStackTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class AmountPieChart(Widget):
+    pass
+
+
+class BaseStackTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
+    pie = AmountPieChart
+
+class DoneRoundedButton1(Button):
+    pass
+
+class DoneRoundedButton2(Button):
+    pass
 
 # -------------------------------------------------------------------
 #                       Screen Manager
@@ -371,8 +381,10 @@ Builder.load_file('View/User/UserScreensKivy.kv')
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
 sizeScreen = SizeScreen(name="Size Screen")
+
 # sauceOfMonthScreen = SauceOfMonth(name="Flavor of The Month")
 # loadingScreen = LoadingScreen(name="Loading Screen")
+
 # baseScreen = BaseScreen(name="Base Screen")
 # flavorScreen = FlavorScreen(name="Flavor Screen")
 # amountScreen = AmountScreen(name="Amount Screen")
