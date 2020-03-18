@@ -332,7 +332,7 @@ class SplitScreen(Screen):
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
-        # self.flavorOfMonthScreen = FlavorOfMonth()
+        self.sauceOfMonth = SauceOfMonth()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
         self.confirmScreen = ConfirmScreen()
