@@ -9,95 +9,24 @@ import BigDriver as BigDriver
 # Initialization of the i2c bus.
 bus = smbus.SMBus(1)
 
-"""
-GPIO ON THE PI TO CONTROL THE SOLENOIDS' PINCH VALVES
-NOT WHICH PINS IS YET TO BE SET
-"""
+dir1 = 11
+dir2 = 19
+
+stepPin1 = 13
+stepPin2 = 21
+
 solenoidPin16 = 16
 solenoidPin18 = 18
-solenoidPin22 = 22
-solenoidPin24 = 24
-solenoidPin26 = 26
-solenoidPin28 = 28
-GPIO.setmode(GPIO.BOARD)  # Uses Physical pins on the Raspberry, NOT the GPIO.
-GPIO.setup(solenoidPin16, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin18, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin22, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin24, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin26, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(solenoidPin28, GPIO.OUT, initial=GPIO.LOW)
 
-"""
-GPIO Pins for the Big Motor. GOES TO DEMUX. NOT SET IN STONE YET.
-"""
-dirPin = 7  # direction pin
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(dir1, GPIO.OUT)
+GPIO.setup(dir2, GPIO.OUT)
+GPIO.setup(stepPin1, GPIO.OUT)
+GPIO.setup(stepPin2, GPIO.OUT)
+GPIO.setup(solenoidPin16, GPIO.OUT)
+GPIO.setup(solenoidPin18, GPIO.OUT)
 
-stepPin8 = 8  # step GPIO pin
-stepPin10 = 10  # step GPIO pin
-stepPin12 = 12  # step GPIO pin
-
-CW = 1  # clockwise Rotation
-CCW = 0  # Counterclockwise Rotation
-SPR = 287 * 200  # Steps per revolution (360 / 1.8)
-
-GPIO.setup(dirPin, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(stepPin8, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(stepPin10, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(stepPin12, GPIO.OUT, initial=GPIO.LOW)
-
-# #Default Address of each driver. Will have to set up different address for each. See 7.5.2 for the DRV8847SPWR spec sheet.
-
-
-"""
-ADDRESS (ID in Database) 1 - 12 --> BASES
-ADDRESS (ID in Database) 13 - 34 --> FLAVOURS (i2c)
-"""
-MODULE_ADDRESS13 = 0x0D
-MODULE_ADDRESS14 = 0x0E
-MODULE_ADDRESS15 = 0x0F
-MODULE_ADDRESS16 = 0x10
-MODULE_ADDRESS17 = 0x11
-MODULE_ADDRESS18 = 0x12
-MODULE_ADDRESS19 = 0x13
-MODULE_ADDRESS20 = 0x14
-MODULE_ADDRESS21 = 0x15
-MODULE_ADDRESS22 = 0x16
-MODULE_ADDRESS23 = 0x17
-MODULE_ADDRESS24 = 0x18
-MODULE_ADDRESS25 = 0x19
-MODULE_ADDRESS26 = 0x1A
-MODULE_ADDRESS27 = 0x1B
-MODULE_ADDRESS28 = 0x1C
-MODULE_ADDRESS29 = 0x1D
-MODULE_ADDRESS30 = 0x1E
-MODULE_ADDRESS31 = 0x1F
-MODULE_ADDRESS32 = 0x20
-MODULE_ADDRESS33 = 0x21
-MODULE_ADDRESS34 = 0x22
-
-"""
-REFER TO 7.6 OF THE DRV8847SPWR SPEC SHEET
-HOWEVER, WILL HAVE TO TEST THE PERFORMANCE. For now, test it to see if it works. Put time delay to see ticks?
-"""
-
-
-def run():
-    getUserData()
-
-
-def pinchValveOpen(pinNumber):
-    GPIO.output(pinNumber, GPIO.HIGH)
-
-def pinchValveClose(pinNumber):
-    GPIO.output(pinNumber, GPIO.LOW)
-
-"""
-Get Data from user and dispense the selections
-IDs from the database starts at 1.
-"""
-
-
-def getUserData():
+def Test():
     connect = sqlite3.connect(r"database/pysqlite.db")
     cursor = connect.cursor()
 
@@ -135,9 +64,32 @@ def getUserData():
             will yield the correct driver to drive. This is for the Big Motor as i2c was not
             used for it. ONLY for the step pin's select line
             """
+            # Forward
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            BigDriver.driveBigMotorForward(dirPin, combination[0] - 1, stepCount)
-            BigDriver.driveBigMotorBackward(dirPin, combination[0] - 1, 10)  # Don't know if Big Cylinder use
+            for i in range(0, stepCount):
+                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.OUT, GPIO.HIGH)
+
+                time.sleep(0.01)
+
+                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.OUT, GPIO.LOW)
+
+                time.sleep(0.01)
+            GPIO.cleanup()
+
+            # Backward
+            for i in range(0, 5):
+                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.OUT, GPIO.HIGH)
+
+                time.sleep(0.01)
+
+                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.OUT, GPIO.LOW)
+
+                time.sleep(0.01)
+            GPIO.cleanup()
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
@@ -171,10 +123,36 @@ def getUserData():
             used for it. ONLY for the step pin's select line
             """
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            pinchValveOpen(solenoidPin16)
-            BigDriver.driveBigMotorForward(dirPin, combination[0] - 1, stepCount)
-            BigDriver.driveBigMotorBackward(dirPin, combination[0] - 1, 10)  # Don't know if Big Cylinder use
-            pinchValveClose(solenoidPin16)
+
+            GPIO.output(solenoidPin16, GPIO.OUT, GPIO.HIGH)
+
+            # Forward
+            for i in range(0, stepCount):
+                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.OUT, GPIO.HIGH)
+
+                time.sleep(0.01)
+
+                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.OUT, GPIO.LOW)
+
+                time.sleep(0.01)
+            GPIO.cleanup()
+
+            # Backward
+            for i in range(0, 5):
+                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.OUT, GPIO.HIGH)
+
+                time.sleep(0.01)
+
+                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.OUT, GPIO.LOW)
+
+                time.sleep(0.01)
+            GPIO.cleanup()
+
+            GPIO.output(solenoidPin16, GPIO.OUT, GPIO.LOW)
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
@@ -202,9 +180,47 @@ def getUserData():
 
             # Call the driver and rotate steps to dispense.
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            i2c.forwardStep(MODULE_ADDRESS13, stepCount)
-            i2c.backwardStep(MODULE_ADDRESS13, 3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
 
+            for i in range(0, stepCount):
+                # Driving forward
+                # 1 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00101100)
+                time.sleep(0.01)
+                print("1 & 3 high")
+                # 2 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00110100)
+                time.sleep(0.01)
+                print("2 & 3 high")
+                # 2 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01010100)
+                time.sleep(0.01)
+                print("2 & 4 high")
+                # 1 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01001100)
+                time.sleep(0.01)
+                print("1 & 4 high")
+
+            bus.write_byte_data(0x23, 0x01, 0b00000100)
+
+            for i in range(0, stepCount):
+                # 1 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01001100)
+                time.sleep(0.01)
+                print("1 & 4 high")
+                # 2 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01010100)
+                time.sleep(0.01)
+                print("2 & 4 high")
+                # 2 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00110100)
+                time.sleep(0.01)
+                print("2 & 3 high")
+                # 1 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00101100)
+                time.sleep(0.01)
+                print("1 & 3 high")
+
+            bus.write_byte_data(0x23, 0x01, 0b00000100)
             """
             UPDATING THE DATABASE AFTER DISPENSING
             """
@@ -230,9 +246,47 @@ def getUserData():
 
             # Call the driver and rotate steps to dispense.
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            i2c.forwardStep(MODULE_ADDRESS14, stepCount)
-            i2c.backwardStep(MODULE_ADDRESS14, 3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
 
+            for i in range(0, stepCount):
+                # Driving forward
+                # 1 & 3 high
+                bus.write_byte_data(0x24, 0x01, 0b00101100)
+                time.sleep(0.01)
+                print("1 & 3 high")
+                # 2 & 3 high
+                bus.write_byte_data(0x24, 0x01, 0b00110100)
+                time.sleep(0.01)
+                print("2 & 3 high")
+                # 2 & 4 high
+                bus.write_byte_data(0x24, 0x01, 0b01010100)
+                time.sleep(0.01)
+                print("2 & 4 high")
+                # 1 & 4 high
+                bus.write_byte_data(0x24, 0x01, 0b01001100)
+                time.sleep(0.01)
+                print("1 & 4 high")
+
+            bus.write_byte_data(0x24, 0x01, 0b00000100)
+
+            for i in range(0, stepCount):
+                # 1 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01001100)
+                time.sleep(0.01)
+                print("1 & 4 high")
+                # 2 & 4 high
+                bus.write_byte_data(0x23, 0x01, 0b01010100)
+                time.sleep(0.01)
+                print("2 & 4 high")
+                # 2 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00110100)
+                time.sleep(0.01)
+                print("2 & 3 high")
+                # 1 & 3 high
+                bus.write_byte_data(0x23, 0x01, 0b00101100)
+                time.sleep(0.01)
+                print("1 & 3 high")
+
+            bus.write_byte_data(0x23, 0x01, 0b00000100)
             """
             UPDATING THE DATABASE AFTER DISPENSING
             """
@@ -260,16 +314,3 @@ def getUserData():
     # delete = "DELETE FROM temporary"
     # cursor.execute(delete)
     cursor.close()
-
-    BigDriver.mix()
-    pinchValveOpen()
-    time.sleep(5)
-    pinchValveClose()
-    i2c.clean()
-
-
-"""
-Mixing of the ingredients.
-"""
-
-run()

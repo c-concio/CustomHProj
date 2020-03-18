@@ -39,6 +39,9 @@ ADDRESS 13+ --> FLAVOURS
 
 timeDelay = 0.01
 
+def clean():
+    forwardStep()
+
 def forwardStep(address, step):
     for i in range(0, step):
         # Driving forward

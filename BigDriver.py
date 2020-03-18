@@ -29,6 +29,9 @@ Work in term of the decoder
 stepPin also means which ID of the cylinder.
 """
 
+def mix():
+    driveBigMotorForward(15, 30)
+
 def driveBigMotorForward(stepPin, step):
     binaryStringStepPin = format(stepPin, '#06b')
     binaryNumArrayStepPin = list(binaryStringStepPin)
