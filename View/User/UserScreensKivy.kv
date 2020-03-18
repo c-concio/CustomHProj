@@ -506,6 +506,7 @@
     cols: 1
     size_hint_y: None
     height: self.minimum_height
+    size_hint_x: None
 
     Label:
         size_hint_y: None
@@ -551,6 +552,15 @@
             text: "Base 2"
             font_name: "Pacifico"
             font_size: "18sp"
+
+    Slider:
+        id: slider
+        min: 0
+        max: 360
+        value: 180
+        step: 30
+        size_hint_y: None
+        height: 70
 
 <ConfirmScreen>:
     orderButton: orderButton

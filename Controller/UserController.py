@@ -69,8 +69,11 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
-    UserModel.splitScreen.flavorScreen.nextButton.bind(
-        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+    UserModel.splitScreen.confirmScreen.orderButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
+
+    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: orderFinish())
+    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: switch_screen(screen_name="Main Screen"))
 
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
@@ -98,7 +101,6 @@ def initialize_buttons():
 
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
 
-    # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x:
     # UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
     UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: loadingPopupWindow())
@@ -125,6 +127,7 @@ def resetStepButtons():
     UserModel.splitScreen.step2.disabled = True
     UserModel.splitScreen.step3.disabled = True
     UserModel.splitScreen.step4.disabled = True
+    UserModel.splitScreen.step5.disabled = True
 
 
 # -------------------------------------------------------------------
@@ -322,6 +325,9 @@ def amountScreenDone():
     connect.commit()
     cursor.close()
 
+
+
+def orderFinish():
     # Deselect all previous options
     resetStepButtons()
     resetSizeScreen()
@@ -331,8 +337,6 @@ def amountScreenDone():
     updateOnlineDatabase()
     # Reset temporary table
     reset_temporary_table()
-
-
 
 def printOut():
     print('called')
@@ -344,14 +348,19 @@ def buildAmountScreen(amountScreen):
         if not amountScreen.built:
             button = UserModel.DoneRoundedButton1()
             button.bind(on_press=lambda x: amountScreenDone())
-            button.bind(on_press=lambda x: switch_screen("Main Screen"))
+            button.bind(on_press=lambda x: enableStep5())
+            button.bind(on_press=lambda x: loadOrder())
+            button.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
             amountScreen.box.add_widget(button)
         buildAmountScreenGridLayout(amountScreen)
     else:
         if not amountScreen.built:
             button = UserModel.DoneRoundedButton2()
             button.bind(on_press=lambda x: amountScreenDone())
-            button.bind(on_press=lambda x: switch_screen("Main Screen"))
+            button.bind(on_press=lambda x: enableStep5())
+            button.bind(on_press=lambda x: loadOrder())
+            button.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+
             amountScreen.add_widget(button)
         buildAmountScreenStackLayout(amountScreen)
 
@@ -473,11 +482,13 @@ def updateOnlineDatabase():
             cursor = conn.cursor()
             cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
             conn.commit()
+
+        local_cursor.close()
+        cursor.close()
     except:
         print("Proxy not setup, could not push temporary table to online database")
 
-    local_cursor.close()
-    cursor.close()
+
 
 def reset_temporary_table():
     conn = DatabaseClass.conn
