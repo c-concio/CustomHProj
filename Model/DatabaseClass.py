@@ -9,15 +9,13 @@ conn = sqlite3.connect(r'database/pysqlite.db')
 
 
 class Cylinder:
-    def __init__(self, cylinderID, ingredient, amount, cylinderType):
+    def __init__(self, cylinderID, ingredient, amount):
         self.cylinderID = cylinderID
         self.ingredient = ingredient
         self.amount = amount
-        self.cylinderType = cylinderType
+
 
 class Ingredient:
-    def __init__(self, ingredientID, ingredient, ingredientType):
+    def __init__(self, ingredientID, ingredientType):
         self.ingredientID = ingredientID
-        self.ingredient = ingredient
         self.ingredientType = ingredientType
-

@@ -46,10 +46,7 @@ def create_table():
                                                 id integer PRIMARY KEY,
                                                 ingredient text,
                                                 type text,
-                                                steps integer,
-                                                ingredient text DEFAULT 'None',
-                                                steps integer DEFAULT 0,
-                                                type TEXT DEFAULT 'Flavor'
+                                                steps integer
                                         ); """
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
@@ -61,10 +58,9 @@ def create_table():
                                                         flavor_mL integer
                                                 ); """
 
-        sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredients (
-                                                        "ID" INTEGER,
-                                                        "Ingredient" TEXT NOT NULL DEFAULT 'None',
-                                                        "Type" TEXT NOT NULL DEFAULT 'Base',
+        sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredient (
+                                                        "ID"	INTEGER,
+                                                        "IngredientType"	TEXT NOT NULL DEFAULT 'None',
                                                         PRIMARY KEY("ID")
                                                         ); """
 
@@ -216,21 +212,9 @@ def select_star_table(table):
         if (connect):
             connect.close()
 
-def cylinder_setup():
-    connect = sqlite3.connect(r"database\pysqlite.db")
-    cursor = connect.cursor()
-
-    query = "UPDATE cylinder SET type = 'flavor' WHERE id > 6"
-
-    cursor.execute(query)
-    cursor.close()
 
 def main():
     # create_table()
-
-    create_table()
-    cylinder_setup()
-
     # print(select_first_row_from_condition('Ketchup'))
 
     # listToInsert = [("Ketchup", 500),
@@ -285,9 +269,6 @@ def main():
     rows = cursor.fetchall()
     for row in rows:
         print(row)
-
-
-
 
 
 kivy_string = """
