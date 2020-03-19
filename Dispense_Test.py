@@ -9,14 +9,14 @@ import BigDriver as BigDriver
 # Initialization of the i2c bus.
 bus = smbus.SMBus(1)
 
-dir1 = 6
-dir2 = 13
+dir1 = 31
+dir2 = 33
 
-stepPin1 = 12
-stepPin2 = 16
+stepPin1 = 32
+stepPin2 = 37
 
-solenoidPin26 = 26
-solenoidPin18 = 18
+solenoidPin26 = 37
+# solenoidPin18 = 18
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(dir1, GPIO.OUT)
@@ -24,7 +24,7 @@ GPIO.setup(dir2, GPIO.OUT)
 GPIO.setup(stepPin1, GPIO.OUT)
 GPIO.setup(stepPin2, GPIO.OUT)
 GPIO.setup(solenoidPin26, GPIO.OUT)
-GPIO.setup(solenoidPin18, GPIO.OUT)
+# GPIO.setup(solenoidPin18, GPIO.OUT)
 
 def Test():
     connect = sqlite3.connect(r"database/pysqlite.db")
@@ -53,7 +53,7 @@ def Test():
         """
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 1):
+        if (combination[0] == "1"):
 
             print("Dispense")
 
@@ -65,28 +65,28 @@ def Test():
             used for it. ONLY for the step pin's select line
             """
             # Forward
-            stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
+            stepCount = int(combination[1])  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
             for i in range(0, stepCount):
-                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin1, GPIO.OUT, GPIO.HIGH)
+                GPIO.output(dir1, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.HIGH)
 
                 time.sleep(0.01)
 
-                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(dir1, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.LOW)
 
                 time.sleep(0.01)
             GPIO.cleanup()
 
             # Backward
             for i in range(0, 5):
-                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin2, GPIO.OUT, GPIO.HIGH)
+                GPIO.output(dir2, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.HIGH)
 
                 time.sleep(0.01)
 
-                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(dir2, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.LOW)
 
                 time.sleep(0.01)
             GPIO.cleanup()
@@ -101,17 +101,17 @@ def Test():
                 if (entry[0] == combination[0]):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 7):
+        if (combination[0] == "7"):
 
             print("Dispense")
 
@@ -122,37 +122,37 @@ def Test():
             will yield the correct driver to drive. This is for the Big Motor as i2c was not
             used for it. ONLY for the step pin's select line
             """
-            stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
+            stepCount = int(combination[1])  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
 
-            GPIO.output(solenoidPin26, GPIO.OUT, GPIO.HIGH)
+            GPIO.output(solenoidPin26, GPIO.HIGH)
 
             # Forward
             for i in range(0, stepCount):
-                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin1, GPIO.OUT, GPIO.HIGH)
+                GPIO.output(dir1, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.HIGH)
 
                 time.sleep(0.01)
 
-                GPIO.output(dir1, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin1, GPIO.OUT, GPIO.LOW)
+                GPIO.output(dir1, GPIO.LOW)
+                GPIO.output(stepPin1, GPIO.LOW)
 
                 time.sleep(0.01)
             GPIO.cleanup()
 
             # Backward
             for i in range(0, 5):
-                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin2, GPIO.OUT, GPIO.HIGH)
+                GPIO.output(dir2, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.HIGH)
 
                 time.sleep(0.01)
 
-                GPIO.output(dir2, GPIO.OUT, GPIO.LOW)
-                GPIO.output(stepPin2, GPIO.OUT, GPIO.LOW)
+                GPIO.output(dir2, GPIO.LOW)
+                GPIO.output(stepPin2, GPIO.LOW)
 
                 time.sleep(0.01)
             GPIO.cleanup()
 
-            GPIO.output(solenoidPin26, GPIO.OUT, GPIO.LOW)
+            GPIO.output(solenoidPin26, GPIO.LOW)
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
@@ -164,22 +164,22 @@ def Test():
                 if (entry[0] == combination[0]):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 13):
+        if (combination[0] == "13"):
 
             print("Dispense")
 
             # Call the driver and rotate steps to dispense.
-            stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
+            stepCount = int(combination[1])  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
 
             for i in range(0, stepCount):
                 # Driving forward
@@ -221,21 +221,23 @@ def Test():
                 print("1 & 3 high")
 
             bus.write_byte_data(0x23, 0x01, 0b00000100)
+            
             """
             UPDATING THE DATABASE AFTER DISPENSING
             """
             newValue = 0
             for entry in updateStepsList:
                 # print(entry)
+                # Updating the database in the total amount of the
                 if (entry[0] == combination[0]):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
@@ -297,12 +299,12 @@ def Test():
                 if (entry[0] == combination[0]):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
