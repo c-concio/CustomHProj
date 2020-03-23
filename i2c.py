@@ -124,7 +124,7 @@ def getUserData():
         """
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 1):
+        if (combination[0] == "1"):
 
             print("Dispense")
 
@@ -146,20 +146,20 @@ def getUserData():
             for entry in updateStepsList:
                 # print(entry)
                 # Updating the database in the total amount of the
-                if (entry[0] == combination[0]):
+                if (str(entry[0]) == str(combination[0])):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 7):
+        if (combination[0] == "7"):
 
             print("Dispense")
 
@@ -183,20 +183,20 @@ def getUserData():
             for entry in updateStepsList:
                 # print(entry)
                 # Updating the database in the total amount of the
-                if (entry[0] == combination[0]):
+                if (str(entry[0]) == str(combination[0])):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 13):
+        if (combination[0] == "13"):
 
             print("Dispense")
 
@@ -211,20 +211,21 @@ def getUserData():
             newValue = 0
             for entry in updateStepsList:
                 # print(entry)
-                if (entry[0] == combination[0]):
+                # Updating the database in the total amount of the
+                if (str(entry[0]) == str(combination[0])):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 
         # If ID corresponds to the one at current combination.
-        if (combination[0] == 14):
+        if (combination[0] == "14"):
 
             print("Dispense")
 
@@ -240,15 +241,15 @@ def getUserData():
             for entry in updateStepsList:
                 # print(entry)
                 # Updating the database in the total amount of the
-                if (entry[0] == combination[0]):
+                if (str(entry[0]) == str(combination[0])):
                     print(entry[0])
                     print(entry[1])
-                    oldValue = entry[1]
-                    newValue = oldValue + combination[1]
+                    oldValue = int(entry[1])
+                    newValue = oldValue + int(combination[1])
                     break
 
             sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (newValue, combination[0])
+            data = (str(newValue), combination[0])
             cursor.execute(sqlCylinderNew, data)
             connect.commit()
 

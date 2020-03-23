@@ -51,13 +51,13 @@ def driveBigMotorForward(stepPin, step):
         """
 
         # Forward drive block
-        GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
-        GPIO.output(stepPinControl, GPIO.OUT, GPIO.HIGH)
+        GPIO.output(dirPin, GPIO.LOW)
+        GPIO.output(stepPinControl, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
-        GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
-        GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
+        GPIO.output(dirPin, GPIO.LOW)
+        GPIO.output(stepPinControl, GPIO.LOW)
 
         time.sleep(timeDelay)
 
@@ -67,11 +67,11 @@ def driveBigMotorForward(stepPin, step):
         # time.sleep(timeDelay)
 
     # Turn all of select line to 0.
-    GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
-    GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin8, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin10, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin12, GPIO.OUT, GPIO.LOW)
+    GPIO.output(stepPinControl, GPIO.LOW)
+    GPIO.output(dirPin, GPIO.LOW)
+    GPIO.output(stepPin8, GPIO.LOW)
+    GPIO.output(stepPin10, GPIO.LOW)
+    GPIO.output(stepPin12, GPIO.LOW)
 
     GPIO.cleanup()
 
@@ -94,13 +94,13 @@ def driveBigMotorBackward(stepPin, step):
         """
 
         # Forward drive block
-        GPIO.output(dirPin, GPIO.OUT, GPIO.HIGH)
-        GPIO.output(stepPinControl, GPIO.OUT, GPIO.HIGH)
+        GPIO.output(dirPin, GPIO.HIGH)
+        GPIO.output(stepPinControl, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
-        GPIO.output(dirPin, GPIO.OUT, GPIO.HIGH)
-        GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
+        GPIO.output(dirPin, GPIO.HIGH)
+        GPIO.output(stepPinControl, GPIO.LOW)
 
         # GPIO.OUT(stepPin, GPIO.HIGH)
         # time.sleep(timeDelay)
@@ -108,10 +108,10 @@ def driveBigMotorBackward(stepPin, step):
         # time.sleep(timeDelay)
 
     # Turn all of select line to 0.
-    GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)
-    GPIO.output(dirPin, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin8, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin10, GPIO.OUT, GPIO.LOW)
-    GPIO.output(stepPin12, GPIO.OUT, GPIO.LOW)
+    GPIO.output(stepPinControl, GPIO.LOW)
+    GPIO.output(dirPin, GPIO.LOW)
+    GPIO.output(stepPin8, GPIO.LOW)
+    GPIO.output(stepPin10, GPIO.LOW)
+    GPIO.output(stepPin12, GPIO.LOW)
 
     GPIO.cleanup()
