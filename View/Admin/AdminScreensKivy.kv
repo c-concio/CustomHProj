@@ -210,3 +210,31 @@
         Button:
             id: declineButton
             text: "No"
+
+<ResetMotorPopupLayout>:
+    upButton: upButton
+    pauseButton: pauseButton
+    downButton: downButton
+    doneButton: doneButton
+
+    orientation: 'tb-lr'
+
+    Button:
+        id: upButton
+        text: "Move Motor Up"
+        size_hint: (0.5, 1/3)
+
+    Button:
+        id: pauseButton
+        text: "Pause Motor"
+        size_hint: (0.5, 1/3)
+
+    Button:
+        id: downButton
+        text: "Move Motor Down"
+        size_hint: (0.5, 1/3)
+
+    Button:
+        id: doneButton
+        text: "Done"
+        size_hint: (0.5, 1)
