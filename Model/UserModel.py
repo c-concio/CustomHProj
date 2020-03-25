@@ -1,6 +1,8 @@
 import kivy
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.graphics.context_instructions import Color
+from kivy.graphics.vertex_instructions import Rectangle
 from kivy.lang import Builder
 from kivy.app import App
 from kivy.properties import ObjectProperty, NumericProperty, StringProperty
@@ -8,10 +10,23 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
+from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.core.text import LabelBase
+
+from kivy.uix.widget import Widget
+
+from kivy.graphics import Color, Ellipse, Rectangle
+from kivy.core.text import Label as CoreLabel
+from kivy.animation import Animation
+
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -32,15 +47,55 @@ class UserMainScreen(Screen):
 
 
 class SizeScreen(Screen):
+    toggleButtonSmall = ObjectProperty(None)
+    toggleButtonMedium = ObjectProperty(None)
+    toggleButtonLarge = ObjectProperty(None)
     nextButton = ObjectProperty(None)
+    sizeList = []
+
+    def __init__(self, **kwargs):
+        super(SizeScreen, self).__init__(**kwargs)
+
+        self.toggleButtonSmall.bind(on_press=self.saveSize)
+        self.toggleButtonMedium.bind(on_press=self.saveSize)
+        self.toggleButtonLarge.bind(on_press=self.saveSize)
+
+    def saveSize(self, instance):
+        # Save size of cup
+        if instance.state == 'down':
+            self.sizeList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.sizeList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove base, it did not exist")
+
+        # Next button enable/disable
+        if len(self.sizeList) < 1:
+            self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1, 1, 1, 0)
+        else:
+            self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1, 1, 1, 0.6)
+
 
 
 class BaseScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
+    flavourOfMonthButton = ObjectProperty()
     baseList = []
+    baseToggleList = []
+
     # backButton = ObjectProperty(None)
+
+    # def btn(self):
+    #     UserController.showPopupWindow()
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
@@ -67,8 +122,8 @@ class BaseScreen(Screen):
         # Dynamic buttons
         for i, base in enumerate(bases):
             button = ToggleButton(text=str(base[1]))
+            self.baseToggleList.append(button)
             self.grid.add_widget(button)
-
             button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
@@ -83,12 +138,43 @@ class BaseScreen(Screen):
             except:
                 print("Could not remove base, it did not exist")
 
+        if len(self.baseList) < 1:
+            self.nextButton.disabled = True
+            self.nextButton.text = ""
+            self.nextButton.colour = (1, 1, 1, 0)
+        else:
+            self.nextButton.disabled = False
+            self.nextButton.text = "Next"
+            self.nextButton.colour = (1, 1, 1, 0.6)
+
+        # Disable other buttons when 2 bases are chosen
+        if len(self.baseList) >= 2:
+            for button in self.baseToggleList:
+                if button.text not in self.baseList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in self.baseToggleList:
+                if button.text not in self.baseList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
+
+
+class SauceOfMonth(Screen):
+    doneButton: ObjectProperty(None)
+    closeButton: ObjectProperty(None)
+    # title: ObjectProperty(None)
+    # separator_height: ObjectProperty()
+
+    # TODO get sauce choices from db
+
 
 class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
     flavorList = []
+    flavorToggleList = []
 
     # backButton = ObjectProperty(None)
 
@@ -96,6 +182,7 @@ class FlavorScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(FlavorScreen, self).__init__(**kwargs)
+        self.nextButton.colour = (1, 1, 1, 0.6)
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
@@ -115,8 +202,8 @@ class FlavorScreen(Screen):
         # Dynamic buttons
         for i, base in enumerate(bases):
             button = ToggleButton(text=str(base[1]))
+            self.flavorToggleList.append(button)
             self.grid.add_widget(button)
-            # print("Base " + str(i) + ": " + base[1])
 
             button.bind(on_press=self.saveButtonName)
 
@@ -132,24 +219,49 @@ class FlavorScreen(Screen):
             except:
                 print("Could not remove base, it did not exist")
 
-
-class SauceOfMonth(Screen):
-    pass
+        # Disable other buttons when 3 flavors are chosen
+        if len(self.flavorList) >= 3:
+            for button in self.flavorToggleList:
+                if button.text not in self.flavorList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in self.flavorToggleList:
+                if button.text not in self.flavorList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
 
 
 class AmountScreen(Screen):
     doneButton = ObjectProperty(None)
-    # addButtons = ObjectProperty(None)
-    # removeButton = ObjectProperty(None)
+    scroll = ObjectProperty(None)
+    box = ObjectProperty(None)
+    built = False
+    flavorLayoutList = []
+
+
+class AmountGridLayout(GridLayout):
+    pass
+
+
+class AmountScreen1(Screen):
     mainGrid = ObjectProperty(None)
     bodyGrid = ObjectProperty(None)
     sliderAnchorLayout = ObjectProperty(None)
     sliderTemplateGrid = ObjectProperty(None)
-
-    # label_text = StringProperty()
+    slider = ObjectProperty(None)
+    sliderExist = True
+    doneButton = ObjectProperty(None)
+    base1 = ObjectProperty(None)
+    base2 = ObjectProperty(None)
+    baseChartLayout = ObjectProperty(None)
+    baseChart = ObjectProperty(None)
+    baseChartExist = True
+    flavorLayoutList = []
 
     def __init__(self):
         super().__init__()
+        self.doneButton.colour = (1, 1, 1, 0.6)
         # TODO: uncomment
         # self.count = 0
         # self.label_text = str(self.count)
@@ -160,9 +272,35 @@ class AmountScreen(Screen):
         # if only one column, the sliderLayout should have the height of the base grid
 
         # TODO: look inside DB and add flavors
-        self.sliderTemplateGrid.add_widget(FlavorsLayout())
-        self.sliderTemplateGrid.add_widget(FlavorsLayout())
+        # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
 
+
+class ConfirmScreen(Screen):
+    orderButton = ObjectProperty(None)
+    confirmLayout = ObjectProperty(None)
+
+
+class loadingPopup(BoxLayout):
+    gif = ObjectProperty(None)
+
+
+# class CProgressBar(Label):
+#     angle = NumericProperty(0)
+#     startCount = NumericProperty(20)
+#     Count = NumericProperty()
+#
+#     def __init__(self, **kwargs):
+#         super(CProgressBar, self).__init__(**kwargs)
+#         Clock.schedule_once(self.set_Circle, 0.1)
+#         self.Count = self.startCount
+#
+#     def set_Circle(self, dt):
+#         self.angle = self.angle + dt * 360
+#         if self.angle >= 360:
+#             self.angle = 0
+#             self.Count = self.Count - 1
+#         if self.Count > 0:
+#             Clock.schedule_once(self.set_Circle, 1.0 / 360)
 
 
 class SplitScreen(Screen):
@@ -171,6 +309,7 @@ class SplitScreen(Screen):
     step2 = ObjectProperty(None)
     step3 = ObjectProperty(None)
     step4 = ObjectProperty(None)
+    step5 = ObjectProperty(None)
 
     def __init__(self, name):
         super().__init__()
@@ -181,27 +320,57 @@ class SplitScreen(Screen):
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
+        self.sauceOfMonth = SauceOfMonth()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
+        self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
         UserController.initialize_buttons()
 
 
-class BaseSliderLayout(AnchorLayout):
-    pass
-
-
-class FlavorsLayout(BoxLayout):
+class FlavorsLayout(GridLayout):
     flavorAddB = ObjectProperty(None)
     flavorRemoveB = ObjectProperty(None)
     label_text = ObjectProperty(None)
+    flavorName = ObjectProperty(None)
 
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
         self.label_text.text = "0"
         self.flavorAddB.bind(on_press=lambda x: UserController.increment(self.label_text))
         self.flavorRemoveB.bind(on_press=lambda x: UserController.decrement(self.label_text))
+        self.flavorName.text = name
 
+
+class BaseGridTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class BaseGridTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
+
+
+class BaseStackTemplate1(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+
+
+class AmountPieChart(Widget):
+    pass
+
+
+class BaseStackTemplate2(GridLayout):
+    baseLabel1 = ObjectProperty(None)
+    baseLabel2 = ObjectProperty(None)
+    slider = ObjectProperty(None)
+    pie = AmountPieChart
+
+class DoneRoundedButton1(Button):
+    pass
+
+class DoneRoundedButton2(Button):
+    pass
 
 # -------------------------------------------------------------------
 #                       Screen Manager
@@ -210,14 +379,19 @@ class FlavorsLayout(BoxLayout):
 # use the kv definitions found in the AdminScreensKivy.kv file
 Builder.load_file('View/User/UserScreensKivy.kv')
 
-
-#screenManager = ScreenManager()
+# screenManager = ScreenManager()
 
 # initialize User screens
 userMainScreen = UserMainScreen(name="User Main Screen")
 splitScreen = SplitScreen(name="Split Screen")
-baseScreen = BaseScreen(name="Base Screen")
-flavorScreen = FlavorScreen(name="Flavor screen")
+sizeScreen = SizeScreen(name="Size Screen")
+
+# sauceOfMonthScreen = SauceOfMonth(name="Flavor of The Month")
+# loadingScreen = LoadingScreen(name="Loading Screen")
+
+# baseScreen = BaseScreen(name="Base Screen")
+# flavorScreen = FlavorScreen(name="Flavor Screen")
+# amountScreen = AmountScreen(name="Amount Screen")
 
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)
