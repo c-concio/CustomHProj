@@ -44,6 +44,7 @@ splitScreen = UserModel.splitScreen
 
 mainScreenManager.add_widget(mainScreen)
 # mainScreenManager.add_widget(adminScreen)
+mainScreenManager.add_widget(UserModel.userMainScreen)
 mainScreenManager.add_widget(splitScreen)
 # mainScreenManager.add_widget(loadingScreen)
 

@@ -55,6 +55,7 @@
 <UserMainScreen>:
     # objectProperty names
     startButton: start
+    qrButton: qrButton
 
     FloatLayout:
 
@@ -80,16 +81,17 @@
             pos_hint: {"x":0.35,"top":0.80}
             size_hint: 0.35, 0.15
 
-        Label:
+        RoundedButton2:
+            id: qrButton
             text:"Or Scan Your \nQR Code Here"
             halign: 'center'
             font_name: "OstrichSans"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.07, "bottom":0.3}
-            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint:{"x":0.07,"y":0.05}
+            size_hint: 0.3, 0.2
+            color: 0, 0, 0, 1
 
-
-        RoundedButton:
+        RoundedButton2:
             id: start
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2

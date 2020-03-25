@@ -20,6 +20,7 @@ from kivy.core.text import LabelBase
 import i2c
 from Controller import DatabaseController
 from Model import UserModel, DatabaseClass, MainModel
+from Controller import MainScreenController
 
 kivy.require('1.9.0')
 
@@ -38,6 +39,11 @@ def switch_screen(screen_name):
 # def return_screen(screen_name):
 #     UserModel.screenManager.transition.direction = 'right'
 #     UserModel.screenManager.current = screen_name
+
+def initialize_main_screen_buttons():
+    UserModel.userMainScreen.startButton.bind(on_press=lambda x: MainScreenController.switch_screen('Split Screen'))
+    UserModel.userMainScreen.qrButton.bind(on_press=lambda x: print("qr button pressed"))
+    # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
 
 # Button switches to
@@ -58,7 +64,6 @@ def initialize_buttons():
 
 
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
-
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 

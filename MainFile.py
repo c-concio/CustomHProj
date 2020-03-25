@@ -39,11 +39,7 @@ class MainApp(App):
 
         testScreenManager = ScreenManager();
 
-
-        testScreenManager.add_widget(QrModel.QrScreen(name="Qr"))
-        screen = UserModel.AmountScreen()
-        # UserController.buildAmountScreen(screen)
-        testScreenManager.add_widget(screen)
+        testScreenManager.add_widget(UserModel.UserMainScreen(name='User Main Screen'))
 
         return screenManager
 

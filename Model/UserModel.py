@@ -44,6 +44,7 @@ LabelBase.register(name="OstrichSans", fn_regular="ostrich-regular.ttf")
 
 class UserMainScreen(Screen):
     startButton = ObjectProperty(None)
+    qrButton = ObjectProperty(None)
 
 
 class SizeScreen(Screen):
@@ -373,6 +374,12 @@ class DoneRoundedButton2(Button):
     pass
 
 # -------------------------------------------------------------------
+#                          QR Screens
+# -------------------------------------------------------------------
+
+
+
+# -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
 
@@ -392,6 +399,8 @@ sizeScreen = SizeScreen(name="Size Screen")
 # baseScreen = BaseScreen(name="Base Screen")
 # flavorScreen = FlavorScreen(name="Flavor Screen")
 # amountScreen = AmountScreen(name="Amount Screen")
+
+UserController.initialize_main_screen_buttons()
 
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)
