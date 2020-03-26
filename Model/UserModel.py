@@ -101,6 +101,7 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
+        self.flavourOfMonthButton.colour = (1, 1, 1, 0.6)
 
         connect = DatabaseClass.conn
 
@@ -278,6 +279,9 @@ class AmountScreen1(Screen):
 class ConfirmScreen(Screen):
     orderButton = ObjectProperty(None)
     confirmLayout = ObjectProperty(None)
+    def __init__(self):
+        super().__init__()
+        self.orderButton.colour = (1, 1, 1, 0.6)
 
 
 class loadingPopup(BoxLayout):
