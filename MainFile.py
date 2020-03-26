@@ -25,7 +25,6 @@ class MainApp(App):
         # iPhone screen size
         # Window.size = (320, 540)
 
-
         # iPhone XR screen size
         # Window.size = (414, 896)
 
@@ -40,8 +39,9 @@ class MainApp(App):
 
         testScreenManager = ScreenManager();
 
-
-        testScreenManager.add_widget(UserModel.AmountScreen())
+        screen = UserModel.AmountScreen()
+        # UserController.buildAmountScreen(screen)
+        testScreenManager.add_widget(screen)
 
         return screenManager
 

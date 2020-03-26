@@ -22,6 +22,8 @@ from functools import partial
 
 import sqlite3
 from sqlite3 import Error
+import pyodbc
+import pymysql
 
 
 def create_connection(db_file):
@@ -43,21 +45,23 @@ def create_table():
         sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
                                                 id integer PRIMARY KEY,
                                                 ingredient text,
-                                                amount integer
+                                                type text,
+                                                steps integer,
+                                                ingredient text DEFAULT 'None',
+                                                steps integer DEFAULT 0,
+                                                type TEXT DEFAULT 'Flavor'
                                         ); """
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
-                                                        base text,
-                                                        base_cylinder_id integer,
-                                                        base_mL integer,
-                                                        flavor text,
-                                                        flavor_cylinder_id integer,
-                                                        flavor_mL integer
+                                                        ingredient TEXT,
+                                                        cylinder_id,
+                                                        ml
                                                 ); """
 
-        sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredient (
-                                                        "ID"	INTEGER,
-                                                        "IngredientType"	TEXT NOT NULL DEFAULT 'None',
+        sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredients (
+                                                        "ID" INTEGER,
+                                                        "Ingredient" TEXT NOT NULL DEFAULT 'None',
+                                                        "Type" TEXT NOT NULL DEFAULT 'Base',
                                                         PRIMARY KEY("ID")
                                                         ); """
 
@@ -209,9 +213,21 @@ def select_star_table(table):
         if (connect):
             connect.close()
 
+def cylinder_setup():
+    connect = sqlite3.connect(r"database\pysqlite.db")
+    cursor = connect.cursor()
+
+    query = "UPDATE cylinder SET type = 'flavor' WHERE id > 6"
+
+    cursor.execute(query)
+    cursor.close()
 
 def main():
     create_table()
+
+    # create_table()
+    # cylinder_setup()
+
     # print(select_first_row_from_condition('Ketchup'))
 
     # listToInsert = [("Ketchup", 500),
@@ -227,20 +243,48 @@ def main():
 
     # select_star_table("temporary")
 
-    connect = sqlite3.connect(r"database\pysqlite.db")
-    cursor = connect.cursor()
+    # connect = sqlite3.connect(r"database\pysqlite.db")
+    # cursor = connect.cursor()
+    #
+    # sql = "DROP TABLE temporary;"
+    #
+    # cursor.execute(sql)
 
-    sql = "SELECT * FROM cylinder;"
+    # bases = cursor.fetchall()
+    # print("Table contents:")
+    #
+    # for i, base in enumerate(bases):
+    #     print("Base " + str(i) + ": " + base[1])
+    #
+    # cursor.close()
 
-    cursor.execute(sql)
+    # serverName = r'LAPTOP-1682377I\SQLEXPRESS'
+    # print(serverName)
+    #
+    # # conn = pyodbc.connect('Driver={SQL SERVER};'
+    # #                       'Server=LAPTOP-1682377I\SQLEXPRESS;'
+    # #                       'Database=CustomHDatabase;'
+    # #                       'Trusted_Connection=yes;')
+    #
+    # create = 'CREATE TABLE cylinder(id int NOT NULL AUTO_INCREMENT, ingredient text, type text, steps int, PRIMARY KEY(id));'
+    # conn = pymysql.connect(host='127.0.0.1',
+    #                             port=3306,
+    #                              user='root',
+    #                              password='customh',
+    #                              db='cylinder')
+    # sql = 'SELECT * FROM cylinder;'
+    # #insert = '''INSERT INTO cylinder(ingredient, steps, type) VALUES('Mustard', 80, 'Base');'''
+    # cursor = conn.cursor()
+    # #cursor.execute(insert)
+    # #conn.commit()
+    # cursor.execute(sql)
+    #
+    # rows = cursor.fetchall()
+    # for row in rows:
+    #     print(row)
 
-    bases = cursor.fetchall()
-    print("Table contents:")
 
-    for i, base in enumerate(bases):
-        print("Base " + str(i) + ": " + base[1])
 
-    cursor.close()
 
 
 kivy_string = """
