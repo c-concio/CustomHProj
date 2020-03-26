@@ -466,6 +466,9 @@ def updatePie(instance, value):
     instance.parent.pie.pie_chart_value = instance.value
 
 def updateOnlineDatabase():
+    sameRecipe = False
+    countCheck = 0
+    id = 0
     # Get ingredients from temporary table
     local_conn = DatabaseClass.conn
     local_cursor = local_conn.cursor()
@@ -477,12 +480,50 @@ def updateOnlineDatabase():
                                user='root',
                                password='customh',
                                db='cylinder')
+        cursor = conn.cursor()
 
-        for ingredient in ingredients:
+        # Create array of ingredients
+        ingredientArray = [None] * 5
+        for i, ingredient in enumerate(ingredients):
             print(ingredient[0])
+            ingredientArray.pop(i)
+            ingredientArray.insert(i, ingredient[0])
+
+        print("Ingredient Array: ")
+        print(ingredientArray)
+
+        checkSQL = "SELECT * FROM online;"
+        cursor.execute(checkSQL)
+        checkIngredients = cursor.fetchall()
+
+        # Check if this recipe exists (5 ingredients)
+        for checkIngredient in checkIngredients:
+            countCheck = 0
+            for i in range(1, 6):
+                if checkIngredient[i] == ingredientArray[i-1]:
+                    countCheck += 1
+                    # If all 5 match, get the id
+                    if countCheck == 5:
+                        id = checkIngredient[0]
+                        sameRecipe = True
+                        continue
+
+        # If same recipe, update the count
+        if sameRecipe == True:
+            print("In update")
+            val = (ingredientArray[0], ingredientArray[1], ingredientArray[2], ingredientArray[3], ingredientArray[4])
+            updateSQL = "UPDATE online SET count = count + 1 WHERE id = %s"
+            sameRecipe = False
+            cursor.execute(updateSQL, id)
+            id = 0
+            conn.commit()
+        # If new recipe, insert new row
+        else:
+            print("In insert")
             # Put ordered ingredients to online database
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
+            val = (ingredientArray[0], ingredientArray[1], ingredientArray[2], ingredientArray[3], ingredientArray[4], 1)
+            insertSQL = "INSERT INTO online(ingredient1,ingredient2,ingredient3,ingredient4,ingredient5,count) VALUES(%s,%s,%s,%s,%s,%s);"
+            cursor.execute(insertSQL, val)
             conn.commit()
 
         local_cursor.close()
