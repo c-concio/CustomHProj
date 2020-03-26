@@ -2,6 +2,7 @@ import time
 import sqlite3
 import RPi.GPIO as GPIO
 import smbus
+import threading
 
 import i2c_driver_manipulation as i2c
 import BigDriver as BigDriver
@@ -81,6 +82,7 @@ HOWEVER, WILL HAVE TO TEST THE PERFORMANCE. For now, test it to see if it works.
 """
 
 
+
 def run():
     getUserData()
 
@@ -88,8 +90,43 @@ def run():
 def pinchValveOpen(pinNumber):
     GPIO.output(pinNumber, GPIO.HIGH)
 
+
 def pinchValveClose(pinNumber):
     GPIO.output(pinNumber, GPIO.LOW)
+
+
+def dispenseBigDriver(cylinderDB, ID, stepCount, cursor, connect):
+    print("Dispense")
+
+    # Call the driver and rotate steps to dispense.
+    """
+    Reason why it's 0 is because decoder. We use 4 select to 16 output demux + input for driving or not.
+    For ID = 0, 0b000 will be propagated through the decoder's input and the output
+    will yield the correct driver to drive. This is for the Big Motor as i2c was not
+    used for it. ONLY for the step pin's select line
+    """
+    BigDriver.driveBigMotorForward(dirPin, ID - 1, stepCount)
+    BigDriver.driveBigMotorBackward(dirPin, ID - 1, 10)  # Don't know if Big Cylinder use
+
+    """
+    UPDATING THE DATABASE AFTER DISPENSING
+    """
+    newValue = 0
+    for entry in cylinderDB:
+        # print(entry)
+        # Updating the database in the total amount of the
+        if (str(entry[0]) == str(ID)):
+            print(entry[0])
+            print(entry[1])
+            oldValue = int(entry[1])
+            newValue = oldValue + int(ID)
+            break
+
+    sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
+    data = (str(newValue), ID)
+    cursor.execute(sqlCylinderNew, data)
+    connect.commit()
+
 
 """
 Get Data from user and dispense the selections
@@ -125,38 +162,8 @@ def getUserData():
 
         # If ID corresponds to the one at current combination.
         if (combination[0] == "1"):
-
-            print("Dispense")
-
-            # Call the driver and rotate steps to dispense.
-            """
-            Reason why it's 0 is because decoder. We use 4 select to 16 output demux + input for driving or not.
-            For ID = 0, 0b000 will be propagated through the decoder's input and the output
-            will yield the correct driver to drive. This is for the Big Motor as i2c was not
-            used for it. ONLY for the step pin's select line
-            """
-            stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
-            BigDriver.driveBigMotorForward(dirPin, combination[0] - 1, stepCount)
-            BigDriver.driveBigMotorBackward(dirPin, combination[0] - 1, 10)  # Don't know if Big Cylinder use
-
-            """
-            UPDATING THE DATABASE AFTER DISPENSING
-            """
-            newValue = 0
-            for entry in updateStepsList:
-                # print(entry)
-                # Updating the database in the total amount of the
-                if (str(entry[0]) == str(combination[0])):
-                    print(entry[0])
-                    print(entry[1])
-                    oldValue = int(entry[1])
-                    newValue = oldValue + int(combination[1])
-                    break
-
-            sqlCylinderNew = "UPDATE cylinder SET steps = ? WHERE id = ?"
-            data = (str(newValue), combination[0])
-            cursor.execute(sqlCylinderNew, data)
-            connect.commit()
+            thread1 = threading.Thread(target=dispenseBigDriver(updateStepsList, combination[0], combination[1], cursor, connect))
+            thread1.start()
 
         # If ID corresponds to the one at current combination.
         if (combination[0] == "7"):
@@ -203,7 +210,8 @@ def getUserData():
             # Call the driver and rotate steps to dispense.
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
             i2c.forwardStep(MODULE_ADDRESS13, stepCount)
-            i2c.backwardStep(MODULE_ADDRESS13, 3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
+            i2c.backwardStep(MODULE_ADDRESS13,
+                             3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
 
             """
             UPDATING THE DATABASE AFTER DISPENSING
@@ -232,7 +240,8 @@ def getUserData():
             # Call the driver and rotate steps to dispense.
             stepCount = combination[1]  # CHECK IF THIS GETS THE SAVED AMOUNT IN THE DATABASE
             i2c.forwardStep(MODULE_ADDRESS14, stepCount)
-            i2c.backwardStep(MODULE_ADDRESS14, 3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
+            i2c.backwardStep(MODULE_ADDRESS14,
+                             3)  # Because of the syringe pressure, we need to go backward to stop dispensing immediately
 
             """
             UPDATING THE DATABASE AFTER DISPENSING

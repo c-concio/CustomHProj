@@ -18,7 +18,7 @@ GPIO.setup(PIN33, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(PIN35, GPIO.OUT, initial=GPIO.LOW)
 
 bus = smbus.SMBus(1)
-count = 0
+count = 13
 
 """
 ADDRESS 1 - 12 --> BASES: ID FROM THE DATABASE
