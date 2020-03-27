@@ -477,9 +477,12 @@ def updateOnlineDatabase():
     # Get ingredients from temporary table
     local_conn = DatabaseClass.conn
     local_cursor = local_conn.cursor()
-    temporary = "SELECT ingredient FROM temporary;"
-    local_cursor.execute(temporary)
-    ingredients = local_cursor.fetchall()
+    sqlBase = "SELECT ingredient FROM temporary WHERE type = 'Base';"
+    local_cursor.execute(sqlBase)
+    bases = local_cursor.fetchall()
+    sqlFlavor = "SELECT ingredient FROM temporary WHERE type = 'Flavor';"
+    local_cursor.execute(sqlFlavor)
+    flavors = local_cursor.fetchall()
     try:
         conn = pymysql.connect(host='127.0.0.1',
                                user='root',
@@ -487,16 +490,28 @@ def updateOnlineDatabase():
                                db='cylinder')
         cursor = conn.cursor()
 
-        # Create array of ingredients
-        ingredientArray = [None] * 5
-        for i, ingredient in enumerate(ingredients):
-            print(ingredient[0])
-            ingredientArray.pop(i)
-            ingredientArray.insert(i, ingredient[0])
+        # Create array of bases
+        baseArray = [None] * 2
+        for i, base in enumerate(bases):
+            print(base[0])
+            baseArray.pop(i)
+            baseArray.insert(i, base[0])
 
-        print("Ingredient Array: ")
+        print("Base Array: ")
+        print(baseArray)
+
+        # Create array of flavors
+        flavorArray = [None] * 3
+        for i, flavor in enumerate(flavors):
+            print(base[0])
+            flavorArray.pop(i)
+            flavorArray.insert(i, flavor[0])
+
+        print("Flavor Array: ")
+        print(flavorArray)
+
+        ingredientArray = baseArray + flavorArray
         print(ingredientArray)
-
         checkSQL = "SELECT * FROM online;"
         cursor.execute(checkSQL)
         checkIngredients = cursor.fetchall()

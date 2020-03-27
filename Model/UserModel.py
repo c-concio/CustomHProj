@@ -203,7 +203,7 @@ class SauceOfMonth(Screen):
                         recipe += row[i] + " "
 
                 button = Button(text=str(recipe))
-                button.text_size = self.size
+                button.text_size = self.width, None
                 self.grid.add_widget(button)
         except:
             print("No connection to online database")
