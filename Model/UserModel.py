@@ -1,4 +1,5 @@
 import kivy
+import pymysql
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics.context_instructions import Color
@@ -164,10 +165,48 @@ class BaseScreen(Screen):
 class SauceOfMonth(Screen):
     doneButton: ObjectProperty(None)
     closeButton: ObjectProperty(None)
+    grid = ObjectProperty(None)
     # title: ObjectProperty(None)
     # separator_height: ObjectProperty()
 
-    # TODO get sauce choices from db
+    def __init__(self, **kwargs):
+        super(SauceOfMonth, self).__init__(**kwargs)
+        self.doneButton.colour = (1, 1, 1, 0.6)
+
+        try:
+            conn = pymysql.connect(host='127.0.0.1',
+                                   user='root',
+                                   password='customh',
+                                   db='cylinder')
+            cursor = conn.cursor()
+            cursor = conn.cursor()
+
+            sqlOnline = "SELECT * FROM online ORDER BY count DESC;"
+            cursor.execute(sqlOnline)
+            rows = cursor.fetchall()
+
+            cursor.close()
+
+            # If screen width is small, have 1 column
+            if (Window.width <= 320):
+                print("Width")
+                self.grid.cols = 1
+            else:
+                self.grid.cols = 2
+
+            # Get top 4 recipes
+            for row in rows:
+                recipe = ""
+                for i in range(1, 6):
+                    print(row[i])
+                    if row[i] is not None:
+                        recipe += row[i] + " "
+
+                button = Button(text=str(recipe))
+                button.text_size = self.size
+                self.grid.add_widget(button)
+        except:
+            print("No connection to online database")
 
 
 class FlavorScreen(Screen):
