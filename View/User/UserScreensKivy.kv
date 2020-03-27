@@ -247,6 +247,7 @@
 
 <SauceOfMonth>:
     doneButton: done
+    grid: sauce_month_grid
 #    closeButton: close
 
     FloatLayout:
@@ -280,6 +281,15 @@
             bold: True
             color: 0, 0, 0, 1
             text: "Done"
+
+    AnchorLayout:
+        anchor_x: 'center'
+
+        GridLayout:
+            id: sauce_month_grid
+            size_hint_x: 0.6
+            size_hint_y: 0.2
+            cols: 2
 
 
 
