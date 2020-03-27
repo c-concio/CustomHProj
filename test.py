@@ -54,8 +54,9 @@ def create_table():
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
                                                         ingredient TEXT,
-                                                        cylinder_id,
-                                                        ml
+                                                        type TEXT,
+                                                        cylinder_id int,
+                                                        ml int
                                                 ); """
 
         sql_create_ingredient_table = """ CREATE TABLE IF NOT EXISTS ingredients (
@@ -266,24 +267,24 @@ def main():
     # #                       'Database=CustomHDatabase;'
     # #                       'Trusted_Connection=yes;')
     #
-    create = 'CREATE TABLE cylinder(id int NOT NULL AUTO_INCREMENT, ingredient text, type text, steps int, PRIMARY KEY(id));'
-    online = 'CREATE TABLE online(id int NOT NULL AUTO_INCREMENT, ingredient1 TEXT, ingredient2 TEXT, ingredient3 TEXT,' \
-             ' ingredient4 TEXT, ingredient5 TEXT, count INT, PRIMARY KEY(id));'
-    conn = pymysql.connect(host='127.0.0.1',
-                                port=3306,
-                                 user='root',
-                                 password='customh',
-                                 db='cylinder')
-    sql = 'SELECT * FROM cylinder;'
-    #insert = '''INSERT INTO cylinder(ingredient, steps, type) VALUES('Mustard', 80, 'Base');'''
-    cursor = conn.cursor()
-    #cursor.execute(insert)
-    #conn.commit()
-    cursor.execute("SELECT * FROM online;")
-
-    rows = cursor.fetchall()
-    for row in rows:
-        print(row)
+    # create = 'CREATE TABLE cylinder(id int NOT NULL AUTO_INCREMENT, ingredient text, type text, steps int, PRIMARY KEY(id));'
+    # online = 'CREATE TABLE online(id int NOT NULL AUTO_INCREMENT, ingredient1 TEXT, ingredient2 TEXT, ingredient3 TEXT,' \
+    #          ' ingredient4 TEXT, ingredient5 TEXT, count INT, PRIMARY KEY(id));'
+    # conn = pymysql.connect(host='127.0.0.1',
+    #                             port=3306,
+    #                              user='root',
+    #                              password='customh',
+    #                              db='cylinder')
+    # sql = 'SELECT * FROM cylinder;'
+    # #insert = '''INSERT INTO cylinder(ingredient, steps, type) VALUES('Mustard', 80, 'Base');'''
+    # cursor = conn.cursor()
+    # #cursor.execute(insert)
+    # #conn.commit()
+    # cursor.execute("SELECT * FROM online;")
+    #
+    # rows = cursor.fetchall()
+    # for row in rows:
+    #     print(row)
 
 
 

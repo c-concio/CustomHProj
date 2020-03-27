@@ -153,7 +153,7 @@ def getBaseList():
     cursor = connect.cursor()
 
     for base in UserModel.splitScreen.baseScreen.baseList:
-        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
+        cursor.execute("INSERT INTO temporary(ingredient,type) VALUES(?,?);", (base, "Base"))
         connect.commit()
 
         print("Added " + base + " to Temporary table")
@@ -195,7 +195,7 @@ def getFlavorList():
     cursor = connect.cursor()
 
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
-        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
+        cursor.execute("INSERT INTO temporary(ingredient, type) VALUES(?,?);", (flavor, "Flavor"))
         connect.commit()
 
         print("Added " + flavor + " to Temporary table")
@@ -262,7 +262,7 @@ def amountScreenDone():
         cursor.execute("UPDATE temporary "
                        "SET ml = ?"
                        "WHERE ingredient = ?",
-                       (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
+                       (flavor.label_text.text,
                         UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
     # Update flavor cylinder_id in temporary table
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
@@ -378,6 +378,7 @@ def buildAmountScreenGridLayout(amountScreen):
     # TODO: replace baselist with actual baselist
     baseList = UserModel.splitScreen.baseScreen.baseList
     flavorList = UserModel.splitScreen.flavorScreen.flavorList
+    flavorLayoutList = UserModel.splitScreen.amountScreen.flavorLayoutList
 
     # if there is only one base selected, then the layout should only have one base, no slider, and show the full pie
     if len(baseList) == 1:
@@ -394,6 +395,7 @@ def buildAmountScreenGridLayout(amountScreen):
 
     # check how many flavors and add flavor templates
     for f in flavorList:
+        flavorLayoutList.append(UserModel.FlavorsLayout(f))
         grid.add_widget(UserModel.FlavorsLayout(name=f))
 
     amountScreen.scroll.add_widget(grid)
@@ -405,6 +407,7 @@ def buildAmountScreenStackLayout(amountScreen):
     # TODO: replace baselist with actual baselist
     baseList = UserModel.splitScreen.baseScreen.baseList
     flavorList = UserModel.splitScreen.flavorScreen.flavorList
+    flavorLayoutList = UserModel.splitScreen.amountScreen.flavorLayoutList
 
     # variable to count the total height of all the elements in layout
     totalHeight = 20
@@ -434,11 +437,13 @@ def buildAmountScreenStackLayout(amountScreen):
 
     # check how many flavors and add flavor templates
     for f in flavorList:
+
         flavor = UserModel.FlavorsLayout(name=f)
         flavor.size_hint_x = None
         flavor.width = Window.width * 0.5
         stack.add_widget(flavor)
         totalHeight += flavor.height + (2 * space)
+        flavorLayoutList.append(flavor)
 
     pieChart = UserModel.AmountPieChart()
     pieChart.width = (Window.width * 0.5) - (5 * padding)
