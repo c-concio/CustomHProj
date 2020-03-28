@@ -128,6 +128,34 @@ class BaseScreen(Screen):
             self.grid.add_widget(button)
             button.bind(on_press=self.saveButtonName)
 
+    def createButtons(self):
+        self.grid.clear_widgets()
+
+        self.flavourOfMonthButton.colour = (1, 1, 1, 0.6)
+
+        connect = DatabaseClass.conn
+        cursor = connect.cursor()
+
+        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
+        cursor.execute(sqlBase)
+        bases = cursor.fetchall()
+
+        cursor.close()
+
+        # If screen width is small, have 1 column
+        if (Window.width <= 320):
+            print("Width")
+            self.grid.cols = 1
+        else:
+            self.grid.cols = 2
+
+        # Dynamic buttons
+        for i, base in enumerate(bases):
+            button = ToggleButton(text=str(base[1]))
+            self.baseToggleList.append(button)
+            self.grid.add_widget(button)
+            button.bind(on_press=self.saveButtonName)
+
     def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
         if instance.state == 'down':
@@ -228,7 +256,7 @@ class FlavorScreen(Screen):
 
         sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
         cursor.execute(sqlFlavor)
-        bases = cursor.fetchall()
+        flavors = cursor.fetchall()
 
         cursor.close()
 
@@ -240,11 +268,37 @@ class FlavorScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, base in enumerate(bases):
+        for i, base in enumerate(flavors):
             button = ToggleButton(text=str(base[1]))
             self.flavorToggleList.append(button)
             self.grid.add_widget(button)
+            button.bind(on_press=self.saveButtonName)
 
+    def createButtons(self):
+        self.grid.clear_widgets()
+
+        self.nextButton.colour = (1, 1, 1, 0.6)
+        connect = DatabaseClass.conn
+        cursor = connect.cursor()
+
+        sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
+        cursor.execute(sqlFlavor)
+        flavors = cursor.fetchall()
+
+        cursor.close()
+
+        # If screen width is small, have 1 column
+        if (Window.width <= 320):
+            print("Width")
+            self.grid.cols = 1
+        else:
+            self.grid.cols = 2
+
+        # Dynamic buttons
+        for i, flavor in enumerate(flavors):
+            button = ToggleButton(text=str(flavor[1]))
+            self.flavorToggleList.append(button)
+            self.grid.add_widget(button)
             button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):

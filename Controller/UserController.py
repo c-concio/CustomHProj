@@ -163,6 +163,7 @@ def getBaseList():
 
 
 def resetBaseScreen():
+    UserModel.splitScreen.baseScreen.createButtons()
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
         button.state = 'normal'
         button.disabled = False
@@ -204,6 +205,7 @@ def getFlavorList():
     print(UserModel.splitScreen.flavorScreen.flavorList)
 
 def resetFlavorScreen():
+    UserModel.splitScreen.flavorScreen.createButtons()
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
         button.state = 'normal'
         button.disabled = False
