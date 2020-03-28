@@ -129,7 +129,8 @@ class BaseScreen(Screen):
             button.bind(on_press=self.saveButtonName)
 
     def createButtons(self):
-        self.grid.clear_widgets()
+        self.baseList.clear()
+        self.baseToggleList.clear()
 
         self.flavourOfMonthButton.colour = (1, 1, 1, 0.6)
 
@@ -275,7 +276,8 @@ class FlavorScreen(Screen):
             button.bind(on_press=self.saveButtonName)
 
     def createButtons(self):
-        self.grid.clear_widgets()
+        self.flavorList.clear()
+        self.flavorToggleList.clear()
 
         self.nextButton.colour = (1, 1, 1, 0.6)
         connect = DatabaseClass.conn

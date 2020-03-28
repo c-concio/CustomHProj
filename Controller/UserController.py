@@ -163,13 +163,16 @@ def getBaseList():
 
 
 def resetBaseScreen():
-    UserModel.splitScreen.baseScreen.createButtons()
+    # Clear the buttons from the grid
+    UserModel.splitScreen.baseScreen.grid.clear_widgets()
+    # Reset to normal state for all buttons
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
+        print("Button is: " + button.text)
         button.state = 'normal'
         button.disabled = False
+    # Reset lists and re-add all buttons (to list and screen)
+    UserModel.splitScreen.baseScreen.createButtons()
 
-    UserModel.splitScreen.baseScreen.baseList = []
-    UserModel.splitScreen.baseScreen.baseToggleList = []
     UserModel.splitScreen.baseScreen.nextButton.disabled = True
     UserModel.splitScreen.baseScreen.nextButton.colour = (0, 0, 0, 0)
 
@@ -205,13 +208,14 @@ def getFlavorList():
     print(UserModel.splitScreen.flavorScreen.flavorList)
 
 def resetFlavorScreen():
-    UserModel.splitScreen.flavorScreen.createButtons()
+    # Clear the buttons from the grid
+    UserModel.splitScreen.flavorScreen.grid.clear_widgets()
+    # Reset to normal state for all buttons
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
         button.state = 'normal'
         button.disabled = False
-
-    UserModel.splitScreen.flavorScreen.flavorList = []
-    UserModel.splitScreen.flavorScreen.flavorToggleList = []
+    # Reset lists and re-add all buttons (to list and screen)
+    UserModel.splitScreen.flavorScreen.createButtons()
 
 
 # setup the flavor screen by getting cylinders(flavor) from the database
