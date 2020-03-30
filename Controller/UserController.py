@@ -89,7 +89,8 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
-    UserModel.splitScreen.baseScreen.flavourOfMonthButton.bind(on_press=lambda x: showPopupWindow())
+    UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
+    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
 
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
@@ -167,7 +168,6 @@ def resetBaseScreen():
     UserModel.splitScreen.baseScreen.grid.clear_widgets()
     # Reset to normal state for all buttons
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
-        print("Button is: " + button.text)
         button.state = 'normal'
         button.disabled = False
     # Reset lists and re-add all buttons (to list and screen)
@@ -183,9 +183,14 @@ def resetBaseScreen():
 # flavor of the month popup window
 def showPopupWindow():
     show = UserModel.SauceOfMonth()
-    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=show
+    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(600, 600), content=show, auto_dismiss=True
                        # , pos_hint={'x': 5.0 / Window.width, 'y': 5.0 / Window.height}
                         )
+
+    # Done button dismisses popup
+    show.doneButton.bind(on_press=lambda x: popupWindow.dismiss())
+    show.doneButton.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+
     popupWindow.open()
 
 #TODO add another function for done button --> bind it to amount page
