@@ -195,6 +195,8 @@ class SauceOfMonth(Screen):
     doneButton: ObjectProperty(None)
     closeButton: ObjectProperty(None)
     grid = ObjectProperty(None)
+    sauceList = []
+    sauceToggleList = []
     # title: ObjectProperty(None)
     # separator_height: ObjectProperty()
 
@@ -224,13 +226,14 @@ class SauceOfMonth(Screen):
 
             # Get top 4 recipes
             for row in rows:
-                recipe = ""
+                sauce = ""
                 for i in range(1, 6):
                     # print(row[i])
                     if row[i] is not None:
-                        recipe += row[i] + " "
-                button = Button(text=str(recipe))
+                        sauce += row[i] + " "
+                button = ToggleButton(text=str(sauce))
                 button.text_size = self.width, None
+                self.sauceToggleList.append(button)
                 self.grid.add_widget(button)
                 button.bind(on_press=self.saveOptions)
 
@@ -240,6 +243,8 @@ class SauceOfMonth(Screen):
 
     def updateButtons(self):
         self.grid.clear_widgets()
+        self.sauceList.clear()
+        self.sauceToggleList.clear()
         conn = pymysql.connect(host='127.0.0.1',
                                user='root',
                                password='customh',
@@ -261,18 +266,50 @@ class SauceOfMonth(Screen):
 
         # Get top 4 recipes
         for row in rows:
-            recipe = ""
+            sauce = ""
             for i in range(1, 6):
                 # print(row[i])
                 if row[i] is not None:
-                    recipe += row[i] + " "
-            button = Button(text=str(recipe))
+                    sauce += row[i] + " "
+            button = ToggleButton(text=str(sauce))
             button.text_size = self.width, None
+            self.sauceToggleList.append(button)
             self.grid.add_widget(button)
             button.bind(on_press=self.saveOptions)
 
     def saveOptions(self, instance):
-        print("It worked")
+        # Save the sauce name in a list to use for the final order
+        if instance.state == 'down':
+            self.sauceList.append(instance.text)
+            print("Added " + instance.text)
+        else:
+            try:
+                self.sauceList.remove(instance.text)
+                print("Removed " + instance.text)
+            except:
+                print("Could not remove sauce, it did not exist")
+
+        if len(self.sauceList) < 1:
+            self.doneButton.disabled = True
+            self.doneButton.text = ""
+            self.doneButton.colour = (1, 1, 1, 0)
+        else:
+            self.doneButton.disabled = False
+            self.doneButton.text = "Done"
+            self.doneButton.colour = (1, 1, 1, 0.6)
+
+        # Disable other buttons when 1 sauce is chosen
+        if len(self.sauceList) >= 1:
+            for button in self.sauceToggleList:
+                if button.text not in self.sauceList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in self.sauceToggleList:
+                if button.text not in self.sauceList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
+
 
 
 class FlavorScreen(Screen):
