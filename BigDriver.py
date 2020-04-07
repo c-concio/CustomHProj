@@ -4,23 +4,42 @@ import i2c_initial_setup as setup
 
 dirPin = 7  # direction pin     0: Forward  1: Backward
 
-stepPin8 = 8  # step GPIO pin     MSB
-stepPin10 = 10  # step GPIO pin
-stepPin12 = 12  # step GPIO pin
-stepPin32 = 32  # step GPIO pin     LSB
-stepPinControl = 37  # Designated pin (1 to drive, 0 to stop drive).
+stepPin1 = 8  # step GPIO pin
+stepPin2 = 10  # step GPIO pin
+stepPin3 = 12  # step GPIO pin
+stepPin4 = 11  # step GPIO pin
+stepPin5 = 13  # step GPIO pin
+stepPin6 = 15  # step GPIO pin
+stepPin7 = 19  # step GPIO pin
+stepPin8 = 21  # step GPIO pin
+stepPin9 = 23  # step GPIO pin
+stepPin10 = 32  # step GPIO pin
+stepPin11 = 36  # step GPIO pin
+stepPin12 = 38  # step GPIO pin
+stepPinMix = 3
+stepPinClean = 5
+
+enablePin = 37
 
 CW = 1  # clockwise Rotation
 CCW = 0  # Counterclockwise Rotation
 SPR = 287 * 200  # Steps per revolution (360 / 1.8)
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(dirPin, GPIO.OUT)
-GPIO.setup(stepPin8, GPIO.OUT)
-GPIO.setup(stepPin10, GPIO.OUT)
-GPIO.setup(stepPin12, GPIO.OUT)
-GPIO.setup(stepPin32, GPIO.OUT)
-GPIO.setup(stepPinControl, GPIO.OUT)
+GPIO.setup(dirPin, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin1, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin2, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin3, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin4, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin5, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin6, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin7, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin8, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin9, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin10, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin11, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPin12, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPinMix, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(stepPinClean, GPIO.OUT, initial=GPIO.LOW)
 
 timeDelay = 0.01
 
@@ -30,18 +49,16 @@ stepPin also means which ID of the cylinder.
 """
 
 def mix():
-    driveBigMotorForward(15, 30)
+    driveBigMotorForward(stepPinMix, 30)
 
 def driveBigMotorForward(stepPin, step):
     binaryStringStepPin = format(stepPin, '#06b')
     binaryNumArrayStepPin = list(binaryStringStepPin)
 
     # Select line that goes through the select lines from the DEMUX to select correct driver.
-    GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)     # Makes sure that it doesn't run at the beginning.
-    setup.GPIO_High_Low(stepPin8, int(binaryNumArrayStepPin[0]))
-    setup.GPIO_High_Low(stepPin10, int(binaryNumArrayStepPin[1]))
-    setup.GPIO_High_Low(stepPin12, int(binaryNumArrayStepPin[2]))
-    setup.GPIO_High_Low(stepPin32, int(binaryNumArrayStepPin[3]))
+    # GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)     # Makes sure that it doesn't run at the beginning.
+
+    GPIO.output(enablePin, GPIO.HIGH)
 
     for i in range(0, step):
 
@@ -52,12 +69,12 @@ def driveBigMotorForward(stepPin, step):
 
         # Forward drive block
         GPIO.output(dirPin, GPIO.LOW)
-        GPIO.output(stepPinControl, GPIO.HIGH)
+        GPIO.output(stepPin, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
         GPIO.output(dirPin, GPIO.LOW)
-        GPIO.output(stepPinControl, GPIO.LOW)
+        GPIO.output(stepPin, GPIO.LOW)
 
         time.sleep(timeDelay)
 
@@ -66,12 +83,9 @@ def driveBigMotorForward(stepPin, step):
         # GPIO.output(STEP, GPIO.LOW)
         # time.sleep(timeDelay)
 
-    # Turn all of select line to 0.
-    GPIO.output(stepPinControl, GPIO.LOW)
     GPIO.output(dirPin, GPIO.LOW)
-    GPIO.output(stepPin8, GPIO.LOW)
-    GPIO.output(stepPin10, GPIO.LOW)
-    GPIO.output(stepPin12, GPIO.LOW)
+    GPIO.output(stepPin, GPIO.LOW)
+    GPIO.output(enablePin, GPIO.LOW)
 
     GPIO.cleanup()
 
@@ -80,12 +94,7 @@ def driveBigMotorBackward(stepPin, step):
     binaryStringStepPin = format(stepPin, '#06b')
     binaryNumArrayStepPin = list(binaryStringStepPin)
 
-    # Select line that goes through the select lines from the DEMUX to select correct driver.
-    GPIO.output(stepPinControl, GPIO.OUT, GPIO.LOW)  # Makes sure that it doesn't run at the beginning.
-    setup.GPIO_High_Low(stepPin8, int(binaryNumArrayStepPin[0]))
-    setup.GPIO_High_Low(stepPin10, int(binaryNumArrayStepPin[1]))
-    setup.GPIO_High_Low(stepPin12, int(binaryNumArrayStepPin[2]))
-    setup.GPIO_High_Low(stepPin32, int(binaryNumArrayStepPin[3]))
+    GPIO.output(enablePin, GPIO.HIGH)
 
     for i in range(0, step):
         """
@@ -95,12 +104,12 @@ def driveBigMotorBackward(stepPin, step):
 
         # Forward drive block
         GPIO.output(dirPin, GPIO.HIGH)
-        GPIO.output(stepPinControl, GPIO.HIGH)
+        GPIO.output(stepPin, GPIO.HIGH)
 
         time.sleep(timeDelay)
 
         GPIO.output(dirPin, GPIO.HIGH)
-        GPIO.output(stepPinControl, GPIO.LOW)
+        GPIO.output(stepPin, GPIO.LOW)
 
         # GPIO.OUT(stepPin, GPIO.HIGH)
         # time.sleep(timeDelay)
@@ -108,10 +117,8 @@ def driveBigMotorBackward(stepPin, step):
         # time.sleep(timeDelay)
 
     # Turn all of select line to 0.
-    GPIO.output(stepPinControl, GPIO.LOW)
     GPIO.output(dirPin, GPIO.LOW)
-    GPIO.output(stepPin8, GPIO.LOW)
-    GPIO.output(stepPin10, GPIO.LOW)
-    GPIO.output(stepPin12, GPIO.LOW)
+    GPIO.output(stepPin, GPIO.LOW)
+    GPIO.output(enablePin, GPIO.LOW)
 
     GPIO.cleanup()
