@@ -42,7 +42,7 @@ def switch_screen(screen_name):
 
 def initialize_main_screen_buttons():
     UserModel.userMainScreen.startButton.bind(on_press=lambda x: MainScreenController.switch_screen('Split Screen'))
-    UserModel.userMainScreen.qrButton.bind(on_press=lambda x: print("qr button pressed"))
+    UserModel.userMainScreen.qrButton.bind(on_press=lambda x: MainScreenController.switch_screen('QR Screen'))
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
 
@@ -59,9 +59,6 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
     UserModel.splitScreen.step5.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
-
-
-
 
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
@@ -95,7 +92,6 @@ def initialize_buttons():
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
     UserModel.splitScreen.baseScreen.flavourOfMonthButton.bind(on_press=lambda x: showPopupWindow())
-
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
@@ -421,9 +417,13 @@ def buildAmountScreenStackLayout(amountScreen):
     # if there is only one base selected, then the layout should only have one base, no slider, and show the full pie
     if len(baseList) == 1:
         baseTemplate = UserModel.BaseStackTemplate1()
-        baseTemplate.baseLabel1.text = baseList[0]
-        baseTemplate.baseLabel1.width = Window.width * 0.5
+        #baseTemplate.baseLabel1.text = baseList[0]
+        #baseTemplate.baseLabel1.width = Window.width * 0.5
         stack.add_widget(baseTemplate)
+        baseLabel = Label(text=baseList[0], size_hint_x=None, width=Window.width * 0.5, height=50, size_hint_y=None)
+        baseLabel.font_name = "Pacifico"
+        baseLabel.font_size = "18sp"
+        stack.add_widget(baseLabel)
         totalHeight += 50 + (2 * space)
     else:
         # Bases

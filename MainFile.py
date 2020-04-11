@@ -34,6 +34,8 @@ class MainApp(App):
         # FullScreen
         # Window.fullscreen = True
 
+        #Window.size = (400, 600)
+
         self.headerFont = UserController.header_font_size()
 
 

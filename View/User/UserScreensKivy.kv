@@ -63,6 +63,13 @@
             anchor_x: 'right'
             anchor_y: 'center'
 
+            canvas.before:
+                Color:
+                    rgba: 0.19, 0.19, 0.19, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
             canvas:
                 Color:
                     rgba: 1, 1, 1, 1
@@ -235,7 +242,7 @@
             disabled: 'True'
             text: "Next"
 
-        RoundedButton:
+        RoundedButton2:
             id: flavOfMonth
             pos_hint:{"x":0.05,"y":0.05}
             size_hint: 0.3, 0.2
@@ -485,20 +492,29 @@
                 angle_end: slider.value
 
 <BaseStackTemplate1>:
-    baseLabel1: baseLabel1
+#    baseLabel1: baseLabel1
 
     cols: 1
     size_hint_y: None
     height: self.minimum_height
     size_hint_x: None
+    orientation: 'tb-lr'
 
-    Label:
-        id: baseLabel1
-        size_hint_y: None
-        size_hint_x: None
-        height: 50
-        font_name: "Pacifico"
-        font_size: "18sp"
+#    Label:
+#        id: baseLabel1
+#        size_hint_y: None
+#        size_hint_x: None
+
+#        height: 50
+#        font_name: "Pacifico"
+#        font_size: "18sp"
+
+#        canvas.before:
+#            Color:
+#                rgb: 0, 0, 0, 1
+#            Rectangle:
+#                size: self.size
+#                pos: self.pos
 
 <BaseStackTemplate2>:
     baseLabel1: baseLabel1
@@ -591,7 +607,7 @@
 
     FloatLayout:
 
-        RoundedButton:
+        RoundedButton2:
             id: orderButton
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
@@ -701,6 +717,13 @@
     size_hint_x: None
     width: root.width
     pie_chart_value: 180
+
+    canvas.before:
+        Color:
+            rgb: 1, 0, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
 
     canvas:
         Color:

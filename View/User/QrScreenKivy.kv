@@ -3,38 +3,63 @@
 <QrScreen>:
     titleLabel: titleLabel
     img: img
+    backButton: back
 
     BoxLayout:
         orientation: 'vertical'
 
-        canvas.before:
-            Color:
-                rgb: (0.2, 0.2, 0.2)
-            Rectangle:
-                size: self.size
-                pos: self.pos
-
-        Label:
-            id: titleLabel
-            text: 'Please scan the QR code'
+        AnchorLayout:
             size_hint_y: None
-            font_size: app.headerFont
+            height: 38
+            canvas:
+                Color:
+                    rgba: 0.1, 0.1, 0.1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            BoxLayout:
+                size_hint_y: None
+                height: 38
+                orientation: 'horizontal'
+                size_hint_max_x: 1325
+
+
+
+                Button:
+                    id: back
+                    text: 'Back'
+                    size_hint_x: None
+                    width: 80
+                    size_hint_y: None
+                    height: 36
+
+        BoxLayout:
+            orientation: 'vertical'
 
             canvas.before:
                 Color:
-                    rgb: (0.1, 0.1, 0.1)
+                    rgb: (0.2, 0.2, 0.2)
                 Rectangle:
                     size: self.size
                     pos: self.pos
 
+            Label:
+                id: titleLabel
+                text: 'Please download the app on the Google Play Store and scan the QR code to get the ingredients'
+                size_hint_y: 0.1
 
 
-        AnchorLayout:
-            anchor_x: 'center'
-            anchor_y: 'center'
+            Label:
+                text: 'Use the QR scanner to get your order on the machine'
+                size_hint_y: 0.1
 
-            Image:
-                id: img
-                size_hint: (None, None)
-                size: (200, 200)
-                allow_stretch: True
+
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'center'
+
+                Image:
+                    id: img
+                    size_hint: (0.8,0.8)
+                    allow_stretch: True

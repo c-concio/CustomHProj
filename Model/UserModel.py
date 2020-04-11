@@ -317,7 +317,6 @@ class SplitScreen(Screen):
         self.name = name
 
     def on_pre_enter(self, *args):
-        print("pre entered")
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
@@ -327,6 +326,9 @@ class SplitScreen(Screen):
         self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
         UserController.initialize_buttons()
+
+        # check if the 
+        3
 
 
 class FlavorsLayout(GridLayout):
@@ -372,11 +374,6 @@ class DoneRoundedButton1(Button):
 
 class DoneRoundedButton2(Button):
     pass
-
-# -------------------------------------------------------------------
-#                          QR Screens
-# -------------------------------------------------------------------
-
 
 
 # -------------------------------------------------------------------

@@ -6,8 +6,6 @@ from Controller import AdminMainScreenController
 from Model import DatabaseClass, DatabaseClass, AdminModel
 
 
-
-
 # function that inserts new ingredients
 def update_cylinders():
     # clear the cylinder array
@@ -60,8 +58,10 @@ def delete_ingredient(ingredient):
     AdminMainScreenController.refresh_ingredient_popup()
     cursor.close()
 
+
 def edit_ingredient():
     AdminModel.deleteConfirmationPopup.dismiss()
+
 
 # if the button given if a base, change type to flavor and change the color as well
 def change_ingredient_type(button):
@@ -78,7 +78,9 @@ def change_ingredient_type(button):
 
     DatabaseClass.conn.commit()
 
-    cursor.execute("UPDATE cylinder SET ingredient = 'None' WHERE ingredient = '{}' AND type = '{}'".format(result[0][1], result[0][0]))
+    cursor.execute(
+        "UPDATE cylinder SET ingredient = 'None' WHERE ingredient = '{}' AND type = '{}'".format(result[0][1],
+                                                                                                 result[0][0]))
     DatabaseClass.conn.commit()
 
     # refresh page and popup
@@ -116,7 +118,6 @@ def ascend_cylinders():
     cursor.close()
 
 
-
 # function to get order from temporary tabel
 def getOrder():
     cursor = DatabaseClass.conn.cursor()
@@ -144,7 +145,6 @@ def update_steps_amount(id, amount):
     cursor.close()
 
 
-
 def select_first_row_from_condition(ingredient):
     try:
         cursor = DatabaseClass.conn.cursor()
@@ -170,6 +170,7 @@ def select_first_row_from_condition(ingredient):
     # finally:
     #     if (connect):
     #         connect.close()
+
 
 def update_temporary_cylinder(ingredient):
     try:
@@ -208,4 +209,74 @@ def get_temporary_table():
     for i in result:
         string += str(i[0]) + "," + str(i[1]) + "," + str(i[2]) + "\n"
 
+    cursor.close()
+
     return string
+
+
+def get_cylinder_ingredients():
+    cursor = DatabaseClass.conn.cursor()
+    cursor.execute("SELECT  ingredient FROM cylinder WHERE type = 'Base' OR type = 'base'")
+
+    result = cursor.fetchall()
+
+    string = "Bases\n"
+
+    for i in result:
+        string += str(i[0]) + "\n"
+
+    cursor.execute("SELECT ingredient FROM cylinder WHERE type = 'Flavor' OR type = 'flavor'")
+
+    result = cursor.fetchall()
+
+    string += "Flavors\n"
+
+    for i in result:
+        string += str(i[0]) + "\n"
+
+    cursor.close()
+
+    return string
+
+
+def add_temporary_recipe(baseArray, flavorArray):
+    cursor = DatabaseClass.conn.cursor()
+    sql = "INSERT INTO temporary (ingredient) VALUES ('{}')"
+
+
+    for baseString in baseArray:
+        cursor.execute(sql.format(baseString))
+
+    print("committing")
+
+    DatabaseClass.conn.commit()
+    cursor.close()
+
+
+def get_cylinder_type(cylinderId):
+    cursor = DatabaseClass.conn.cursor()
+    sql = "SELECT type FROM cylinder WHERE id = {}"
+
+    cursor.execute(sql.format(cylinderId))
+
+    DatabaseClass.conn.commit()
+
+    result = cursor.fetchall()
+    type = ""
+    for i in result:
+        type = i[0]
+
+    cursor.close()
+
+    return type
+
+
+def clear_temporary_table():
+    cursor = DatabaseClass.conn.cursor()
+    sql = "DELETE FROM temporary"
+
+    cursor.execute(sql)
+
+    DatabaseClass.conn.commit()
+
+    cursor.close()
