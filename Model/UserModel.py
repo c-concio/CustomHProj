@@ -107,7 +107,7 @@ class BaseScreen(Screen):
 
         cursor = connect.cursor()
 
-        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
+        sqlBase = "SELECT * FROM cylinder WHERE type='base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -187,7 +187,7 @@ class FlavorScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
+        sqlFlavor = "SELECT * FROM cylinder WHERE type='flavor';"
         cursor.execute(sqlFlavor)
         bases = cursor.fetchall()
 
