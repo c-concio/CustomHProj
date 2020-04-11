@@ -335,6 +335,8 @@ def orderFinish():
     resetFlavorScreen()
     # Push data to online database
     updateOnlineDatabase()
+    # Pull data from online database
+    getOnlineDatabase()
     # Reset temporary table
     reset_temporary_table()
 
@@ -488,7 +490,24 @@ def updateOnlineDatabase():
     except:
         print("Proxy not setup, could not push temporary table to online database")
 
+def getOnlineDatabase():
+    try:
+        conn = pymysql.connect(host='127.0.0.1',
+                               user='root',
+                               password='customh',
+                               db='cylinder')
 
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM online;")
+
+        rows = cursor.fetchall()
+        print("Online database contains:")
+        for row in rows:
+            print(row)
+
+        cursor.close()
+    except:
+        print("Proxy not setup, could not push temporary table to online database")
 
 def reset_temporary_table():
     conn = DatabaseClass.conn
