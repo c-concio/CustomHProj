@@ -38,10 +38,12 @@ class AdminMainScreen(Screen):
     inventoryButton = ObjectProperty(None)
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
+    entered = False
 
     def on_enter(self, *args):
         AdminMainScreenController.initialize_admin_buttons()
         AdminMainScreenController.setup_inventory_screen()
+
 
 
 class InventoryScreen(Screen):
@@ -49,6 +51,7 @@ class InventoryScreen(Screen):
     backButton = ObjectProperty(None)
     editIngredientButton = ObjectProperty(None)
     sortToggleButton = ObjectProperty(None)
+    entered = False
 
     def __init__(self, name):
         super().__init__()
@@ -59,8 +62,10 @@ class InventoryScreen(Screen):
         AdminMainScreenController.initialize_inventory_buttons()
 
 
+
 class InventoryItemTemplate(BoxLayout):
     cylinderButton = ObjectProperty(None)
+    ingredientSpinner = ObjectProperty(None)
     ingredientSpinner = ObjectProperty(None)
     percentButton = ObjectProperty(None)
     progressBar = ObjectProperty(None)
