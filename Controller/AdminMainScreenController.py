@@ -84,16 +84,20 @@ def add_inventory_template(cylinder_item):
     inventory_item_template.progressBar.value = cylinder_item.amount
 
     # bind the reset button to change the label text and rebind on press
-    inventory_item_template.resetButton.bind(on_press=reset_cylinder)
+    inventory_item_template.resetButton.bind(on_press=lambda x:open_reset_motor_popup())
 
     AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
 
 
 def reset_cylinder(button):
+    # When the reset button is pressed, move the motor all the way up
+    # Once the motor has been resetted, open up a popup with an up, down, and done button
+
     # set steps to 100
     DatabaseController.update_steps_amount(button.parent.cylinderID, 0)
     newButton = refresh_inventory_button(button.parent.cylinderID)
 
+    #
     # change text to "set up"
     newButton.text = 'Set up'
 
@@ -244,7 +248,7 @@ def dismiss_delete_confirmation_popup():
 
 def open_delete_confirmation_popup(ingredient):
     AdminModel.deleteConfirmationPopup = Popup(title_align="center", title_size=22, size_hint=(None, None),
-                                            size=(Window.width * 0.6, 125))
+                                               size=(Window.width * 0.6, 125))
 
     AdminModel.deleteConfirmationPopup.title = "Delete " + ingredient + "?"
     addInventoryLayout = AdminModel.AddInventoryPopupLayout()
@@ -254,7 +258,6 @@ def open_delete_confirmation_popup(ingredient):
 
     AdminModel.deleteConfirmationPopup.content = addInventoryLayout
     AdminModel.deleteConfirmationPopup.open()
-
 
 
 def add_text_field(addInventoryButton, gridLayout):
@@ -298,3 +301,68 @@ def bind_delete_button(button, ingredient):
 
 def bind_ingredient_button(button):
     button.bind(on_press=lambda x: DatabaseController.change_ingredient_type(button))
+
+
+# Popup for the reset motor function. Popup has up, down, and done button
+def open_reset_motor_popup():
+    # TODO: Reset motor all the way to the top of the cylinder
+
+    AdminModel.resetMotorPopup = Popup(title='Ingredients', size_hint=(None, None),
+                                       size=(Window.width * 0.7, Window.height * 0.7))
+    AdminModel.resetMotorPopup.auto_dismiss = False
+
+    # add a ResetMotorPopupLayout to the popup
+    resetMotorPopupLayout = AdminModel.ResetMotorPopupLayout()
+    bind_reset_motor_buttons(resetMotorPopupLayout.upButton, resetMotorPopupLayout.pauseButton, resetMotorPopupLayout.downButton, resetMotorPopupLayout.doneButton)
+
+    AdminModel.resetMotorPopup.content = resetMotorPopupLayout
+
+    AdminModel.resetMotorPopup.open()
+
+
+def bind_reset_motor_buttons(upButton, pauseButton, downButton, doneButton):
+    upButton.bind(on_press=lambda x: move_motor_up())
+    pauseButton.bind(on_press=lambda x: pause_motor())
+    downButton.bind(on_press=lambda x: move_motor_down())
+    doneButton.bind(on_press=lambda x: AdminModel.resetMotorPopup.dismiss())
+
+
+def move_motor_up():
+    AdminModel.threadLock.acquire()
+    AdminModel.moveMotorUp = True
+    AdminModel.moveMotorDown = False
+    AdminModel.threadLock.release()
+
+    AdminModel.activeThread = AdminModel.MotorUpThread()
+    AdminModel.activeThread.start()
+
+    print("Up button")
+
+
+def move_motor_down():
+    AdminModel.threadLock.acquire()
+    AdminModel.moveMotorUp = False
+    AdminModel.moveMotorDown = True
+    AdminModel.threadLock.release()
+
+    AdminModel.activeThread = AdminModel.MotorDownThread()
+    AdminModel.activeThread.start()
+
+    print("Down button")
+
+
+def pause_motor():
+    AdminModel.threadLock.acquire()
+    AdminModel.moveMotorUp = False
+    AdminModel.moveMotorDown = False
+    AdminModel.threadLock.release()
+
+    print("Pause Button")
+
+
+def temporary_dissmiss_reset_popup():
+    pause_motor()
+
+    # TODO: move the motor up a bit
+
+    print("Popup dissmissed")
