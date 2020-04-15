@@ -44,6 +44,7 @@ def switch_screen(screen_name):
 
 # Button switches to
 def initialize_buttons():
+    reset_temporary_table()
     # Step buttons
     UserModel.splitScreen.step1.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
