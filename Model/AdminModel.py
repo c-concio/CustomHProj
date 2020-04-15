@@ -1,12 +1,15 @@
+import threading
 from tkinter import Button
 
 from kivy.graphics.context_instructions import Color
 from kivy.graphics.vertex_instructions import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.spinner import Spinner
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.textinput import TextInput
 
 from Controller import AdminMainScreenController, DatabaseController
@@ -35,10 +38,12 @@ class AdminMainScreen(Screen):
     inventoryButton = ObjectProperty(None)
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
+    entered = False
 
     def on_enter(self, *args):
         AdminMainScreenController.initialize_admin_buttons()
         AdminMainScreenController.setup_inventory_screen()
+
 
 
 class InventoryScreen(Screen):
@@ -46,6 +51,7 @@ class InventoryScreen(Screen):
     backButton = ObjectProperty(None)
     editIngredientButton = ObjectProperty(None)
     sortToggleButton = ObjectProperty(None)
+    entered = False
 
     def __init__(self, name):
         super().__init__()
@@ -56,8 +62,10 @@ class InventoryScreen(Screen):
         AdminMainScreenController.initialize_inventory_buttons()
 
 
+
 class InventoryItemTemplate(BoxLayout):
     cylinderButton = ObjectProperty(None)
+    ingredientSpinner = ObjectProperty(None)
     ingredientSpinner = ObjectProperty(None)
     percentButton = ObjectProperty(None)
     progressBar = ObjectProperty(None)
@@ -96,6 +104,60 @@ class AddInventoryPopupLayout(BoxLayout):
     declineButton = ObjectProperty(None)
 
 
+class ResetMotorPopupLayout(StackLayout):
+    upButton = ObjectProperty(None)
+    downButton = ObjectProperty(None)
+    doneButton = ObjectProperty(None)
+    pauseButton = ObjectProperty(None)
+
+
+# //////////////////////////////////////////////////
+#                     Threads
+# //////////////////////////////////////////////////
+
+# -------------- Thread Variables ------------------
+moveMotorUp = False
+moveMotorDown = False
+pauseMotor = False
+threadLock = threading.Lock()
+activeThread = None
+
+
+# thread that moves the motor up until the moveMotorUp boolean turns False
+class MotorUpThread(threading.Thread):
+    def run(self):
+        while True:
+            print("Moving motor up")
+
+            # TODO: add move motor up loop
+
+            threadLock.acquire()
+            if not moveMotorUp:
+                threadLock.release()
+                break
+            threadLock.release()
+
+        print("Exited up while loop")
+
+
+# thread that moves the motor down until the moveMotorDown boolean turns False
+class MotorDownThread(threading.Thread):
+    def run(self):
+        while True:
+            print("Moving motor down")
+
+            # TODO: add move motor down loop
+
+            threadLock.acquire()
+            if not moveMotorDown:
+                threadLock.release()
+                break
+            threadLock.release()
+
+        print("Exited down while loop")
+
+
+
 
 # //////////////////////////////////////////////////
 #                  Screen Manager
@@ -119,5 +181,6 @@ MainModel.mainScreenManager.add_widget(inventoryScreen)
 ingredientPopup = Popup()
 addConfirmationPopup = Popup()
 deleteConfirmationPopup = Popup()
+resetMotorPopup = Popup()
 
 text_input = TextInput()

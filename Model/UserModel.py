@@ -102,12 +102,13 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
+        self.flavourOfMonthButton.colour = (1, 1, 1, 0.6)
 
         connect = DatabaseClass.conn
 
         cursor = connect.cursor()
 
-        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
+        sqlBase = "SELECT * FROM cylinder WHERE type='base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -187,7 +188,7 @@ class FlavorScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
+        sqlFlavor = "SELECT * FROM cylinder WHERE type='flavor';"
         cursor.execute(sqlFlavor)
         bases = cursor.fetchall()
 
@@ -279,6 +280,9 @@ class AmountScreen1(Screen):
 class ConfirmScreen(Screen):
     orderButton = ObjectProperty(None)
     confirmLayout = ObjectProperty(None)
+    def __init__(self):
+        super().__init__()
+        self.orderButton.colour = (1, 1, 1, 0.6)
 
 
 class loadingPopup(BoxLayout):
