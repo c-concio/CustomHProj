@@ -55,12 +55,20 @@
 <UserMainScreen>:
     # objectProperty names
     startButton: start
+    qrButton: qrButton
 
     FloatLayout:
 
         AnchorLayout:
             anchor_x: 'right'
             anchor_y: 'center'
+
+            canvas.before:
+                Color:
+                    rgba: 0.19, 0.19, 0.19, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
             canvas:
                 Color:
@@ -80,16 +88,17 @@
             pos_hint: {"x":0.35,"top":0.80}
             size_hint: 0.35, 0.15
 
-        Label:
+        RoundedButton2:
+            id: qrButton
             text:"Or Scan Your \nQR Code Here"
             halign: 'center'
             font_name: "OstrichSans"
-            font_size: (root.width**2 + root.height**2) / 15**4
-            pos_hint: {"x":0.07, "bottom":0.3}
-            size_hint: 0.35, 0.15
+            font_size: (root.width**2 + root.height**2) / 13**4
+            pos_hint:{"x":0.07,"y":0.05}
+            size_hint: 0.3, 0.2
+            color: 0, 0, 0, 1
 
-
-        RoundedButton:
+        RoundedButton2:
             id: start
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
@@ -235,6 +244,7 @@
             disabled: 'True'
             text: "Next"
 
+
         #RoundedButton:
         #    id: flavOfMonth
         #    pos_hint:{"x":0.05,"y":0.05}
@@ -244,6 +254,7 @@
         #    bold: True
         #    color: 0, 0, 0, 1
         #    text: "Sauce Of The Month"
+
 
 
 
@@ -485,20 +496,29 @@
                 angle_end: slider.value
 
 <BaseStackTemplate1>:
-    baseLabel1: baseLabel1
+#    baseLabel1: baseLabel1
 
     cols: 1
     size_hint_y: None
     height: self.minimum_height
     size_hint_x: None
+    orientation: 'tb-lr'
 
-    Label:
-        id: baseLabel1
-        size_hint_y: None
-        size_hint_x: None
-        height: 50
-        font_name: "Pacifico"
-        font_size: "18sp"
+#    Label:
+#        id: baseLabel1
+#        size_hint_y: None
+#        size_hint_x: None
+
+#        height: 50
+#        font_name: "Pacifico"
+#        font_size: "18sp"
+
+#        canvas.before:
+#            Color:
+#                rgb: 0, 0, 0, 1
+#            Rectangle:
+#                size: self.size
+#                pos: self.pos
 
 <BaseStackTemplate2>:
     baseLabel1: baseLabel1
@@ -591,7 +611,7 @@
 
     FloatLayout:
 
-        RoundedButton:
+        RoundedButton2:
             id: orderButton
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2

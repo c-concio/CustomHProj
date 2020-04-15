@@ -12,7 +12,7 @@ from kivy.uix.spinner import Spinner
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.textinput import TextInput
 
-from Controller import AdminMainScreenController
+from Controller import AdminMainScreenController, DatabaseController
 import kivy
 
 from Model import MainModel
@@ -74,7 +74,8 @@ class InventoryItemTemplate(BoxLayout):
     def __init__(self, cylinderID):
         super().__init__()
         self.cylinderID = cylinderID
-        if (cylinderID <= 6):
+        type = DatabaseController.get_cylinder_type(cylinderID)
+        if type == "Base":
             with self.canvas.before:
                 self.color_widget = Color(0.8, 0.06, 0.06, 0.3)
                 self._rectangle = Rectangle()

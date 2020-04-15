@@ -22,7 +22,6 @@ from functools import partial
 
 import sqlite3
 from sqlite3 import Error
-import pyodbc
 import pymysql
 
 
@@ -44,9 +43,6 @@ def create_table():
 
         sql_create_cylinder_table = """ CREATE TABLE IF NOT EXISTS cylinder (
                                                 id integer PRIMARY KEY,
-                                                ingredient text,
-                                                type text,
-                                                steps integer,
                                                 ingredient text DEFAULT 'None',
                                                 steps integer DEFAULT 0,
                                                 type TEXT DEFAULT 'Flavor'
@@ -54,6 +50,7 @@ def create_table():
 
         sql_create_temporary_table = """ CREATE TABLE IF NOT EXISTS temporary (
                                                         ingredient TEXT,
+
                                                         type TEXT,
                                                         cylinder_id int,
                                                         ml int
@@ -69,12 +66,15 @@ def create_table():
         # create database connection
         connect = create_connection(database)
 
+
         # create tables
         if connect is not None:
             cursor = connect.cursor()
             cursor.execute(sql_create_cylinder_table)
             cursor.execute(sql_create_temporary_table)
             cursor.execute(sql_create_ingredient_table)
+            print("execution")
+
 
         else:
             print("Error! Cannot create the connection")

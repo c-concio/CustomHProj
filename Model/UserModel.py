@@ -45,6 +45,7 @@ LabelBase.register(name="OstrichSans", fn_regular="ostrich-regular.ttf")
 
 class UserMainScreen(Screen):
     startButton = ObjectProperty(None)
+    qrButton = ObjectProperty(None)
 
 
 class SizeScreen(Screen):
@@ -490,6 +491,9 @@ class SplitScreen(Screen):
 
     def __init__(self, name):
         super().__init__()
+        self.name = name
+
+    def on_pre_enter(self, *args):
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
@@ -497,7 +501,10 @@ class SplitScreen(Screen):
         self.amountScreen = AmountScreen()
         self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
-        self.name = name
+        UserController.initialize_buttons()
+
+        # check if the 
+        3
 
 
 class FlavorsLayout(GridLayout):
@@ -544,6 +551,7 @@ class DoneRoundedButton1(Button):
 class DoneRoundedButton2(Button):
     pass
 
+
 # -------------------------------------------------------------------
 #                       Screen Manager
 # -------------------------------------------------------------------
@@ -565,6 +573,7 @@ sizeScreen = SizeScreen(name="Size Screen")
 # flavorScreen = FlavorScreen(name="Flavor Screen")
 # amountScreen = AmountScreen(name="Amount Screen")
 
-UserController.initialize_buttons()
+UserController.initialize_main_screen_buttons()
+
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)

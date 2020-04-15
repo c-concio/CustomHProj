@@ -17,11 +17,9 @@ def return_screen(screen_name):
     MainModel.mainScreenManager.transition.direction = 'right'
     MainModel.mainScreenManager.current = screen_name
 
-
-
 def initialize_buttons():
     MainModel.mainScreen.adminButton.bind(on_press=lambda x: switch_screen('Admin Main Screen'))
-    MainModel.mainScreen.userButton.bind(on_press=lambda x: switch_screen('Split Screen'))
+    MainModel.mainScreen.userButton.bind(on_press=lambda x: switch_screen('User Main Screen'))
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 

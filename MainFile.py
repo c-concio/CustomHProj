@@ -1,7 +1,7 @@
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager
 
-from Model import AdminModel, MainModel
+from Model import AdminModel, MainModel, QrModel
 from Controller import AdminMainScreenController, DatabaseController
 from Model import UserModel
 from Controller import UserController
@@ -34,14 +34,14 @@ class MainApp(App):
         # FullScreen
         # Window.fullscreen = True
 
+        #Window.size = (400, 600)
+
         self.headerFont = UserController.header_font_size()
 
 
         testScreenManager = ScreenManager();
 
-        screen = UserModel.AmountScreen()
-        # UserController.buildAmountScreen(screen)
-        testScreenManager.add_widget(screen)
+        testScreenManager.add_widget(UserModel.UserMainScreen(name='User Main Screen'))
 
         return screenManager
 
