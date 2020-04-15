@@ -87,9 +87,9 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
-    UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
-    UserModel.splitScreen.sizeScreen.nextButton.bind(
-        on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
+    # UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
+    # UserModel.splitScreen.sizeScreen.nextButton.bind(
+    #     on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
@@ -142,7 +142,7 @@ def getBaseList():
     cursor = connect.cursor()
 
     for base in UserModel.splitScreen.baseScreen.baseList:
-        cursor.execute("INSERT INTO temporary(ingredient,type) VALUES(?,?);", (base, "Base"))
+        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (base,))
         connect.commit()
 
         print("Added " + base + " to Temporary table")
@@ -263,7 +263,7 @@ def getFlavorList():
     cursor = connect.cursor()
 
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
-        cursor.execute("INSERT INTO temporary(ingredient, type) VALUES(?,?);", (flavor, "Flavor"))
+        cursor.execute("INSERT INTO temporary(ingredient) VALUES(?);", (flavor,))
         connect.commit()
 
         print("Added " + flavor + " to Temporary table")
@@ -550,10 +550,10 @@ def updateOnlineDatabase():
     # Get ingredients from temporary table
     local_conn = DatabaseClass.conn
     local_cursor = local_conn.cursor()
-    sqlBase = "SELECT ingredient FROM temporary WHERE type = 'Base';"
+    sqlBase = "SELECT ingredient FROM temporary;"
     local_cursor.execute(sqlBase)
     bases = local_cursor.fetchall()
-    sqlFlavor = "SELECT ingredient FROM temporary WHERE type = 'Flavor';"
+    sqlFlavor = "SELECT ingredient FROM temporary;"
     local_cursor.execute(sqlFlavor)
     flavors = local_cursor.fetchall()
     try:
