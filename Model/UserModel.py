@@ -1,4 +1,5 @@
 import kivy
+import pymysql
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.graphics.context_instructions import Color
@@ -88,7 +89,7 @@ class BaseScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
     nextButton = ObjectProperty()
-    flavourOfMonthButton = ObjectProperty()
+    sauceOfMonthButton = ObjectProperty()
     baseList = []
     baseToggleList = []
 
@@ -101,13 +102,42 @@ class BaseScreen(Screen):
     # Create buttons dynamically based on the 'cylinder' table
     def __init__(self, **kwargs):
         super(BaseScreen, self).__init__(**kwargs)
-        self.flavourOfMonthButton.colour = (1, 1, 1, 0.6)
+        # self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
 
         connect = DatabaseClass.conn
 
         cursor = connect.cursor()
 
         sqlBase = "SELECT * FROM cylinder WHERE type='base';"
+        cursor.execute(sqlBase)
+        bases = cursor.fetchall()
+
+        cursor.close()
+
+        # If screen width is small, have 1 column
+        if (Window.width <= 320):
+            print("Width")
+            self.grid.cols = 1
+        else:
+            self.grid.cols = 2
+
+        # Dynamic buttons
+        for i, base in enumerate(bases):
+            button = ToggleButton(text=str(base[1]))
+            self.baseToggleList.append(button)
+            self.grid.add_widget(button)
+            button.bind(on_press=self.saveButtonName)
+
+    def createButtons(self):
+        self.baseList.clear()
+        self.baseToggleList.clear()
+
+        #self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
+
+        connect = DatabaseClass.conn
+        cursor = connect.cursor()
+
+        sqlBase = "SELECT * FROM cylinder WHERE type='Base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -161,13 +191,125 @@ class BaseScreen(Screen):
                     # print("This button recovered: " + button.text)
 
 
-class SauceOfMonth(Screen):
-    doneButton: ObjectProperty(None)
-    closeButton: ObjectProperty(None)
-    # title: ObjectProperty(None)
-    # separator_height: ObjectProperty()
+# class SauceOfMonth(Screen):
+#     doneButton: ObjectProperty(None)
+#     closeButton: ObjectProperty(None)
+#     grid = ObjectProperty(None)
+#     sauceList = []
+#     sauceToggleList = []
+#     # title: ObjectProperty(None)
+#     # separator_height: ObjectProperty()
+#
+#     def __init__(self, **kwargs):
+#         super(SauceOfMonth, self).__init__(**kwargs)
+#         self.doneButton.colour = (1, 1, 1, 0.6)
+#
+#         try:
+#             conn = pymysql.connect(host='127.0.0.1',
+#                                    user='root',
+#                                    password='customh',
+#                                    db='cylinder')
+#             cursor = conn.cursor()
+#
+#             sqlOnline = "SELECT * FROM online ORDER BY count DESC LIMIT 4;"
+#             cursor.execute(sqlOnline)
+#             rows = cursor.fetchall()
+#
+#             cursor.close()
+#
+#             # If screen width is small, have 1 column
+#             if (Window.width <= 320):
+#                 print("Width")
+#                 self.grid.cols = 1
+#             else:
+#                 self.grid.cols = 2
+#
+#             # Get top 4 recipes
+#             for row in rows:
+#                 sauce = ""
+#                 for i in range(1, 6):
+#                     # print(row[i])
+#                     if row[i] is not None:
+#                         sauce += row[i] + " "
+#                 button = ToggleButton(text=str(sauce))
+#                 button.text_size = self.width, None
+#                 self.sauceToggleList.append(button)
+#                 self.grid.add_widget(button)
+#                 button.bind(on_press=self.saveOptions)
+#
+#
+#         except:
+#             print("No connection to online database")
+#
+#     def updateButtons(self):
+#         self.grid.clear_widgets()
+#         self.sauceList.clear()
+#         self.sauceToggleList.clear()
+#         conn = pymysql.connect(host='127.0.0.1',
+#                                user='root',
+#                                password='customh',
+#                                db='cylinder')
+#         cursor = conn.cursor()
+#
+#         sqlOnline = "SELECT * FROM online ORDER BY count DESC LIMIT 4;"
+#         cursor.execute(sqlOnline)
+#         rows = cursor.fetchall()
+#
+#         cursor.close()
+#
+#         # If screen width is small, have 1 column
+#         if (Window.width <= 320):
+#             print("Width")
+#             self.grid.cols = 1
+#         else:
+#             self.grid.cols = 2
+#
+#         # Get top 4 recipes
+#         for row in rows:
+#             sauce = ""
+#             for i in range(1, 6):
+#                 # print(row[i])
+#                 if row[i] is not None:
+#                     sauce += row[i] + " "
+#             button = ToggleButton(text=str(sauce))
+#             button.text_size = self.width, None
+#             self.sauceToggleList.append(button)
+#             self.grid.add_widget(button)
+#             button.bind(on_press=self.saveOptions)
+#
+#     def saveOptions(self, instance):
+#         # Save the sauce name in a list to use for the final order
+#         if instance.state == 'down':
+#             self.sauceList.append(instance.text)
+#             print("Added " + instance.text)
+#         else:
+#             try:
+#                 self.sauceList.remove(instance.text)
+#                 print("Removed " + instance.text)
+#             except:
+#                 print("Could not remove sauce, it did not exist")
+#
+#         if len(self.sauceList) < 1:
+#             self.doneButton.disabled = True
+#             self.doneButton.text = ""
+#             self.doneButton.colour = (1, 1, 1, 0)
+#         else:
+#             self.doneButton.disabled = False
+#             self.doneButton.text = "Done"
+#             self.doneButton.colour = (1, 1, 1, 0.6)
+#
+#         # Disable other buttons when 1 sauce is chosen
+#         if len(self.sauceList) >= 1:
+#             for button in self.sauceToggleList:
+#                 if button.text not in self.sauceList:
+#                     button.disabled = True
+#                     # print("This button disabled: " + button.text)
+#         else:
+#             for button in self.sauceToggleList:
+#                 if button.text not in self.sauceList:
+#                     button.disabled = False
+#                     # print("This button recovered: " + button.text)
 
-    # TODO get sauce choices from db
 
 
 class FlavorScreen(Screen):
@@ -189,7 +331,7 @@ class FlavorScreen(Screen):
 
         sqlFlavor = "SELECT * FROM cylinder WHERE type='flavor';"
         cursor.execute(sqlFlavor)
-        bases = cursor.fetchall()
+        flavors = cursor.fetchall()
 
         cursor.close()
 
@@ -201,11 +343,38 @@ class FlavorScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, base in enumerate(bases):
+        for i, base in enumerate(flavors):
             button = ToggleButton(text=str(base[1]))
             self.flavorToggleList.append(button)
             self.grid.add_widget(button)
+            button.bind(on_press=self.saveButtonName)
 
+    def createButtons(self):
+        self.flavorList.clear()
+        self.flavorToggleList.clear()
+
+        self.nextButton.colour = (1, 1, 1, 0.6)
+        connect = DatabaseClass.conn
+        cursor = connect.cursor()
+
+        sqlFlavor = "SELECT * FROM cylinder WHERE type='Flavor';"
+        cursor.execute(sqlFlavor)
+        flavors = cursor.fetchall()
+
+        cursor.close()
+
+        # If screen width is small, have 1 column
+        if (Window.width <= 320):
+            print("Width")
+            self.grid.cols = 1
+        else:
+            self.grid.cols = 2
+
+        # Dynamic buttons
+        for i, flavor in enumerate(flavors):
+            button = ToggleButton(text=str(flavor[1]))
+            self.flavorToggleList.append(button)
+            self.grid.add_widget(button)
             button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
@@ -320,7 +489,6 @@ class SplitScreen(Screen):
         # screens to be put in carousel
         self.sizeScreen = SizeScreen()
         self.baseScreen = BaseScreen()
-        self.sauceOfMonth = SauceOfMonth()
         self.flavorScreen = FlavorScreen()
         self.amountScreen = AmountScreen()
         self.confirmScreen = ConfirmScreen()

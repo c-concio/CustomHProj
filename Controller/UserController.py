@@ -1,3 +1,5 @@
+import re
+
 import kivy
 import pymysql
 from kivy.clock import Clock
@@ -54,11 +56,7 @@ def initialize_buttons():
     UserModel.splitScreen.step5.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
-
-
-
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
-
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
@@ -78,8 +76,8 @@ def initialize_buttons():
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: enableStep4())
-#    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: enableStep5())
-#    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: loadOrder())
+    #    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: enableStep5())
+    #    UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: loadOrder())
 
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: i2c.run())
     # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: print("I2C"))
@@ -89,19 +87,16 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
-    UserModel.splitScreen.baseScreen.flavourOfMonthButton.bind(on_press=lambda x: showPopupWindow())
-
+    # UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
+    # UserModel.splitScreen.sizeScreen.nextButton.bind(
+    #     on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
     # TODO: uncomment
     # Trigger Amount screen properties
-    # UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: reloadAmountScreen())
-    UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
-
-    # UserModel.splitScreen.amountScreen.doneButton.bind(on_press=lambda x: amountScreenDone())
-
-    # UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+    UserModel.splitScreen.flavorScreen.nextButton.bind(
+        on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
     UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: loadingPopupWindow())
 
@@ -116,11 +111,6 @@ def initialize_carousel(split_screen):
     split_screen.carouselWidget.add_widget(split_screen.flavorScreen)
     split_screen.carouselWidget.add_widget(split_screen.amountScreen)
     split_screen.carouselWidget.add_widget(split_screen.confirmScreen)
-
-
-#    split_screen.carouselWidget.add_widget(split_screen.loadingScreen)
-# split_screen.carouselWidget.add_widget(split_screen.flavorOfMonthScreen)
-
 
 
 def resetStepButtons():
@@ -140,7 +130,6 @@ def resetSizeScreen():
     UserModel.splitScreen.sizeScreen.toggleButtonLarge.state = 'normal'
     UserModel.splitScreen.sizeScreen.nextButton.disabled = True
     UserModel.splitScreen.sizeScreen.nextButton.colour = (0, 0, 0, 0)
-
 
 
 # -------------------------------------------------------------------
@@ -163,28 +152,107 @@ def getBaseList():
 
 
 def resetBaseScreen():
+    # Clear the buttons from the grid
+    UserModel.splitScreen.baseScreen.grid.clear_widgets()
+    # Reset to normal state for all buttons
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
         button.state = 'normal'
         button.disabled = False
+    # Reset lists and re-add all buttons (to list and screen)
+    UserModel.splitScreen.baseScreen.createButtons()
 
-    UserModel.splitScreen.baseScreen.baseList = []
-    UserModel.splitScreen.baseScreen.baseToggleList = []
     UserModel.splitScreen.baseScreen.nextButton.disabled = True
     UserModel.splitScreen.baseScreen.nextButton.colour = (0, 0, 0, 0)
 
 
+# -------------------------------------------------------------------
+#                       Sauce of the Month Functions
+# -------------------------------------------------------------------
 
-# popup windows
-
-# flavor of the month popup window
+# Popup window of sauce of the month
 def showPopupWindow():
     show = UserModel.SauceOfMonth()
-    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(900, 900), content=show
-                       # , pos_hint={'x': 5.0 / Window.width, 'y': 5.0 / Window.height}
+    popupWindow = Popup(title="", separator_height=0, size_hint=(None, None), size=(600, 600), content=show,
+                        auto_dismiss=True
+                        # , pos_hint={'x': 5.0 / Window.width, 'y': 5.0 / Window.height}
                         )
+
+    # Done button dismisses popup
+    show.doneButton.bind(on_press=lambda x: popupWindow.dismiss())
+    # Jump to base screen when sauce is chosen
+    show.doneButton.bind(
+        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    # Enable base step
+    show.doneButton.bind(on_press=lambda x: enableStep3())
+    # Enable flavor step
+    show.doneButton.bind(on_press=lambda x: enableStep4())
+    # Selects the buttons for base screen
+    show.doneButton.bind(on_press=lambda x: select_base_toggle_buttons())
+    # Selects the buttons for flavor screen
+    show.doneButton.bind(on_press=lambda x: select_flavor_toggle_buttons())
     popupWindow.open()
 
-#TODO add another function for done button --> bind it to amount page
+def select_base_toggle_buttons():
+    sauceOfMonth = UserModel.SauceOfMonth()
+    baseScreen = UserModel.splitScreen.baseScreen
+
+    for ingredient in sauceOfMonth.sauceList:
+        ingredient = re.sub("\\s+", ",", ingredient.strip())
+        values = ingredient.split(',')
+        for baseToggle in baseScreen.baseToggleList:
+            for value in values:
+                if value == baseToggle.text:
+                    baseToggle.state = "down"
+                    baseScreen.baseList.append(baseToggle.text)
+
+        if len(baseScreen.baseList) < 1:
+            baseScreen.nextButton.disabled = True
+            baseScreen.nextButton.text = ""
+            baseScreen.nextButton.colour = (1, 1, 1, 0)
+        else:
+            baseScreen.nextButton.disabled = False
+            baseScreen.nextButton.text = "Next"
+            baseScreen.nextButton.colour = (1, 1, 1, 0.6)
+
+        # Disable other buttons when 2 bases are chosen
+        if len(baseScreen.baseList) >= 2:
+            for button in baseScreen.baseToggleList:
+                if button.text not in baseScreen.baseList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in baseScreen.baseToggleList:
+                if button.text not in baseScreen.baseList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
+
+def select_flavor_toggle_buttons():
+    sauceOfMonth = UserModel.SauceOfMonth()
+    flavorScreen = UserModel.splitScreen.flavorScreen
+
+    for ingredient in sauceOfMonth.sauceList:
+        ingredient = re.sub("\\s+", ",", ingredient.strip())
+        values = ingredient.split(',')
+        for flavorToggle in flavorScreen.flavorToggleList:
+            for value in values:
+                if value == flavorToggle.text:
+                    flavorToggle.state = "down"
+                    flavorScreen.flavorList.append(flavorToggle.text)
+
+        # Disable other buttons when 3 flavors are chosen
+        if len(flavorScreen.flavorList) >= 3:
+            for button in flavorScreen.baseToggleList:
+                if button.text not in flavorScreen.flavorList:
+                    button.disabled = True
+                    # print("This button disabled: " + button.text)
+        else:
+            for button in flavorScreen.flavorToggleList:
+                if button.text not in flavorScreen.flavorList:
+                    button.disabled = False
+                    # print("This button recovered: " + button.text)
+
+
+# TODO add another function for done button --> bind it to amount page
 
 # -------------------------------------------------------------------
 #                       Flavor Screen Functions
@@ -203,13 +271,16 @@ def getFlavorList():
 
     print(UserModel.splitScreen.flavorScreen.flavorList)
 
+
 def resetFlavorScreen():
+    # Clear the buttons from the grid
+    UserModel.splitScreen.flavorScreen.grid.clear_widgets()
+    # Reset to normal state for all buttons
     for button in UserModel.splitScreen.flavorScreen.flavorToggleList:
         button.state = 'normal'
         button.disabled = False
-
-    UserModel.splitScreen.flavorScreen.flavorList = []
-    UserModel.splitScreen.flavorScreen.flavorToggleList = []
+    # Reset lists and re-add all buttons (to list and screen)
+    UserModel.splitScreen.flavorScreen.createButtons()
 
 
 # setup the flavor screen by getting cylinders(flavor) from the database
@@ -262,7 +333,7 @@ def amountScreenDone():
         cursor.execute("UPDATE temporary "
                        "SET ml = ?"
                        "WHERE ingredient = ?",
-                       (UserModel.splitScreen.amountScreen.flavorLayoutList[i].label_text.text,
+                       (flavor.label_text.text,
                         UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
     # Update flavor cylinder_id in temporary table
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
@@ -326,7 +397,6 @@ def amountScreenDone():
     cursor.close()
 
 
-
 def orderFinish():
     # Deselect all previous options
     resetStepButtons()
@@ -340,6 +410,7 @@ def orderFinish():
     # Reset temporary table
     reset_temporary_table()
 
+
 def printOut():
     print('called')
 
@@ -352,7 +423,8 @@ def buildAmountScreen(amountScreen):
             button.bind(on_press=lambda x: amountScreenDone())
             button.bind(on_press=lambda x: enableStep5())
             button.bind(on_press=lambda x: loadOrder())
-            button.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+            button.bind(
+                on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
             amountScreen.box.add_widget(button)
         buildAmountScreenGridLayout(amountScreen)
     else:
@@ -361,7 +433,8 @@ def buildAmountScreen(amountScreen):
             button.bind(on_press=lambda x: amountScreenDone())
             button.bind(on_press=lambda x: enableStep5())
             button.bind(on_press=lambda x: loadOrder())
-            button.bind(on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
+            button.bind(
+                on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
             amountScreen.add_widget(button)
         buildAmountScreenStackLayout(amountScreen)
@@ -378,6 +451,7 @@ def buildAmountScreenGridLayout(amountScreen):
     # TODO: replace baselist with actual baselist
     baseList = UserModel.splitScreen.baseScreen.baseList
     flavorList = UserModel.splitScreen.flavorScreen.flavorList
+    flavorLayoutList = UserModel.splitScreen.amountScreen.flavorLayoutList
 
     # if there is only one base selected, then the layout should only have one base, no slider, and show the full pie
     if len(baseList) == 1:
@@ -394,6 +468,7 @@ def buildAmountScreenGridLayout(amountScreen):
 
     # check how many flavors and add flavor templates
     for f in flavorList:
+        flavorLayoutList.append(UserModel.FlavorsLayout(f))
         grid.add_widget(UserModel.FlavorsLayout(name=f))
 
     amountScreen.scroll.add_widget(grid)
@@ -405,6 +480,7 @@ def buildAmountScreenStackLayout(amountScreen):
     # TODO: replace baselist with actual baselist
     baseList = UserModel.splitScreen.baseScreen.baseList
     flavorList = UserModel.splitScreen.flavorScreen.flavorList
+    flavorLayoutList = UserModel.splitScreen.amountScreen.flavorLayoutList
 
     # variable to count the total height of all the elements in layout
     totalHeight = 20
@@ -439,6 +515,7 @@ def buildAmountScreenStackLayout(amountScreen):
         flavor.width = Window.width * 0.5
         stack.add_widget(flavor)
         totalHeight += flavor.height + (2 * space)
+        flavorLayoutList.append(flavor)
 
     pieChart = UserModel.AmountPieChart()
     pieChart.width = (Window.width * 0.5) - (5 * padding)
@@ -465,30 +542,89 @@ def buildAmountScreenStackLayout(amountScreen):
 def updatePie(instance, value):
     instance.parent.pie.pie_chart_value = instance.value
 
+
 def updateOnlineDatabase():
+    sameRecipe = False
+    countCheck = 0
+    id = 0
     # Get ingredients from temporary table
     local_conn = DatabaseClass.conn
     local_cursor = local_conn.cursor()
-    temporary = "SELECT ingredient FROM temporary;"
-    local_cursor.execute(temporary)
-    ingredients = local_cursor.fetchall()
+    sqlBase = "SELECT ingredient FROM temporary;"
+    local_cursor.execute(sqlBase)
+    bases = local_cursor.fetchall()
+    sqlFlavor = "SELECT ingredient FROM temporary;"
+    local_cursor.execute(sqlFlavor)
+    flavors = local_cursor.fetchall()
     try:
         conn = pymysql.connect(host='127.0.0.1',
                                user='root',
                                password='customh',
                                db='cylinder')
+        cursor = conn.cursor()
 
-        for ingredient in ingredients:
-            print(ingredient[0])
+        # Create array of bases
+        baseArray = [None] * 2
+        for i, base in enumerate(bases):
+            print(base[0])
+            baseArray.pop(i)
+            baseArray.insert(i, base[0])
+
+        print("Base Array: ")
+        print(baseArray)
+
+        # Create array of flavors
+        flavorArray = [None] * 3
+        for i, flavor in enumerate(flavors):
+            print(base[0])
+            flavorArray.pop(i)
+            flavorArray.insert(i, flavor[0])
+
+        print("Flavor Array: ")
+        print(flavorArray)
+
+        ingredientArray = baseArray + flavorArray
+        print(ingredientArray)
+        checkSQL = "SELECT * FROM online;"
+        cursor.execute(checkSQL)
+        checkIngredients = cursor.fetchall()
+
+        # Check if this recipe exists (5 ingredients)
+        for checkIngredient in checkIngredients:
+            countCheck = 0
+            for i in range(1, 6):
+                if checkIngredient[i] == ingredientArray[i - 1]:
+                    countCheck += 1
+                    # If all 5 match, get the id
+                    if countCheck == 5:
+                        id = checkIngredient[0]
+                        sameRecipe = True
+                        continue
+
+        # If same recipe, update the count
+        if sameRecipe == True:
+            print("In update")
+            val = (ingredientArray[0], ingredientArray[1], ingredientArray[2], ingredientArray[3], ingredientArray[4])
+            updateSQL = "UPDATE online SET count = count + 1 WHERE id = %s"
+            sameRecipe = False
+            cursor.execute(updateSQL, id)
+            id = 0
+            conn.commit()
+        # If new recipe, insert new row
+        else:
+            print("In insert")
             # Put ordered ingredients to online database
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO online(ingredient) VALUES(%s);", [ingredient[0]])
+            val = (
+            ingredientArray[0], ingredientArray[1], ingredientArray[2], ingredientArray[3], ingredientArray[4], 1)
+            insertSQL = "INSERT INTO online(ingredient1,ingredient2,ingredient3,ingredient4,ingredient5,count) VALUES(%s,%s,%s,%s,%s,%s);"
+            cursor.execute(insertSQL, val)
             conn.commit()
 
         local_cursor.close()
         cursor.close()
     except:
         print("Proxy not setup, could not push temporary table to online database")
+
 
 def getOnlineDatabase():
     try:
@@ -508,6 +644,7 @@ def getOnlineDatabase():
         cursor.close()
     except:
         print("Proxy not setup, could not push temporary table to online database")
+
 
 def reset_temporary_table():
     conn = DatabaseClass.conn
@@ -542,15 +679,12 @@ def header_font_size():
 # progressBar (loading) popupwindow
 def loadingPopupWindow():
     content = UserModel.loadingPopup()
-    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(Window.width*0.5, Window.height*0.8), content=content)
-    #popup = Popup(title="", separator_height=0, content=content)
+    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(Window.width * 0.5, Window.height * 0.8),
+                  content=content)
+    # popup = Popup(title="", separator_height=0, content=content)
 
     popup.open()
 
 
 def loadOrder():
     DatabaseController.getOrder()
-
-
-
-
