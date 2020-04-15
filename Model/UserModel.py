@@ -108,7 +108,7 @@ class BaseScreen(Screen):
 
         cursor = connect.cursor()
 
-        sqlBase = "SELECT * FROM cylinder WHERE type='base';"
+        sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -122,11 +122,12 @@ class BaseScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, base in enumerate(bases):
-            button = ToggleButton(text=str(base[1]))
-            self.baseToggleList.append(button)
-            self.grid.add_widget(button)
-            button.bind(on_press=self.saveButtonName)
+        for i, items in enumerate(bases):
+            for base in items:
+                button = ToggleButton(text=str(base))
+                self.baseToggleList.append(button)
+                self.grid.add_widget(button)
+                button.bind(on_press=self.saveButtonName)
 
     def createButtons(self):
         self.baseList.clear()
@@ -137,7 +138,7 @@ class BaseScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlBase = "SELECT * FROM cylinder WHERE type='base';"
+        sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base';"
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -151,11 +152,12 @@ class BaseScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, base in enumerate(bases):
-            button = ToggleButton(text=str(base[1]))
-            self.baseToggleList.append(button)
-            self.grid.add_widget(button)
-            button.bind(on_press=self.saveButtonName)
+        for i, items in enumerate(bases):
+            for base in items:
+                button = ToggleButton(text=str(base))
+                self.baseToggleList.append(button)
+                self.grid.add_widget(button)
+                button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
@@ -329,7 +331,7 @@ class FlavorScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlFlavor = "SELECT * FROM cylinder WHERE type='flavor';"
+        sqlFlavor = "SELECT DISTINCT ingredient FROM cylinder WHERE type='flavor';"
         cursor.execute(sqlFlavor)
         flavors = cursor.fetchall()
 
@@ -343,11 +345,12 @@ class FlavorScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, base in enumerate(flavors):
-            button = ToggleButton(text=str(base[1]))
-            self.flavorToggleList.append(button)
-            self.grid.add_widget(button)
-            button.bind(on_press=self.saveButtonName)
+        for i, items in enumerate(flavors):
+            for flavor in items:
+                button = ToggleButton(text=str(flavor))
+                self.flavorToggleList.append(button)
+                self.grid.add_widget(button)
+                button.bind(on_press=self.saveButtonName)
 
     def createButtons(self):
         self.flavorList.clear()
@@ -357,7 +360,7 @@ class FlavorScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlFlavor = "SELECT * FROM cylinder WHERE type='flavor';"
+        sqlFlavor = "SELECT DISTINCT ingredient FROM cylinder WHERE type='flavor';"
         cursor.execute(sqlFlavor)
         flavors = cursor.fetchall()
 
@@ -371,11 +374,12 @@ class FlavorScreen(Screen):
             self.grid.cols = 2
 
         # Dynamic buttons
-        for i, flavor in enumerate(flavors):
-            button = ToggleButton(text=str(flavor[1]))
-            self.flavorToggleList.append(button)
-            self.grid.add_widget(button)
-            button.bind(on_press=self.saveButtonName)
+        for i, items in enumerate(flavors):
+            for flavor in items:
+                button = ToggleButton(text=str(flavor))
+                self.flavorToggleList.append(button)
+                self.grid.add_widget(button)
+                button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
         # Save the flavor name in a list to use for the final order
