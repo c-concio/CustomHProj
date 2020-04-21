@@ -339,7 +339,7 @@ def amountScreenDone():
                         UserModel.splitScreen.amountScreen.flavorLayoutList[i].flavorName.text))
     # Update flavor cylinder_id in temporary table
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
-        DatabaseController.update_temporary_cylinder(flavor)
+        DatabaseController.update_temporary_cylinder(flavor, 10)
 
 
     # When 1 base is chosen
@@ -376,6 +376,10 @@ def amountScreenDone():
                                    (baseProportionList[i] * 10 / 360, baseList[i]))
                     print(baseProportionList[i] * 10 / 360)
                     print(baseList[i])
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                        DatabaseController.update_temporary_cylinder(base, 10)
+
             elif sizeList[0] == "MEDIUM":
                 for i, base in enumerate(baseList):
                     cursor.execute("UPDATE temporary "
@@ -384,6 +388,10 @@ def amountScreenDone():
                                    (baseProportionList[i] * 50 / 360, baseList[i]))
                     print(baseProportionList[i] * 50 / 360)
                     print(baseList[i])
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                        DatabaseController.update_temporary_cylinder(base, 50)
+
             elif sizeList[0] == "LARGE":
                 for i, base in enumerate(baseList):
                     cursor.execute("UPDATE temporary "
@@ -392,10 +400,10 @@ def amountScreenDone():
                                    (baseProportionList[i] * 100 / 360, baseList[i]))
                     print(baseProportionList[i] * 100 / 360)
                     print(baseList[i])
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                        DatabaseController.update_temporary_cylinder(base, 100)
 
-    # Update base cylinder_id
-    for base in UserModel.splitScreen.baseScreen.baseList:
-        DatabaseController.update_temporary_cylinder(base)
 
     connect.commit()
     cursor.close()

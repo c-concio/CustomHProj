@@ -145,7 +145,7 @@ def update_steps_amount(id, amount):
     cursor.close()
 
 
-def select_first_row_from_condition(ingredient):
+def select_first_row_from_condition(ingredient, steps):
     try:
         cursor = DatabaseClass.conn.cursor()
 
@@ -153,7 +153,7 @@ def select_first_row_from_condition(ingredient):
                        "row_number() over (PARTITION BY ingredient ORDER BY steps DESC) as rownum "
                        "FROM cylinder"
                        ") cylinder "
-                       "WHERE ingredient = ? AND rownum = 1);", (ingredient,))
+                       "WHERE ingredient = ? AND steps > ? AND rownum = 1);", (ingredient, steps))
 
         rows = cursor.fetchone()
         print("Fetched first row")
@@ -172,7 +172,7 @@ def select_first_row_from_condition(ingredient):
     #         connect.close()
 
 
-def update_temporary_cylinder(ingredient):
+def update_temporary_cylinder(ingredient, steps):
     try:
         cursor = DatabaseClass.conn.cursor()
 
@@ -180,7 +180,7 @@ def update_temporary_cylinder(ingredient):
 
         try:
             # select the cylinder id with ingredient name
-            cylinder_id = select_first_row_from_condition(ingredient)
+            cylinder_id = select_first_row_from_condition(ingredient, steps)
             print("Cylinder id", cylinder_id)
 
         except:
