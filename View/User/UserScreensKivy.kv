@@ -188,7 +188,7 @@
 <BaseScreen>:
     grid: base_grid
     nextButton: next
-    #sauceOfMonthButton: flavOfMonth
+    sauceOfMonthButton: flavOfMonth
 
     canvas.before:
         Color:
@@ -233,15 +233,15 @@
             disabled: 'True'
             text: "Next"
 
-        # RoundedButton:
-        #    id: flavOfMonth
-        #    pos_hint:{"x":0.05,"y":0.05}
-        #    size_hint: 0.3, 0.2
-        #    font_size: (root.width**2 + root.height**2) / 16**4
-        #    font_name: "OstrichSans"
-        #    bold: True
-        #    color: 0, 0, 0, 1
-        #    text: "Sauce Of The Month"
+        RoundedButton:
+            id: flavOfMonth
+            pos_hint:{"x":0.05,"y":0.05}
+            size_hint: 0.3, 0.2
+            font_size: (root.width**2 + root.height**2) / 16**4
+            font_name: "OstrichSans"
+            bold: True
+            color: 0, 0, 0, 1
+            text: "Sauce Of The Month"
 
 
 

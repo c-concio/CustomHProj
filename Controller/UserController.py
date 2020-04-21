@@ -87,9 +87,9 @@ def initialize_buttons():
 
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: getBaseList())
 
-    # UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
-    # UserModel.splitScreen.sizeScreen.nextButton.bind(
-    #     on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
+    UserModel.splitScreen.baseScreen.sauceOfMonthButton.bind(on_press=lambda x: showPopupWindow())
+    UserModel.splitScreen.sizeScreen.nextButton.bind(
+        on_press=lambda x: UserModel.SauceOfMonth.updateButtons(UserModel.SauceOfMonth()))
 
     UserModel.splitScreen.flavorScreen.nextButton.bind(on_press=lambda x: getFlavorList())
 
