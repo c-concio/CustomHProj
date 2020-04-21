@@ -135,6 +135,9 @@ class MotorUpThread(threading.Thread):
             if not moveMotorUp:
                 threadLock.release()
                 break
+
+
+
             threadLock.release()
 
         print("Exited up while loop")

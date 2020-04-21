@@ -15,6 +15,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition
 from kivy.uix.scrollview import ScrollView
@@ -27,7 +28,6 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Ellipse, Rectangle
 from kivy.core.text import Label as CoreLabel
 from kivy.animation import Animation
-
 
 from Controller import UserController
 from Model import DatabaseClass
@@ -65,6 +65,7 @@ class SizeScreen(Screen):
     def saveSize(self, instance):
         # Save size of cup
         if instance.state == 'down':
+            self.sizeList = []
             self.sizeList.append(instance.text)
             print("Added " + instance.text)
         else:
@@ -83,7 +84,6 @@ class SizeScreen(Screen):
             self.nextButton.disabled = False
             self.nextButton.text = "Next"
             self.nextButton.colour = (1, 1, 1, 0.6)
-
 
 
 class BaseScreen(Screen):
@@ -134,7 +134,7 @@ class BaseScreen(Screen):
         self.baseList.clear()
         self.baseToggleList.clear()
 
-        #self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
+        # self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
 
         connect = DatabaseClass.conn
         cursor = connect.cursor()
@@ -314,7 +314,6 @@ class BaseScreen(Screen):
 #                     # print("This button recovered: " + button.text)
 
 
-
 class FlavorScreen(Screen):
     # grid object from kivy file
     grid = ObjectProperty()
@@ -422,6 +421,7 @@ class AmountGridLayout(GridLayout):
 class ConfirmScreen(Screen):
     orderButton = ObjectProperty(None)
     confirmLayout = ObjectProperty(None)
+
     def __init__(self):
         super().__init__()
         self.orderButton.colour = (1, 1, 1, 0.6)
@@ -471,6 +471,7 @@ class SplitScreen(Screen):
         self.confirmScreen = ConfirmScreen()
         UserController.initialize_carousel(self)
         UserController.initialize_buttons()
+        self.carouselWidget.load_slide(self.sizeScreen)
 
         # check if the 
         3
@@ -514,8 +515,10 @@ class BaseStackTemplate2(GridLayout):
     slider = ObjectProperty(None)
     pie = AmountPieChart
 
+
 class DoneRoundedButton1(Button):
     pass
+
 
 class DoneRoundedButton2(Button):
     pass
@@ -546,3 +549,9 @@ UserController.initialize_main_screen_buttons()
 
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)
+
+
+popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(Window.width * 0.5, Window.height * 0.8),
+              content=loadingPopup())
+
+popup.auto_dismiss = False

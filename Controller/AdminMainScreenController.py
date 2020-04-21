@@ -80,8 +80,8 @@ def add_inventory_template(cylinder_item):
     inventory_item_template.ingredientSpinner.bind(text=update_ingredient_choice)
 
     # setup the percent label
-    inventory_item_template.percentLabel.text = str(cylinder_item.amount)
-    inventory_item_template.progressBar.value = cylinder_item.amount
+    inventory_item_template.percentLabel.text = str(int((cylinder_item.amount/1000) * 100))
+    inventory_item_template.progressBar.value = ((cylinder_item.amount/1000) * 100)
 
     # bind the reset button to change the label text and rebind on press
     inventory_item_template.resetButton.bind(on_press=lambda x:open_reset_motor_popup())

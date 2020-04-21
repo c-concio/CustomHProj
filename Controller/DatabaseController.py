@@ -280,3 +280,21 @@ def clear_temporary_table():
     DatabaseClass.conn.commit()
 
     cursor.close()
+
+
+def completeOrder():
+    cursor = DatabaseClass.conn.cursor()
+    cursor.execute("SELECT * FROM temporary")
+
+    results = cursor.fetchall()
+
+    for result in results:
+        cursor.execute("SELECT steps FROM cylinder WHERE id = " + str(result[1]))
+        step = cursor.fetchall()
+        string = "UPDATE cylinder SET steps = " + str(step[0][0]) + " - " + str(result[2]) + " WHERE id = " + str(result[1])
+        print(string)
+        cursor.execute(string)
+
+
+def add_cylinder_steps(id, amountAdd):
+    cursor = DatabaseClass.conn.cursor()

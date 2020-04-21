@@ -72,15 +72,14 @@ class MainApp(App):
 
         # get all the base ingredients and save the ingredient, cylinder name, and amount
 
-
         self.cursor.execute("SELECT id, ingredient, steps, type FROM cylinder")
         results = self.cursor.fetchall()
 
         for result in results:
-            newTemplate = SimulationCylinderTemplate(100)
+            newTemplate = SimulationCylinderTemplate(4000)
             newTemplate.setName("Cylinder " + str(result[0]))
             newTemplate.setIngredient(result[1])
-            newTemplate.setAmount(result[2])
+            newTemplate.setAmount((result[2]/4000) * 100)
             self.cylinderTemplates.append(newTemplate)
             if result[3] == 'base':
                 simulationScreen.baseRow.add_widget(newTemplate)

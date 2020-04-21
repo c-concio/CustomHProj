@@ -63,6 +63,8 @@ def initialize_buttons():
     UserModel.splitScreen.step5.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
+    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: orderFinish())
+
     UserModel.splitScreen.step4.bind(on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
@@ -74,8 +76,6 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
-
-    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: orderFinish())
 
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
@@ -153,7 +153,6 @@ def getBaseList():
         print("Added " + base + " to Temporary table")
     cursor.close()
 
-    print(UserModel.splitScreen.baseScreen.baseList)
 
 
 def resetBaseScreen():
@@ -274,8 +273,6 @@ def getFlavorList():
         print("Added " + flavor + " to Temporary table")
     cursor.close()
 
-    print(UserModel.splitScreen.flavorScreen.flavorList)
-
 
 def resetFlavorScreen():
     # Clear the buttons from the grid
@@ -344,6 +341,7 @@ def amountScreenDone():
     for flavor in UserModel.splitScreen.flavorScreen.flavorList:
         DatabaseController.update_temporary_cylinder(flavor)
 
+
     # When 1 base is chosen
     if len(baseList) == 1:
         print("1 Base")
@@ -353,6 +351,7 @@ def amountScreenDone():
                                "SET ml = ?"
                                "WHERE ingredient = ?",
                                (10, baseList[0]))
+
                 print(baseList[0])
             elif sizeList[0] == "MEDIUM":
                 cursor.execute("UPDATE temporary "
@@ -404,7 +403,7 @@ def amountScreenDone():
 
 def orderFinish():
     # open the loading popup
-    loadingPopupWindow()
+    UserModel.popup.open()
 
     # Deselect all previous options
     resetStepButtons()
@@ -416,12 +415,14 @@ def orderFinish():
     # # Pull data from online database
     # getOnlineDatabase()
     # Reset temporary table
-    reset_temporary_table()
     switch_screen(screen_name="User Main Screen")
 
+    # change all the changes onto the database
+    DatabaseController.completeOrder()
 
-def printOut():
-    print('called')
+    reset_temporary_table()
+
+    UserModel.popup.dismiss()
 
 
 def buildAmountScreen(amountScreen):
@@ -540,8 +541,6 @@ def buildAmountScreenStackLayout(amountScreen):
         baseTemplate.pie = pieChart
         baseTemplate.slider.bind(value=updatePie)
 
-    print("width:")
-    print(pieChart.width)
     stack.add_widget(pieChart)
 
     stack.height = totalHeight
@@ -689,14 +688,4 @@ def header_font_size():
 # -------------------------------------------------------------------
 #                       Confirm Screen Functions
 # -------------------------------------------------------------------
-
-
-# progressBar (loading) popupwindow
-def loadingPopupWindow():
-    content = UserModel.loadingPopup()
-    popup = Popup(title="", separator_height=0, size_hint=(None, None), size=(Window.width * 0.5, Window.height * 0.8),
-                  content=content)
-    # popup = Popup(title="", separator_height=0, content=content)
-
-    popup.open()
 
