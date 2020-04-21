@@ -419,37 +419,6 @@ class AmountGridLayout(GridLayout):
     pass
 
 
-class AmountScreen1(Screen):
-    mainGrid = ObjectProperty(None)
-    bodyGrid = ObjectProperty(None)
-    sliderAnchorLayout = ObjectProperty(None)
-    sliderTemplateGrid = ObjectProperty(None)
-    slider = ObjectProperty(None)
-    sliderExist = True
-    doneButton = ObjectProperty(None)
-    base1 = ObjectProperty(None)
-    base2 = ObjectProperty(None)
-    baseChartLayout = ObjectProperty(None)
-    baseChart = ObjectProperty(None)
-    baseChartExist = True
-    flavorLayoutList = []
-
-    def __init__(self):
-        super().__init__()
-        self.doneButton.colour = (1, 1, 1, 0.6)
-        # TODO: uncomment
-        # self.count = 0
-        # self.label_text = str(self.count)
-        # self.addButtons.bind(on_press=lambda x: UserController.increment(self))
-        # self.removeButton.bind(on_press=lambda x: UserController.decrement(self))
-        self.bodyGrid.cols = 1 if Window.width < 425 else 2
-
-        # if only one column, the sliderLayout should have the height of the base grid
-
-        # TODO: look inside DB and add flavors
-        # self.sliderTemplateGrid.add_widget(FlavorsLayout("Flavor 1"))
-
-
 class ConfirmScreen(Screen):
     orderButton = ObjectProperty(None)
     confirmLayout = ObjectProperty(None)

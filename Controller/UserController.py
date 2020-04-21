@@ -74,11 +74,8 @@ def initialize_buttons():
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
-    UserModel.splitScreen.confirmScreen.orderButton.bind(
-        on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.sizeScreen))
 
     UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: orderFinish())
-    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: switch_screen(screen_name="Main Screen"))
 
     UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: enableStep2())
     UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: enableStep3())
@@ -107,7 +104,6 @@ def initialize_buttons():
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: buildAmountScreen(UserModel.splitScreen.amountScreen))
 
-    UserModel.splitScreen.confirmScreen.orderButton.bind(on_press=lambda x: loadingPopupWindow())
 
 
 # -------------------------------------------------------------------
@@ -407,17 +403,21 @@ def amountScreenDone():
 
 
 def orderFinish():
+    # open the loading popup
+    loadingPopupWindow()
+
     # Deselect all previous options
     resetStepButtons()
     resetSizeScreen()
     resetBaseScreen()
     resetFlavorScreen()
-    # Push data to online database
-    updateOnlineDatabase()
-    # Pull data from online database
-    getOnlineDatabase()
+    # # Push data to online database
+    # updateOnlineDatabase()
+    # # Pull data from online database
+    # getOnlineDatabase()
     # Reset temporary table
     reset_temporary_table()
+    switch_screen(screen_name="User Main Screen")
 
 
 def printOut():
@@ -431,7 +431,7 @@ def buildAmountScreen(amountScreen):
             button = UserModel.DoneRoundedButton1()
             button.bind(on_press=lambda x: amountScreenDone())
             button.bind(on_press=lambda x: enableStep5())
-            button.bind(on_press=lambda x: loadOrder())
+            button.bind(on_press=lambda x: DatabaseController.getOrder())
             button.bind(
                 on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
             amountScreen.box.add_widget(button)
@@ -441,7 +441,7 @@ def buildAmountScreen(amountScreen):
             button = UserModel.DoneRoundedButton2()
             button.bind(on_press=lambda x: amountScreenDone())
             button.bind(on_press=lambda x: enableStep5())
-            button.bind(on_press=lambda x: loadOrder())
+            button.bind(on_press=lambda x: DatabaseController.getOrder())
             button.bind(
                 on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.confirmScreen))
 
@@ -700,6 +700,3 @@ def loadingPopupWindow():
 
     popup.open()
 
-
-def loadOrder():
-    DatabaseController.getOrder()

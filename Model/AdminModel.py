@@ -75,7 +75,7 @@ class InventoryItemTemplate(BoxLayout):
         super().__init__()
         self.cylinderID = cylinderID
         type = DatabaseController.get_cylinder_type(cylinderID)
-        if type == "Base":
+        if type == "base":
             with self.canvas.before:
                 self.color_widget = Color(0.8, 0.06, 0.06, 0.3)
                 self._rectangle = Rectangle()

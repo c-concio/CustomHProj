@@ -84,7 +84,7 @@
             halign: 'center'
             font_name: "OstrichSans"
             bold: True
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size:"35sp"
             pos_hint: {"x":0.35,"top":0.80}
             size_hint: 0.35, 0.15
 
@@ -93,7 +93,7 @@
             text:"Or Scan Your \nQR Code Here"
             halign: 'center'
             font_name: "OstrichSans"
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             pos_hint:{"x":0.07,"y":0.05}
             size_hint: 0.3, 0.2
             color: 0, 0, 0, 1
@@ -104,7 +104,7 @@
             size_hint: 0.3, 0.2
             font_name: "OstrichSans"
             bold: True
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             text: "Start"
             color: 0, 0, 0, 1
 
@@ -139,7 +139,7 @@
         Label:
             text:"Choose Cup Size"
             font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 15**4
+            font_size: "35sp"
             pos_hint: {"x":0.35,"top":0.9}
             size_hint: 0.35, 0.15
 
@@ -182,7 +182,7 @@
         id: nextButton
         pos_hint:{"x":0.65,"y":0.05}
         size_hint: 0.3, 0.2
-        font_size: (root.width**2 + root.height**2) / 13**4
+        font_size: "35sp"
         font_name: "OstrichSans"
         bold: True
         color: 0, 0, 0, 1
@@ -237,7 +237,7 @@
             id: next
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             font_name: "OstrichSans"
             bold: True
             color: 0, 0, 0, 1
@@ -266,7 +266,7 @@
         Label:
             text: "Sauce of the Month"
             font_name: "Pacifico"
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             pos_hint: {"x":0.35,"top":1}
             size_hint: 0.35, 0.15
 
@@ -288,7 +288,7 @@
             id: done
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             font_name: "OstrichSans"
             bold: True
             color: 0, 0, 0, 1
@@ -347,7 +347,7 @@
             id: next
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 13**4
+            font_size: "35sp"
             font_name: "OstrichSans"
             bold: True
             color: 0, 0, 0, 1
@@ -615,7 +615,7 @@
             id: orderButton
             pos_hint:{"x":0.65,"y":0.05}
             size_hint: 0.3, 0.2
-            font_size: (root.width**2 + root.height**2) / 14**4
+            font_size: "35sp"
             font_name: "OstrichSans"
             bold: True
             color: 0, 0, 0, 1
@@ -627,7 +627,7 @@
             Label:
                 text: "Confirm Your Order"
                 font_name: "Pacifico"
-                font_size: (root.width**2 + root.height**2) / 14**4
+                font_size: "35sp"
                 pos_hint: {"x":0.35,"top":1}
                 size_hint: 0.35, 0.15
 
@@ -672,46 +672,7 @@
         anim_delay: 0.5
         #anim_loop: 1
 
-        Label:
-            id: baseLabel1
-            text: "Base 1"
-            font_name: "Pacifico"
-            font_size: "18sp"
 
-        RoundedButton2:
-            id: reset
-            text: 'Reset'
-
-            on_press: reset.value = 180
-            on_press: slider.value = 180
-
-            font_name: "OstrichSans"
-            font_size: 18
-            bold: True
-            color: 0, 0, 0, 1
-
-            size_hint_y: None
-            height: 50
-
-            size_hint_x: None
-            width: self.parent.width * 0.2
-
-            pos_hint: {'center_y': 0.5}
-
-        Label:
-            id: baseLabel2
-            text: "Base 2"
-            font_name: "Pacifico"
-            font_size: "18sp"
-
-    Slider:
-        id: slider
-        min: 0
-        max: 360
-        value: 180
-        step: 30
-        size_hint_y: None
-        height: 70
 
 <AmountPieChart>:
 
@@ -823,17 +784,25 @@
     font_size: '25sp'
     font_name: "OstrichSans"
     bold: True
-    text: "Done"
-    background_color: 1,1,1,0.5
-    colour: (0, 0, 0, 0)
+    text: "Not"
 
-<DoneRoundedButton2>:
+<DoneRoundedButton2@Button>:
+    id: next
     pos_hint:{"x":0.65,"y":0.05}
     size_hint: 0.3, 0.2
-    font_size: '50sp'
+    font_size: "35sp"
     font_name: "OstrichSans"
     bold: True
-    text: "Done"
-    background_color: 1,1,1,0.5
-    colour: (0, 0, 0, 0)
+    color: 0, 0, 0, 1
+    text: "Next"
 
+    background_color: 0,0,0,0
+    colour: (1, 1, 1, 0.60)
+    canvas.before:
+        Color:
+            rgba: self.colour
+            #rgba: (1,1,1,0) if self.state=='normal' else (0,.7,.7,1)  # visual feedback of press
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [30,]
