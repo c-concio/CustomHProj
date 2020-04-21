@@ -69,15 +69,14 @@ def initialize_buttons():
 
     # UserModel.userMainScreen.startButton.bind(on_press=lambda x: print("Start button pressed"))
 
+
     # Screen buttons
     UserModel.splitScreen.sizeScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
-    UserModel.splitScreen.sizeScreen.nextButton.bind(
-        on_press=lambda x: UserModel.splitScreen.baseScreen.createButtons())
+    UserModel.splitScreen.sizeScreen.nextButton.bind(on_press=lambda x: resetBaseScreen())
     UserModel.splitScreen.baseScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
-    UserModel.splitScreen.baseScreen.nextButton.bind(
-        on_press=lambda x: UserModel.splitScreen.flavorScreen.createButtons())
+    #UserModel.splitScreen.baseScreen.nextButton.bind(on_press=lambda x: resetFlavorScreen())
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
 
@@ -167,8 +166,10 @@ def resetBaseScreen():
         button.state = 'normal'
         button.disabled = False
 
-    UserModel.splitScreen.baseScreen.nextButton.disabled = True
+    UserModel.splitScreen.baseScreen.createButtons()
+    # UserModel.splitScreen.baseScreen.nextButton.disabled = True
     UserModel.splitScreen.baseScreen.nextButton.colour = (0, 0, 0, 0)
+
 
 
 # -------------------------------------------------------------------
