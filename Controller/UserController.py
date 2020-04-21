@@ -353,16 +353,25 @@ def amountScreenDone():
                                (10, baseList[0]))
 
                 print(baseList[0])
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                    DatabaseController.update_temporary_cylinder(base, 10)
             elif sizeList[0] == "MEDIUM":
                 cursor.execute("UPDATE temporary "
                                "SET ml = ?"
                                "WHERE ingredient = ?",
                                (50, baseList[0]))
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                    DatabaseController.update_temporary_cylinder(base, 50)
             elif sizeList[0] == "LARGE":
                 cursor.execute("UPDATE temporary "
                                "SET ml = ?"
                                "WHERE ingredient = ?",
                                (100, baseList[0]))
+                # Update base cylinder_id
+                for base in UserModel.splitScreen.baseScreen.baseList:
+                    DatabaseController.update_temporary_cylinder(base, 100)
     # When 2 bases are chosen
     elif len(baseList) == 2:
         sliderValue = UserModel.splitScreen.amountScreen.slider.value
