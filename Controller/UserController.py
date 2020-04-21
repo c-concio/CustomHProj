@@ -72,8 +72,12 @@ def initialize_buttons():
     # Screen buttons
     UserModel.splitScreen.sizeScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.baseScreen))
+    UserModel.splitScreen.sizeScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.baseScreen.createButtons())
     UserModel.splitScreen.baseScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.flavorScreen))
+    UserModel.splitScreen.baseScreen.nextButton.bind(
+        on_press=lambda x: UserModel.splitScreen.flavorScreen.createButtons())
     UserModel.splitScreen.flavorScreen.nextButton.bind(
         on_press=lambda x: UserModel.splitScreen.carouselWidget.load_slide(UserModel.splitScreen.amountScreen))
 

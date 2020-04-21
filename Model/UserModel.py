@@ -94,52 +94,28 @@ class BaseScreen(Screen):
     baseList = []
     baseToggleList = []
 
-    # backButton = ObjectProperty(None)
-
-    # def btn(self):
-    #     UserController.showPopupWindow()
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
-    def __init__(self, **kwargs):
-        super(BaseScreen, self).__init__(**kwargs)
-        # self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
-
-        connect = DatabaseClass.conn
-
-        cursor = connect.cursor()
-
-        sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base';"
-        cursor.execute(sqlBase)
-        bases = cursor.fetchall()
-
-        cursor.close()
-
-        # If screen width is small, have 1 column
-        if (Window.width <= 320):
-            print("Width")
-            self.grid.cols = 1
-        else:
-            self.grid.cols = 2
-
-        # Dynamic buttons
-        for i, items in enumerate(bases):
-            for base in items:
-                button = ToggleButton(text=str(base))
-                self.baseToggleList.append(button)
-                self.grid.add_widget(button)
-                button.bind(on_press=self.saveButtonName)
-
     def createButtons(self):
         self.baseList.clear()
         self.baseToggleList.clear()
-
+        sizeList = splitScreen.sizeScreen.sizeList
         # self.sauceOfMonthButton.colour = (1, 1, 1, 0.6)
 
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base';"
+        sqlBase = ""
+        print("SIZE")
+        print(sizeList[0])
+        if sizeList[0] == "SMALL":
+            sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base' AND steps > 10;"
+        elif sizeList[0] == "MEDIUM":
+            sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base' AND steps > 50;"
+        elif sizeList[0] == "LARGE":
+            sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base' AND steps > 100;"
+
         cursor.execute(sqlBase)
         bases = cursor.fetchall()
 
@@ -325,33 +301,6 @@ class FlavorScreen(Screen):
 
     # Get ingredient names from database
     # Create buttons dynamically based on the 'cylinder' table
-    def __init__(self, **kwargs):
-        super(FlavorScreen, self).__init__(**kwargs)
-        self.nextButton.colour = (1, 1, 1, 0.6)
-        connect = DatabaseClass.conn
-        cursor = connect.cursor()
-
-        sqlFlavor = "SELECT DISTINCT ingredient FROM cylinder WHERE type='flavor';"
-        cursor.execute(sqlFlavor)
-        flavors = cursor.fetchall()
-
-        cursor.close()
-
-        # If screen width is small, have 1 column
-        if (Window.width <= 320):
-            print("Width")
-            self.grid.cols = 1
-        else:
-            self.grid.cols = 2
-
-        # Dynamic buttons
-        for i, items in enumerate(flavors):
-            for flavor in items:
-                button = ToggleButton(text=str(flavor))
-                self.flavorToggleList.append(button)
-                self.grid.add_widget(button)
-                button.bind(on_press=self.saveButtonName)
-
     def createButtons(self):
         self.flavorList.clear()
         self.flavorToggleList.clear()
@@ -360,7 +309,7 @@ class FlavorScreen(Screen):
         connect = DatabaseClass.conn
         cursor = connect.cursor()
 
-        sqlFlavor = "SELECT DISTINCT ingredient FROM cylinder WHERE type='flavor';"
+        sqlFlavor = "SELECT DISTINCT ingredient FROM cylinder WHERE type='flavor' AND steps > 10;"
         cursor.execute(sqlFlavor)
         flavors = cursor.fetchall()
 
