@@ -108,7 +108,6 @@ class BaseScreen(Screen):
 
         sqlBase = ""
         print("SIZE")
-        print(sizeList[0])
         if sizeList[0] == "SMALL":
             sqlBase = "SELECT DISTINCT ingredient FROM cylinder WHERE type='base' AND steps > 10;"
         elif sizeList[0] == "MEDIUM":
@@ -131,10 +130,11 @@ class BaseScreen(Screen):
         # Dynamic buttons
         for i, items in enumerate(bases):
             for base in items:
-                button = ToggleButton(text=str(base))
-                self.baseToggleList.append(button)
-                self.grid.add_widget(button)
-                button.bind(on_press=self.saveButtonName)
+                if base != "None":
+                    button = ToggleButton(text=str(base))
+                    self.baseToggleList.append(button)
+                    self.grid.add_widget(button)
+                    button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
         # Save the base name in a list to use for the final order
@@ -325,10 +325,11 @@ class FlavorScreen(Screen):
         # Dynamic buttons
         for i, items in enumerate(flavors):
             for flavor in items:
-                button = ToggleButton(text=str(flavor))
-                self.flavorToggleList.append(button)
-                self.grid.add_widget(button)
-                button.bind(on_press=self.saveButtonName)
+                if flavor != "None":
+                    button = ToggleButton(text=str(flavor))
+                    self.flavorToggleList.append(button)
+                    self.grid.add_widget(button)
+                    button.bind(on_press=self.saveButtonName)
 
     def saveButtonName(self, instance):
         # Save the flavor name in a list to use for the final order
@@ -410,6 +411,7 @@ class SplitScreen(Screen):
     def __init__(self, name):
         super().__init__()
         self.name = name
+        UserController.initialize_main_screen_buttons()
 
     def on_pre_enter(self, *args):
         # screens to be put in carousel
@@ -493,8 +495,6 @@ sizeScreen = SizeScreen(name="Size Screen")
 # baseScreen = BaseScreen(name="Base Screen")
 # flavorScreen = FlavorScreen(name="Flavor Screen")
 # amountScreen = AmountScreen(name="Amount Screen")
-
-UserController.initialize_main_screen_buttons()
 
 # screenManager.add_widget(userMainScreen)
 # screenManager.add_widget(splitScreen)

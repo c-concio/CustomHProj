@@ -166,8 +166,6 @@ def resetBaseScreen():
     for button in UserModel.splitScreen.baseScreen.baseToggleList:
         button.state = 'normal'
         button.disabled = False
-    # Reset lists and re-add all buttons (to list and screen)
-    UserModel.splitScreen.baseScreen.createButtons()
 
     UserModel.splitScreen.baseScreen.nextButton.disabled = True
     UserModel.splitScreen.baseScreen.nextButton.colour = (0, 0, 0, 0)

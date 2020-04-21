@@ -4,6 +4,7 @@
     # objectProperty names
     inventoryButton: inventory
     powerButton: power
+    returnMainScreen: returnMainScreen
 
     canvas:
         Color:
@@ -22,6 +23,14 @@
         Button:
             id: inventory
             text: 'Edit Inventory'
+            pos_hint:{'left': 1}
+            background_normal: ''
+            background_color: [1, 0.595, 0, 1]
+            background_down: 'Color\DarkerOrange.png'
+
+        Button:
+            id: returnMainScreen
+            text: 'Return to Main Screen'
             pos_hint:{'left': 1}
             background_normal: ''
             background_color: [1, 0.595, 0, 1]
@@ -172,7 +181,7 @@
 
     Button:
         id: reset
-        text: 'Reset'
+        text: 'Move Motor'
         background_normal: ''
         background_color: [0.135, 0.135, 0.135, 1]
 

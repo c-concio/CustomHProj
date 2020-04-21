@@ -1,4 +1,6 @@
+import sqlite3
 import threading
+import time
 from tkinter import Button
 
 from kivy.graphics.context_instructions import Color
@@ -38,12 +40,12 @@ class AdminMainScreen(Screen):
     inventoryButton = ObjectProperty(None)
     internetButton = ObjectProperty(None)
     powerButton = ObjectProperty(None)
+    returnMainScreen = ObjectProperty(None)
     entered = False
 
     def on_enter(self, *args):
         AdminMainScreenController.initialize_admin_buttons()
         AdminMainScreenController.setup_inventory_screen()
-
 
 
 class InventoryScreen(Screen):
@@ -60,7 +62,6 @@ class InventoryScreen(Screen):
 
     def on_enter(self, *args):
         AdminMainScreenController.initialize_inventory_buttons()
-
 
 
 class InventoryItemTemplate(BoxLayout):
@@ -125,9 +126,17 @@ activeThread = None
 
 # thread that moves the motor up until the moveMotorUp boolean turns False
 class MotorUpThread(threading.Thread):
+    cylinderID = 0
+    cylinderType = "none"
+
+    def __init__(self, cylinderID, cylinderType):
+        super().__init__()
+        self.cylinderID = cylinderID
+        self.cylinderType = cylinderType
+
     def run(self):
         while True:
-            print("Moving motor up")
+            time.sleep(0.01)
 
             # TODO: add move motor up loop
 
@@ -136,7 +145,11 @@ class MotorUpThread(threading.Thread):
                 threadLock.release()
                 break
 
-
+            # move motor and update the database
+            if self.cylinderType == "base":
+                DatabaseController.add_cylinder_steps(self.cylinderID, self.cylinderType, 10, sqlite3.connect(r'database/pysqlite.db'))
+            elif self.cylinderType == "flavor":
+                DatabaseController.add_cylinder_steps(self.cylinderID, self.cylinderType, 1, sqlite3.connect(r'database/pysqlite.db'))
 
             threadLock.release()
 
@@ -145,9 +158,17 @@ class MotorUpThread(threading.Thread):
 
 # thread that moves the motor down until the moveMotorDown boolean turns False
 class MotorDownThread(threading.Thread):
+    cylinderID = 0
+    cylinderType = "none"
+
+    def __init__(self, cylinderID, cylinderType):
+        super().__init__()
+        self.cylinderID = cylinderID
+        self.cylinderType = cylinderType
+
     def run(self):
         while True:
-            print("Moving motor down")
+            time.sleep(0.01)
 
             # TODO: add move motor down loop
 
@@ -155,11 +176,16 @@ class MotorDownThread(threading.Thread):
             if not moveMotorDown:
                 threadLock.release()
                 break
+
+            if self.cylinderType == "base":
+                DatabaseController.sub_cylinder_steps(self.cylinderID, 10, sqlite3.connect(r'database/pysqlite.db'))
+            elif self.cylinderType == "flavor":
+                DatabaseController.sub_cylinder_steps(self.cylinderID, 1, sqlite3.connect(r'database/pysqlite.db'))
+
+
             threadLock.release()
 
         print("Exited down while loop")
-
-
 
 
 # //////////////////////////////////////////////////

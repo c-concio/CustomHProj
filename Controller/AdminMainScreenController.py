@@ -49,6 +49,11 @@ def initialize_admin_buttons():
     AdminModel.adminMainScreen.inventoryButton.bind(on_press=lambda x: switch_screen('Inventory Screen'))
     AdminModel.adminMainScreen.powerButton.bind(on_press=quit_application)
     AdminModel.inventoryScreen.backButton.bind(on_press=lambda x: return_screen('Admin Main Screen'))
+    AdminModel.adminMainScreen.returnMainScreen.bind(on_press=lambda x: switch_screen("User Main Screen"))
+
+def switch_screen(screen_name):
+    MainModel.mainScreenManager.transition.direction = 'left'
+    MainModel.mainScreenManager.current = screen_name
 
 
 # -------------------------------------------------------------------
@@ -80,42 +85,18 @@ def add_inventory_template(cylinder_item):
     inventory_item_template.ingredientSpinner.bind(text=update_ingredient_choice)
 
     # setup the percent label
-    inventory_item_template.percentLabel.text = str(int((cylinder_item.amount/1000) * 100))
-    inventory_item_template.progressBar.value = ((cylinder_item.amount/1000) * 100)
+    if cylinder_item.cylinderType == "base":
+        inventory_item_template.percentLabel.text = str(int(cylinder_item.amount))
+        inventory_item_template.progressBar.value = ((cylinder_item.amount / 4000) * 100)
+
+    elif cylinder_item.cylinderType == "flavor":
+        inventory_item_template.percentLabel.text = str(int(cylinder_item.amount))
+        inventory_item_template.progressBar.value = ((cylinder_item.amount / 100) * 100)
 
     # bind the reset button to change the label text and rebind on press
-    inventory_item_template.resetButton.bind(on_press=lambda x:open_reset_motor_popup())
+    inventory_item_template.resetButton.bind(on_press=lambda x: open_reset_motor_popup(cylinder_item.cylinderID, cylinder_item.cylinderType))
 
     AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
-
-
-def reset_cylinder(button):
-    # When the reset button is pressed, move the motor all the way up
-    # Once the motor has been resetted, open up a popup with an up, down, and done button
-
-    # set steps to 100
-    DatabaseController.update_steps_amount(button.parent.cylinderID, 0)
-    newButton = refresh_inventory_button(button.parent.cylinderID)
-
-    #
-    # change text to "set up"
-    newButton.text = 'Set up'
-
-    # rebind button to reset the motor and change button to reset button
-    newButton.bind(on_press=set_up_cylinder)
-    newButton.unbind(on_press=reset_cylinder)
-
-
-def set_up_cylinder(button):
-    # set steps to 100
-    DatabaseController.update_steps_amount(button.parent.cylinderID, 100)
-    newButton = refresh_inventory_button(button.parent.cylinderID)
-
-    # change button to reset and rebind back to set up when pressed
-    newButton.text = 'Reset'
-
-    newButton.bind(on_press=reset_cylinder)
-    newButton.unbind(on_press=set_up_cylinder)
 
 
 # get the ingredient choices from the database and set it on the spinner values
@@ -152,40 +133,6 @@ def un_sort_cylinder_inventory(self):
     setup_inventory_screen()
     self.unbind(on_press=un_sort_cylinder_inventory)
     self.bind(on_press=sort_cylinder_inventory)
-
-
-def refresh_inventory_button(cylinderID):
-    AdminModel.inventoryScreen.grid.clear_widgets()
-
-    DatabaseController.update_cylinders()
-
-    for cylinder_item in DatabaseClass.cylinderArray:
-        inventory_item_template = AdminModel.InventoryItemTemplate(cylinder_item.cylinderID)
-
-        # assign cylinder name to label
-        inventory_item_template.cylinderButton.text = 'Cylinder ' + str(cylinder_item.cylinderID)
-
-        # assign chosen ingredient
-        inventory_item_template.ingredientSpinner.text = cylinder_item.ingredient
-
-        # setup the values for the ingredientSpinner and bind the function update_ingredient to it
-        DatabaseController.update_ingredients()
-        set_ingredient_list(inventory_item_template.ingredientSpinner, cylinder_item)
-        inventory_item_template.ingredientSpinner.bind(text=update_ingredient_choice)
-
-        # setup the percent label
-        inventory_item_template.percentLabel.text = str(cylinder_item.amount)
-        inventory_item_template.progressBar.value = cylinder_item.amount
-
-        # bind the reset button to change the label text and rebind on press
-        inventory_item_template.resetButton.bind(on_press=reset_cylinder)
-
-        if (cylinder_item.cylinderID == cylinderID):
-            button = inventory_item_template.resetButton
-
-        AdminModel.inventoryScreen.grid.add_widget(inventory_item_template)
-
-    return button
 
 
 # -------------------------------------------------------------------
@@ -304,54 +251,61 @@ def bind_ingredient_button(button):
 
 
 # Popup for the reset motor function. Popup has up, down, and done button
-def open_reset_motor_popup():
+def open_reset_motor_popup(cylinderID, cylinderType):
     # TODO: Reset motor all the way to the top of the cylinder
 
     AdminModel.resetMotorPopup = Popup(title='Ingredients', size_hint=(None, None),
                                        size=(Window.width * 0.7, Window.height * 0.7))
     AdminModel.resetMotorPopup.auto_dismiss = False
+    AdminModel.resetMotorPopup.title = ""
+    AdminModel.resetMotorPopup.separator_height = 0
 
     # add a ResetMotorPopupLayout to the popup
     resetMotorPopupLayout = AdminModel.ResetMotorPopupLayout()
-    bind_reset_motor_buttons(resetMotorPopupLayout.upButton, resetMotorPopupLayout.pauseButton, resetMotorPopupLayout.downButton, resetMotorPopupLayout.doneButton)
+    bind_reset_motor_buttons(resetMotorPopupLayout.upButton, resetMotorPopupLayout.pauseButton,
+                             resetMotorPopupLayout.downButton, resetMotorPopupLayout.doneButton, cylinderID, cylinderType)
 
     AdminModel.resetMotorPopup.content = resetMotorPopupLayout
 
     AdminModel.resetMotorPopup.open()
 
 
-def bind_reset_motor_buttons(upButton, pauseButton, downButton, doneButton):
-    upButton.bind(on_press=lambda x: move_motor_up())
-    pauseButton.bind(on_press=lambda x: pause_motor())
-    downButton.bind(on_press=lambda x: move_motor_down())
-    doneButton.bind(on_press=lambda x: AdminModel.resetMotorPopup.dismiss())
+def bind_reset_motor_buttons(upButton, pauseButton, downButton, doneButton, cylinderID, cylinderType):
+    upButton.bind(on_press=lambda x: move_motor_up(cylinderID, cylinderType))
+    pauseButton.bind(on_press=lambda x: pause_motor(cylinderID))
+    downButton.bind(on_press=lambda x: move_motor_down(cylinderID, cylinderType))
+    doneButton.bind(on_press=lambda x: done_reset_motor(cylinderID))
 
 
-def move_motor_up():
+def done_reset_motor(cylinderID):
+    AdminModel.resetMotorPopup.dismiss()
+    pause_motor(cylinderID)
+    setup_inventory_screen()
+
+
+def move_motor_up(cylinderID, cylinderType):
     AdminModel.threadLock.acquire()
     AdminModel.moveMotorUp = True
     AdminModel.moveMotorDown = False
     AdminModel.threadLock.release()
 
-    AdminModel.activeThread = AdminModel.MotorUpThread()
+    AdminModel.activeThread = AdminModel.MotorUpThread(cylinderID, cylinderType)
     AdminModel.activeThread.start()
 
-    print("Up button")
 
-
-def move_motor_down():
+def move_motor_down(cylinderID, cylinderType):
     AdminModel.threadLock.acquire()
     AdminModel.moveMotorUp = False
     AdminModel.moveMotorDown = True
     AdminModel.threadLock.release()
 
-    AdminModel.activeThread = AdminModel.MotorDownThread()
+    AdminModel.activeThread = AdminModel.MotorDownThread(cylinderID, cylinderType)
     AdminModel.activeThread.start()
 
     print("Down button")
 
 
-def pause_motor():
+def pause_motor(cylinderID):
     AdminModel.threadLock.acquire()
     AdminModel.moveMotorUp = False
     AdminModel.moveMotorDown = False

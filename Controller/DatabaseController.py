@@ -295,6 +295,37 @@ def completeOrder():
         print(string)
         cursor.execute(string)
 
+    cursor.close()
 
-def add_cylinder_steps(id, amountAdd):
-    cursor = DatabaseClass.conn.cursor()
+
+def add_cylinder_steps(cylinderID, cylinderType, amountAdd, dbConn):
+    cursor = dbConn.cursor()
+    cursor.execute("SELECT steps FROM cylinder where id = " + str(cylinderID))
+    currentSteps = cursor.fetchall()
+
+    newSteps = currentSteps[0][0] + amountAdd
+
+    if cylinderType == "base":
+        if newSteps <= 4000:
+            cursor.execute("UPDATE cylinder SET steps = " + str(newSteps) + " WHERE id = " + str(cylinderID))
+            dbConn.commit()
+    elif cylinderType == "flavor":
+        if newSteps <= 100:
+            cursor.execute("UPDATE cylinder SET steps = " + str(newSteps) + " WHERE id = " + str(cylinderID))
+            dbConn.commit()
+
+    cursor.close()
+
+
+def sub_cylinder_steps(cylinderID, amountAdd, dbConn):
+    cursor = dbConn.cursor()
+    cursor.execute("SELECT steps FROM cylinder where id = " + str(cylinderID))
+    currentSteps = cursor.fetchall()
+
+    newSteps = currentSteps[0][0] - amountAdd
+
+    if newSteps > 0:
+        cursor.execute("UPDATE cylinder SET steps = " + str(newSteps) + " WHERE id = " + str(cylinderID))
+        dbConn.commit()
+
+    cursor.close()
